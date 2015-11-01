@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Align;
 
+@SuppressWarnings("rawtypes")
 public class Menu {
 
 	private Map<String, MenuElement> elements = new LinkedHashMap<String, MenuElement>();

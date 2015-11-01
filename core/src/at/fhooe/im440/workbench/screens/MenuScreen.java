@@ -43,14 +43,15 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 	private void createMenu() {
 		this.menu = new Menu();
 		
-		this.menu.add(new MenuElement("start", new Label("START", defaultLabelStyle), new GameScreen(this.workbench)));
-		this.menu.add(new MenuElement("settings", new Label("SETTINGS", defaultLabelStyle)));
-		this.menu.add(new MenuElement("credits", new Label("CREDITS", defaultLabelStyle)));
-		this.menu.add(new MenuElement("exit", new Label("EXIT", defaultLabelStyle), new ExitScreen(this.workbench)));
+		this.menu.add(new MenuElement<GameScreen>("start", new Label("START", defaultLabelStyle), GameScreen.class));
+		this.menu.add(new MenuElement<Screen>("settings", new Label("SETTINGS", defaultLabelStyle)));
+		this.menu.add(new MenuElement<Screen>("credits", new Label("CREDITS", defaultLabelStyle)));
+		this.menu.add(new MenuElement<ExitScreen>("exit", new Label("EXIT", defaultLabelStyle), ExitScreen.class));
 		
 		this.menu.highlight("start");
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private void resetMenu() {
 		for(Entry<String, MenuElement> element : this.menu.getAll().entrySet()) {
 			Label label = (Label) element.getValue().getElement();
@@ -144,7 +145,7 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 				this.menu.highlightPrev();
 				break;
 			case Keys.ENTER:
-				Screen screen = this.menu.getActive().getScreen();
+				Screen screen = this.menu.getActive().getScreen(this.workbench);
 				if (screen != null) {
 					this.dead = true;
 					this.workbench.setScreen(screen);

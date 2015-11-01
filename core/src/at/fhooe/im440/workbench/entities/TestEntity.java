@@ -12,7 +12,7 @@ public class TestEntity extends Entity implements Visual {
 
 	@Override
 	public void draw() {
-		System.out.println("Drawing TestEntity..");
+		// System.out.println("Drawing TestEntity..");
 	}
 
 }

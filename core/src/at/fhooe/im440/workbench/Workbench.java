@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import at.fhooe.im440.workbench.components.Move;
+import at.fhooe.im440.workbench.components.Position;
 import at.fhooe.im440.workbench.entities.TestEntity;
 import at.fhooe.im440.workbench.screens.SplashScreen;
 import at.fhooe.im440.workbench.services.ServiceManager;
@@ -38,7 +38,7 @@ public class Workbench extends Game {
 		this.serviceManager.addService(entityManager);
 		
 		TestEntity testEntity = new TestEntity();
-		testEntity.addComponent(new Move());
+		testEntity.addComponent(new Position(25, 25));
 		
 		entityManager.addEntity(testEntity);
 		renderSystem.addVisual(testEntity);
