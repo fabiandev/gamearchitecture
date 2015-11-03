@@ -17,6 +17,12 @@ public abstract class Entity {
 		return this.components.add(component);
 	}
 	
+	public void addComponents(Component... components) {
+		for (Component component : components) {
+			this.addComponent(component);
+		}
+	}
+	
 	public <T extends Component> T removeComponent(Class<T> type) {
 		return this.components.removeFirst(type);
 	}

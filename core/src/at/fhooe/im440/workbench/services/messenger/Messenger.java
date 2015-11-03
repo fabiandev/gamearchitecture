@@ -8,7 +8,7 @@ import at.fhooe.im440.workbench.services.Service;
 
 public class Messenger implements Service {
 
-	private HashMap<String,ArrayList<Subscribeable>> subscribers = new HashMap<String,ArrayList<Subscribeable>>();
+	private HashMap<String, ArrayList<Subscribeable>> subscribers = new HashMap<String, ArrayList<Subscribeable>>();
 	private ArrayList<Message> queue = new ArrayList<Message>();
 	
 	public void subsrcibe(Subscribeable subscriber, String messageType) {

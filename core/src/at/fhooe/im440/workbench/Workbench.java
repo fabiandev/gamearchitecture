@@ -16,7 +16,7 @@ import at.fhooe.im440.workbench.services.renderSystem.RenderSystem;
 
 public class Workbench extends Game {
 	
-	public ServiceManager serviceManager;
+	private ServiceManager serviceManager;
 	
 	public static final float V_WIDTH = 1366;
 	public static final float V_HEIGHT = 768;
@@ -29,19 +29,14 @@ public class Workbench extends Game {
 	private void init() {
 		this.serviceManager = new ServiceManager();
 		
-		Messenger messenger = new Messenger();
-		RenderSystem renderSystem = new RenderSystem();
-		EntityManager entityManager = new EntityManager();
-		
-		this.serviceManager.addService(messenger);
-		this.serviceManager.addService(renderSystem);
-		this.serviceManager.addService(entityManager);
+		serviceManager.addService(new Messenger());
+		serviceManager.addService(new RenderSystem(this.batch));
+		serviceManager.addService(new EntityManager());
 		
 		TestEntity testEntity = new TestEntity();
 		testEntity.addComponent(new Position(25, 25));
 		
-		entityManager.addEntity(testEntity);
-		renderSystem.addVisual(testEntity);
+		serviceManager.getService(EntityManager.class).addEntity(testEntity);
 	}
 	
 	@Override
@@ -64,6 +59,10 @@ public class Workbench extends Game {
 		// call render of base class which will call render for current screen
 		super.render();
 		
+	}
+	
+	public ServiceManager getServiceManager() {
+		return this.serviceManager;
 	}
 
 	public SpriteBatch getBatch() {
