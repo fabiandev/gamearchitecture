@@ -32,7 +32,7 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 	private boolean dead = false;
 
 	public MenuScreen(Workbench workbench) {
-		this.font = new BitmapFont(Gdx.files.internal("arial_black_32.fnt"));
+		this.font = this.workbench.getFont();
 		this.workbench = workbench;
 		this.stage = this.workbench.getStage();
 		this.defaultLabelStyle = new LabelStyle(this.font, Picasso.GRAY);

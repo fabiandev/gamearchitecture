@@ -11,7 +11,7 @@ public class Messenger implements Service {
 	private HashMap<String, ArrayList<Subscribeable>> subscribers = new HashMap<String, ArrayList<Subscribeable>>();
 	private ArrayList<Message> queue = new ArrayList<Message>();
 	
-	public void subsrcibe(Subscribeable subscriber, String messageType) {
+	public void subscribe(Subscribeable subscriber, String messageType) {
 		messageType = messageType.toUpperCase();
 		
 		ArrayList<Subscribeable> list = this.subscribers.get(messageType);

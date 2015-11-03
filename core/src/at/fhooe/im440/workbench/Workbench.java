@@ -6,17 +6,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import at.fhooe.im440.workbench.components.Position;
-import at.fhooe.im440.workbench.entities.TestEntity;
 import at.fhooe.im440.workbench.screens.SplashScreen;
 import at.fhooe.im440.workbench.services.ServiceManager;
-import at.fhooe.im440.workbench.services.entityManager.EntityManager;
-import at.fhooe.im440.workbench.services.messenger.Messenger;
-import at.fhooe.im440.workbench.services.renderSystem.RenderSystem;
 
 public class Workbench extends Game {
-	
-	private ServiceManager serviceManager;
 	
 	public static final float V_WIDTH = 1366;
 	public static final float V_HEIGHT = 768;
@@ -24,19 +17,12 @@ public class Workbench extends Game {
 	public static final String APP_TITLE = "Workbench";
 	
 	private Stage stage;
+	private ServiceManager serviceManager;
+	private BitmapFont font;
 	private SpriteBatch batch;
 	
 	private void init() {
-		this.serviceManager = new ServiceManager();
 		
-		serviceManager.addService(new Messenger());
-		serviceManager.addService(new RenderSystem(this.batch));
-		serviceManager.addService(new EntityManager());
-		
-		TestEntity testEntity = new TestEntity();
-		testEntity.addComponent(new Position(25, 25));
-		
-		serviceManager.getService(EntityManager.class).addEntity(testEntity);
 	}
 	
 	@Override
@@ -45,8 +31,8 @@ public class Workbench extends Game {
 		
 		this.batch = new SpriteBatch();
 		this.stage = new Stage();
-		
-		//this.font = new BitmapFont(Gdx.files.internal("arial_black_32.fnt"), Gdx.files.internal("arial_black_32.png"), false);
+		this.serviceManager = new ServiceManager();
+		this.font = new BitmapFont(Gdx.files.internal("arial_black_32.fnt"), Gdx.files.internal("arial_black_32.png"), false);
 		
 		setScreen(new SplashScreen(this));
 	}
@@ -60,10 +46,6 @@ public class Workbench extends Game {
 		super.render();
 		
 	}
-	
-	public ServiceManager getServiceManager() {
-		return this.serviceManager;
-	}
 
 	public SpriteBatch getBatch() {
 		return this.batch;
@@ -73,12 +55,16 @@ public class Workbench extends Game {
 		return this.stage;
 	}
 	
+	public ServiceManager getServiceManager() {
+		return this.serviceManager;
+	}
+	
 	public BitmapFont getFont() {
-		return new BitmapFont(Gdx.files.internal("arial_black_32.fnt"), Gdx.files.internal("arial_black_32.png"), false);
-		// return this.font;
+		return this.font;
 	}
 	
 	public void dispose() {
-		// this.font.dispose();
+		this.font.dispose();
+		this.batch.dispose();
 	}
 }

@@ -12,10 +12,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  *
  */
 
-public class Assets {
+public class AssetManager {
 	
 	// All files go into assets folder
-	private final static String spritesPath = "sprites/spritesTexture.png";
+	private final static String SPRITES_PATH = "sprites/spritesTexture.png";
 	
 	// Variable for main spriteMap
 	public static Texture spritesTexture;
@@ -30,8 +30,16 @@ public class Assets {
 	 * Static method to load sprites needed from the beginning
 	 */
 	public static void load() {
-		spritesTexture = new Texture(Gdx.files.internal(spritesPath));
+		spritesTexture = new Texture(Gdx.files.internal(SPRITES_PATH));
 		
 		enemy = new TextureRegion(spritesTexture, 0, 0, 64, 64);
+	}
+	
+	/**
+	 * Dispose all the textures
+	 */
+	public static void dispose() {
+		
+		spritesTexture.dispose();
 	}
 }
