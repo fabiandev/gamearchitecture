@@ -7,9 +7,9 @@ import at.fhooe.im440.workbench.assets.AssetManager;
 import at.fhooe.im440.workbench.components.Position;
 import at.fhooe.im440.workbench.entities.TestEntity;
 import at.fhooe.im440.workbench.services.ServiceManager;
-import at.fhooe.im440.workbench.services.entityManager.EntityManager;
-import at.fhooe.im440.workbench.services.messenger.Messenger;
-import at.fhooe.im440.workbench.services.renderSystem.RenderSystem;
+import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
+import at.fhooe.im440.workbench.services.Messenger.Messenger;
+import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
 
 /*
  * NOTES: What I've changed

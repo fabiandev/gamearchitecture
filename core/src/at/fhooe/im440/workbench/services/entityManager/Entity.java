@@ -1,4 +1,4 @@
-package at.fhooe.im440.workbench.services.entityManager;
+package at.fhooe.im440.workbench.services.EntityManager;
 
 import at.fhooe.im440.workbench.components.Component;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;

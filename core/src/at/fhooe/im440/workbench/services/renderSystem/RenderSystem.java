@@ -1,4 +1,4 @@
-package at.fhooe.im440.workbench.services.renderSystem;
+package at.fhooe.im440.workbench.services.RenderSystem;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

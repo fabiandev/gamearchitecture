@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import at.fhooe.im440.workbench.components.Position;
-import at.fhooe.im440.workbench.services.entityManager.Entity;
-import at.fhooe.im440.workbench.services.renderSystem.Visual;
+import at.fhooe.im440.workbench.services.EntityManager.Entity;
+import at.fhooe.im440.workbench.services.RenderSystem.Visual;
 
 public class TestEntity extends Entity implements Visual {
 	

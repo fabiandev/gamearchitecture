@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.ServiceManager;
-import at.fhooe.im440.workbench.services.entityManager.EntityManager;
-import at.fhooe.im440.workbench.services.messenger.Messenger;
-import at.fhooe.im440.workbench.services.renderSystem.RenderSystem;
+import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
+import at.fhooe.im440.workbench.services.Messenger.Messenger;
+import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
 import at.fhooe.im440.workbench.world.World;
 
 public class GameScreen extends ScreenAdapter implements Screen, InputProcessor {

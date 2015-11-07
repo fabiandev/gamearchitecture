@@ -1,4 +1,4 @@
-package at.fhooe.im440.workbench.services.messenger;
+package at.fhooe.im440.workbench.services.Messenger;
 
 public class Message {
 
