@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import at.fhooe.im440.workbench.assets.AssetManager;
 import at.fhooe.im440.workbench.screens.SplashScreen;
 import at.fhooe.im440.workbench.services.ServiceManager;
 
@@ -17,12 +18,11 @@ public class Workbench extends Game {
 	public static final String APP_TITLE = "Workbench";
 	
 	private Stage stage;
-	private ServiceManager serviceManager;
 	private BitmapFont font;
 	private SpriteBatch batch;
 	
 	private void init() {
-		
+		AssetManager.load();
 	}
 	
 	@Override
@@ -31,7 +31,6 @@ public class Workbench extends Game {
 		
 		this.batch = new SpriteBatch();
 		this.stage = new Stage();
-		this.serviceManager = new ServiceManager();
 		this.font = new BitmapFont(Gdx.files.internal("arial_black_32.fnt"), Gdx.files.internal("arial_black_32.png"), false);
 		
 		setScreen(new SplashScreen(this));
@@ -40,7 +39,7 @@ public class Workbench extends Game {
 	@Override
 	public void render () {
 		// TODO: add tasks that need to be updated for all screens (aka state)
-		this.serviceManager.update();
+		ServiceManager.update();
 		
 		// call render of base class which will call render for current screen
 		super.render();
@@ -53,10 +52,6 @@ public class Workbench extends Game {
 	
 	public Stage getStage() {
 		return this.stage;
-	}
-	
-	public ServiceManager getServiceManager() {
-		return this.serviceManager;
 	}
 	
 	public BitmapFont getFont() {
