@@ -24,6 +24,9 @@ public class GameScreen extends ScreenAdapter implements Screen, InputProcessor 
 	private Workbench workbench;
 	private Stage stage;
 	private World world;
+	
+	// TODO: Camera testing variable
+	private float start;
 
 	public GameScreen(Workbench workbench) {
 		this.workbench = workbench;
@@ -31,14 +34,23 @@ public class GameScreen extends ScreenAdapter implements Screen, InputProcessor 
 		
 		this.world = new World(this.workbench);	// Initialize Game logic
 		this.world.init();
+		
+		ServiceManager.getService(CameraSystem.class).setPosition(50f, 50f);
+		
+		// TODO: Camera testing purpose
+		this.start = ServiceManager.getService(CameraSystem.class).getCamera().viewportHeight;
 	}
 
 	@Override
 	public void render(float delta) {
 		Picasso.paintBackground(Picasso.GAME_BLUEGREEN);
-		this.stage.act(delta);
-		this.stage.draw();
+//		this.stage.act(delta);
+//		this.stage.draw();
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		this.workbench.getBatch().setProjectionMatrix(ServiceManager.getService(CameraSystem.class).getCamera().combined);
 		
+		// TODO: Camera testing purpose
+		ServiceManager.getService(CameraSystem.class).animateViewport(this.start, Workbench.V_WIDTH / 2f, 2f, delta);
 		ServiceManager.update();
 	}
 
