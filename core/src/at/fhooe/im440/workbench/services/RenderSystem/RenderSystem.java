@@ -29,12 +29,9 @@ public class RenderSystem implements Service {
 	
 	@Override
 	public void update() {
-		
-		this.batch.begin();
 		for (Visual visual : this.visuals) {
 			visual.draw(this.batch);
 		}
-		this.batch.end();
 	}
 
 }

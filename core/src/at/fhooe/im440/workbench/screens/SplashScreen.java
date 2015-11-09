@@ -77,7 +77,7 @@ public class SplashScreen implements Screen, InputProcessor {
 	}
 	
 	public void endOfState() {
-		workbench.setScreen(new MenuScreen(workbench));
+		workbench.setScreen(new MenuScreen(this.workbench));
 	}
 
 	@Override

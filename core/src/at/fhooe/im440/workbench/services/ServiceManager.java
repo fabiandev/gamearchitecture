@@ -1,27 +1,48 @@
 package at.fhooe.im440.workbench.services;
 
-import at.fhooe.im440.workbench.utilities.GenericArrayList;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-public class ServiceManager implements Service {
+public class ServiceManager {
 	
-	private GenericArrayList<Service> services = new GenericArrayList<Service>();
+	private static Iterator<Service> iterator;
+	private static ArrayList<Service> services = new ArrayList<Service>();
 	
-	public <T extends Service> T getService(Class<T> type) {
-		return this.services.getFirst(type);
+	@SuppressWarnings("unchecked")
+	private static <T extends Service> T firstEntry(Class<T> type) {
+		boolean found = false;
+		T service = null;
+		iterator = services.iterator();
+		
+		while (iterator.hasNext() && !found) {
+			Service s = iterator.next();
+			if (s.getClass().equals(type)) {
+				found = true;
+				service = (T) s;
+			}
+		}
+		
+		return service;
 	}
 	
-	public boolean addService(Service service) {
-		return this.services.add(service);
+	public static <T extends Service> T getService(Class<T> type) {
+		return firstEntry(type);
 	}
 	
-	public <T extends Service> T removeService(Class<T> type) {
-		return this.services.removeFirst(type);
+	public static boolean addService(Service service) {
+		return services.add(service);
 	}
 	
-	@Override
-	public void update() {
-		for (Service service : this.services) {
-			service.update();
+	public static <T extends Service> T removeService(Class<T> type) {
+		T s = firstEntry(type);
+		return services.remove(s) ? s : null;
+	}
+	
+	public static void update() {
+		iterator = services.iterator();
+		
+		while (iterator.hasNext()) {
+			iterator.next().update();
 		}
 	}
 	

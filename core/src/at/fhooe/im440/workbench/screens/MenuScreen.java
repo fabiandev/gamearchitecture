@@ -32,8 +32,8 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 	private boolean dead = false;
 
 	public MenuScreen(Workbench workbench) {
-		this.font = this.workbench.getFont();
 		this.workbench = workbench;
+		this.font = this.workbench.getFont();
 		this.stage = this.workbench.getStage();
 		this.defaultLabelStyle = new LabelStyle(this.font, Picasso.GRAY);
 		this.activeLabelStyle = new LabelStyle(this.font, Picasso.BLACK);

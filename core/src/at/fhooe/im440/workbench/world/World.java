@@ -7,6 +7,7 @@ import at.fhooe.im440.workbench.assets.AssetManager;
 import at.fhooe.im440.workbench.components.Position;
 import at.fhooe.im440.workbench.entities.TestEntity;
 import at.fhooe.im440.workbench.services.ServiceManager;
+import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
 import at.fhooe.im440.workbench.services.Messenger.Messenger;
 import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
@@ -24,17 +25,16 @@ import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
 public class World {
 
 	private Workbench workbench;
-	private ServiceManager serviceManager;
 	private BitmapFont font;
 	
 	public World(Workbench workbench) {
 		this.workbench = workbench;
-		this.serviceManager = this.workbench.getServiceManager();
 		this.font = this.workbench.getFont();
 		
-		this.serviceManager.addService(new EntityManager());
-		this.serviceManager.addService(new Messenger());
-		this.serviceManager.addService(new RenderSystem(this.workbench.getBatch()));
+		ServiceManager.addService(new EntityManager());
+		ServiceManager.addService(new Messenger());
+		ServiceManager.addService(new RenderSystem(this.workbench.getBatch()));
+		ServiceManager.addService(new CameraSystem());
 		
 	}
 	
@@ -42,15 +42,10 @@ public class World {
 	// create game levels which provide informations to be processed from logic below...
 	
 	public void init() {
-		TestEntity t = new TestEntity();
+		TestEntity t = new TestEntity(this.workbench.getBatch());
 		t.addComponent(new Position(20f, 20f));
-		t.setRegion(AssetManager.enemy);
+		t.setAnimation(AssetManager.gearwheel);
 		
-		// Here, a persisting, accessible key would be needed...
-		this.serviceManager.getService(EntityManager.class).addEntity(t);
-	}
-	
-	public void update() {
-		
+		ServiceManager.getService(EntityManager.class).addEntity(t);
 	}
 }
