@@ -19,7 +19,7 @@ import at.fhooe.im440.workbench.services.Messenger.Messenger;
 import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
 import at.fhooe.im440.workbench.world.World;
 
-public class GameScreen extends ScreenAdapter implements Screen, InputProcessor {
+public class TestScreen extends ScreenAdapter implements Screen, InputProcessor {
 	
 	private Workbench workbench;
 	//private Stage stage;
@@ -28,7 +28,7 @@ public class GameScreen extends ScreenAdapter implements Screen, InputProcessor 
 	// TODO: Camera testing variable
 	//private float start;
 
-	public GameScreen(Workbench workbench) {
+	public TestScreen(Workbench workbench) {
 		this.workbench = workbench;
 		//this.stage = new Stage();				// Create new stage or use old one from MenuScreen?
 		
@@ -65,7 +65,7 @@ public class GameScreen extends ScreenAdapter implements Screen, InputProcessor 
 	@Override
 	public void show() {
 		super.show();
-		Gdx.input.setInputProcessor(this);
+		//Gdx.input.setInputProcessor(this);
 	}
 
 	@Override
@@ -81,9 +81,9 @@ public class GameScreen extends ScreenAdapter implements Screen, InputProcessor 
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (keycode == Keys.ESCAPE) {
-			this.workbench.setScreen(new MenuScreen(this.workbench));
-		}
+//		if (keycode == Keys.ESCAPE) {
+//			this.workbench.setScreen(new MenuScreen(this.workbench));
+//		}
 		return false;
 	}
 

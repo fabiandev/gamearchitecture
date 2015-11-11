@@ -10,7 +10,6 @@ import at.fhooe.im440.workbench.components.poses.StaticPose;
 import at.fhooe.im440.workbench.components.visuals.SpriteVisual;
 import at.fhooe.im440.workbench.entities.TestEntity;
 import at.fhooe.im440.workbench.screens.SplashScreen;
-import at.fhooe.im440.workbench.screens.TestScreen;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.AssetManager.AssetManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
@@ -20,13 +19,13 @@ import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
 import at.fhooe.im440.workbench.services.Messenger.Messenger;
 import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
 
-public class Workbench extends Game {
+public class Workbench2 extends Game {
 	
-	public static final float WINDOW_WIDTH = 640; // 480 1366 640
-	public static final float WINDOW_HEIGHT = 920; // 320 768 920
+	public static final float WINDOW_WIDTH = 800; // 1366
+	public static final float WINDOW_HEIGHT = 400; // 768
 	
-	public static final float VIEWPORT_WIDTH = 16; // 6  16
-	public static final float VIEWPORT_HEIGHT = 23; // 5  23
+	public static final float WORLD_WIDTH = 100; // 1366
+	public static final float WORLD_HEIGHT = 50; // 768
 	
 	public static final String VERSION = "1.0.0";
 	public static final String APP_TITLE = "Workbench";
@@ -44,11 +43,11 @@ public class Workbench extends Game {
 		ServiceManager.addService(new AssetManager());
 		ServiceManager.addService(new EntityManager());
 		ServiceManager.addService(new Messenger());
-		ServiceManager.addService(new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, new CameraTarget(new StaticPose())));
+		ServiceManager.addService(new CameraSystem(WORLD_WIDTH, WORLD_HEIGHT, new CameraTarget(new StaticPose())));
 		ServiceManager.addService(new RenderSystem(this.getBatch()));
 		ServiceManager.activate();
 		
-		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).offset(.5f, .5f);
+		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1"));
 		
 		Entity testEntity = new TestEntity().addComponents(new StaticPose(), spriteVisual);
 		
@@ -66,9 +65,9 @@ public class Workbench extends Game {
 		
 		this.init();
 		
-		// stage.setViewport(ServiceManager.getService(CameraSystem.class).getViewport());
+		//stage.setViewport(ServiceManager.getService(CameraSystem.class).getViewport());
 		
-		setScreen(new SplashScreen(this));
+		//setScreen(new SplashScreen(this));
 	}
 
 	@Override

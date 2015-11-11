@@ -1,49 +1,49 @@
 package at.fhooe.im440.workbench.services;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
-public class ServiceManager {
-	
-	private static Iterator<Service> iterator;
-	private static ArrayList<Service> services = new ArrayList<Service>();
-	
-	@SuppressWarnings("unchecked")
-	private static <T extends Service> T firstEntry(Class<T> type) {
-		boolean found = false;
-		T service = null;
-		iterator = services.iterator();
-		
-		while (iterator.hasNext() && !found) {
-			Service s = iterator.next();
-			if (s.getClass().equals(type)) {
-				found = true;
-				service = (T) s;
-			}
-		}
-		
-		return service;
-	}
+public abstract class ServiceManager {
+
+	private static GenericArrayList<Service> services = new GenericArrayList<Service>();
+
+	private static boolean active = false;
 	
 	public static <T extends Service> T getService(Class<T> type) {
-		return firstEntry(type);
+		return services.getFirst(type);
 	}
-	
+
 	public static boolean addService(Service service) {
 		return services.add(service);
 	}
-	
-	public static <T extends Service> T removeService(Class<T> type) {
-		T s = firstEntry(type);
-		return services.remove(s) ? s : null;
-	}
-	
-	public static void update() {
-		iterator = services.iterator();
-		
-		while (iterator.hasNext()) {
-			iterator.next().update();
+
+	public static void addServices(Service... services) {
+		for (Service service : services) {
+			addService(service);
 		}
 	}
+
+	public static <T extends Service> T removeService(Class<T> type) {
+		return services.removeFirst(type);
+	}
 	
+	public static void activate() {
+		active = true;
+	}
+	
+	public static void deactivate() {
+		active = false;
+	}
+	
+	public static boolean isActive() {
+		return active;
+	}
+
+	public static void update() {
+		if (!active) return;
+		
+		for (Service service : services) {
+			service.update();
+		}
+	}
+
 }

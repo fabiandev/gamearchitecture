@@ -11,13 +11,13 @@ import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
-public class RenderSystem implements Service {
+public class RenderSystem2 implements Service {
 
 	private GenericArrayList<Visual> visuals = new GenericArrayList<Visual>();
 	
 	private SpriteBatch batch;
 	
-	public RenderSystem(SpriteBatch batch) {
+	public RenderSystem2(SpriteBatch batch) {
 		this.batch = batch;
 	}
 	

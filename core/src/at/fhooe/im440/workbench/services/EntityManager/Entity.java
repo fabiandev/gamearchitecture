@@ -1,6 +1,7 @@
 package at.fhooe.im440.workbench.services.EntityManager;
 
 import at.fhooe.im440.workbench.components.Component;
+import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
 public abstract class Entity {
@@ -9,18 +10,31 @@ public abstract class Entity {
 	
 	public abstract void update();
 	
+	public void activate() {
+		ServiceManager.getService(EntityManager.class).addEntity(this);
+	}
+
+	public void deactivate() {
+		ServiceManager.getService(EntityManager.class).removeEntity(this);
+	}
+	
 	public <T extends Component> T getComponent(Class<T> type) {
 		return this.components.getFirst(type);
 	}
 	
-	public boolean addComponent(Component component) {
-		return this.components.add(component);
+	public Entity addComponent(Component component) {
+		component.setEntity(this);
+		components.add(component);
+		
+		return this;
 	}
 	
-	public void addComponents(Component... components) {
+	public Entity addComponents(Component... components) {
 		for (Component component : components) {
 			this.addComponent(component);
 		}
+		
+		return this;
 	}
 	
 	public <T extends Component> T removeComponent(Class<T> type) {

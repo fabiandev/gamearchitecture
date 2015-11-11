@@ -20,7 +20,7 @@ import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.menu.Menu;
 import at.fhooe.im440.workbench.menu.MenuElement;
 
-public class MenuScreen extends ScreenAdapter implements InputProcessor {
+public class MenuScreen extends ScreenAdapter implements Screen, InputProcessor {
 	
 	private Workbench workbench;
 	private BitmapFont font;
@@ -91,7 +91,7 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 
 	@Override
 	public void render(float delta) {
-		Picasso.paintBackground(Picasso.GAME_PALEGREEN);
+		Picasso.paintBackground(Picasso.LIGHT_GRAY);
 		
 		this.renderMenu();
 		
@@ -102,8 +102,8 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		this.stage.getViewport().getCamera().position.set(0, 0, 0);
-		this.stage.getViewport().update(width, height);
+		//this.stage.getViewport().getCamera().position.set(0, 0, 0);
+		//this.stage.getViewport().update(width, height);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package at.fhooe.im440.workbench.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -12,8 +13,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.helpers.Picasso;
+import at.fhooe.im440.workbench.services.ServiceManager;
+import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 
-public class SplashScreen implements Screen, InputProcessor {
+public class SplashScreen  extends ScreenAdapter implements Screen, InputProcessor {
 	private static final float FADE_TIME = 1.0f;
 	private static final float DELAY_TIME = 5.0f;
 	private Workbench workbench;
@@ -49,7 +52,8 @@ public class SplashScreen implements Screen, InputProcessor {
 		
 		stage.addActor(img);
 		
-		stage.setViewport(new FitViewport(Workbench.V_WIDTH, Workbench.V_HEIGHT));
+		//stage.setViewport(new FitViewport(Workbench.V_WIDTH, Workbench.V_HEIGHT));
+		//stage.setViewport(ServiceManager.getService(CameraSystem.class).getViewport());
 		
 		Gdx.input.setInputProcessor(this);
 		dead = false;
@@ -90,8 +94,9 @@ public class SplashScreen implements Screen, InputProcessor {
 
 	@Override
 	public void resize(int width, int height) {
-		stage.getViewport().getCamera().position.set(0, 0, 0);
-		stage.getViewport().update(width, height);
+		super.resize(width, height);
+		//stage.getViewport().getCamera().position.set(0, 0, 0);
+		//stage.getViewport().update(width, height);
 	}
 
 	@Override
