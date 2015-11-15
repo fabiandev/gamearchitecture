@@ -1,29 +1,41 @@
 package at.fhooe.im440.workbench.services.Messenger;
 
+import at.fhooe.im440.workbench.utilities.GenericArrayList;
+
 public class Message {
 
-	private String type;
-	private MessageData data;
+	private MessageType type;
 	
-	public Message() {
-		this.type = "DEFAULT";
+	private GenericArrayList<MessageData> contents = new GenericArrayList<MessageData>();
+	
+	public Message(MessageType type) {
+		this.type = type;
 	}
 	
-	public Message(String type) {
-		this.type = type.toUpperCase();
-	}
-	
-	public Message(String type, MessageData data) {
-		this(type);
-		this.data = data;
-	}
-	
-	public String getType() {
+	public MessageType getType() {
 		return this.type;
 	}
 	
-	public MessageData getData() {
-		return this.data;
+	public MessageData[] getContents() {
+		return this.contents.toArray();
+	}
+	
+	public <T extends MessageData> Message with(T messageDataObject) {
+		this.contents.add(messageDataObject);
+		
+		return this;
+	}
+	
+	public <T extends MessageData> boolean has(Class<T> type) {
+		if (this.contents.hasOne(type)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public <T extends MessageData> T get(Class<T> type) {
+		return this.contents.getFirst(type);
 	}
 	
 }

@@ -245,6 +245,6 @@ public class SpriteVisual extends BaseComponent implements Visual {
 
 	@Override
 	public boolean contains(float x, float y) {
-		return false;
+		return true;
 	}
 }

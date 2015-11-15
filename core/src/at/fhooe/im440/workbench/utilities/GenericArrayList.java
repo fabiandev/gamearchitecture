@@ -93,4 +93,9 @@ public class GenericArrayList<I> implements Iterable<I> {
 		return this.list.iterator();
 	}
 	
+	@SuppressWarnings({ "hiding", "unchecked" })
+	public <I extends Object> I[] toArray() {
+		return (I[]) this.list.toArray();
+	}
+	
 }

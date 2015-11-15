@@ -8,13 +8,11 @@ import at.fhooe.im440.workbench.services.Service;
 
 public class Messenger implements Service {
 
-	private HashMap<String, ArrayList<Subscribeable>> subscribers = new HashMap<String, ArrayList<Subscribeable>>();
+	private HashMap<MessageType, ArrayList<Subscribeable>> subscribers = new HashMap<MessageType, ArrayList<Subscribeable>>();
 	
 	private ArrayList<Message> queue = new ArrayList<Message>();
 	
-	public void subscribe(Subscribeable subscriber, String messageType) {
-		messageType = messageType.toUpperCase();
-		
+	public void subscribe(Subscribeable subscriber, MessageType messageType) {
 		ArrayList<Subscribeable> list = this.subscribers.get(messageType);
 		
 		if (list != null) {
@@ -26,14 +24,14 @@ public class Messenger implements Service {
 		}
 	}
 	
-	public void subscribe(Subscribeable subscriber, String... messageTypes) {
-		for (String messageType : messageTypes) {
+	public void subscribe(Subscribeable subscriber, MessageType... messageTypes) {
+		for (MessageType messageType : messageTypes) {
 			this.subscribe(subscriber, messageType);
 		}	
 	}
 	
 	public void unsubscribe(Subscribeable subscriber) {
-		for (Map.Entry<String, ArrayList<Subscribeable>> entry : this.subscribers.entrySet()) {
+		for (Map.Entry<MessageType, ArrayList<Subscribeable>> entry : this.subscribers.entrySet()) {
 			ArrayList<Subscribeable> list = entry.getValue();
 			if (list != null) {
 				for (int i = 0; i < list.size(); i++) {
@@ -45,14 +43,13 @@ public class Messenger implements Service {
 		}
 	}
 	
-	public void unsubscribe(Subscribeable subscriber, String... messageTypes) {
-		for (String messageType : messageTypes) {
+	public void unsubscribe(Subscribeable subscriber, MessageType... messageTypes) {
+		for (MessageType messageType : messageTypes) {
 			this.unsubscribe(subscriber, messageType);
 		}	
 	}
 	
-	public void unsubscribe(Subscribeable subscriber, String messageType) {
-		messageType = messageType.toUpperCase();
+	public void unsubscribe(Subscribeable subscriber, MessageType messageType) {
 		ArrayList<Subscribeable> list = this.subscribers.get(messageType);
 		if (list != null) {
 			for (int i = 0; i < list.size(); i++) {
@@ -64,7 +61,7 @@ public class Messenger implements Service {
 	}
 	
 	public void fire(Message message) {
-		String messageType = message.getType().toUpperCase();
+		MessageType messageType = message.getType();
 		ArrayList<Subscribeable> list = this.subscribers.get(messageType);
 		if (list != null) {
 			for (Subscribeable e : list) {

@@ -19,8 +19,14 @@ import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.menu.Menu;
 import at.fhooe.im440.workbench.menu.MenuElement;
+import at.fhooe.im440.workbench.services.ServiceManager;
+import at.fhooe.im440.workbench.services.Messenger.IntegerMessage;
+import at.fhooe.im440.workbench.services.Messenger.Message;
+import at.fhooe.im440.workbench.services.Messenger.MessageType;
+import at.fhooe.im440.workbench.services.Messenger.Messenger;
+import at.fhooe.im440.workbench.services.Messenger.Subscribeable;
 
-public class MenuScreen extends ScreenAdapter implements Screen, InputProcessor {
+public class MenuScreen extends ScreenAdapter implements Screen, Subscribeable {
 	
 	private Workbench workbench;
 	private BitmapFont font;
@@ -38,6 +44,7 @@ public class MenuScreen extends ScreenAdapter implements Screen, InputProcessor 
 		this.defaultLabelStyle = new LabelStyle(this.font, Picasso.GRAY);
 		this.activeLabelStyle = new LabelStyle(this.font, Picasso.BLACK);
 		this.createMenu();
+		this.subscribe();
 	}
 	
 	private void createMenu() {
@@ -106,6 +113,8 @@ public class MenuScreen extends ScreenAdapter implements Screen, InputProcessor 
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
+		stage.getViewport().getCamera().position.set(0, 0, 0);
+		stage.getViewport().update(width, height);
 		//this.stage.getViewport().getCamera().position.set(0, 0, 0);
 		//this.stage.getViewport().update(width, height);
 	}
@@ -113,9 +122,14 @@ public class MenuScreen extends ScreenAdapter implements Screen, InputProcessor 
 	@Override
 	public void show() {
 		super.show();
+		
+		stage.getViewport().getCamera().position.set(0, 0, 0);
+		stage.getViewport().update((int)Workbench.VIEWPORT_WIDTH, (int)Workbench.VIEWPORT_HEIGHT);
+		
 		this.stage.addActor(this.menu.getGroup());
 		animateMenu();
-		Gdx.input.setInputProcessor(this);
+		// Gdx.input.setInputProcessor(this);
+	
 		this.dead = false;
 	}
 
@@ -134,14 +148,16 @@ public class MenuScreen extends ScreenAdapter implements Screen, InputProcessor 
 	}
 
 	@Override
-	public boolean keyDown(int keycode) {
+	public void message(Message message) {
 		if (dead) {
-			return false;
+			return;
 		}
 		
 		this.stopMenuAnimtation();
 		
-		switch(keycode) {
+		switch(message.getType()) {
+		case KEY_UP:
+			switch(message.get(IntegerMessage.class).getValue()) {
 			case Keys.RIGHT:
 				this.menu.highlightNext();
 				break;
@@ -155,46 +171,26 @@ public class MenuScreen extends ScreenAdapter implements Screen, InputProcessor 
 					this.workbench.setScreen(screen);
 				}
 				break;
+			}
+			default:
+				break;
 		}
 		
 		this.animateMenu();
-		
-		return false;
+	}
+
+	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_UP };
+	
+	@Override
+	public void subscribe() {
+		Messenger messenger = ServiceManager.getService(Messenger.class);
+		messenger.subscribe(this, this.listenTo);
 	}
 
 	@Override
-	public boolean keyUp(int keycode) {
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		return false;
+	public void unsubscribe() {
+		Messenger messenger = ServiceManager.getService(Messenger.class);
+		messenger.subscribe(this, this.listenTo);
 	}
 
 }

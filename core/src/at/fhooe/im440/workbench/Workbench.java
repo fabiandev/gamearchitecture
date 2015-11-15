@@ -13,6 +13,7 @@ import at.fhooe.im440.workbench.components.Editable;
 import at.fhooe.im440.workbench.components.SpriteVisual;
 import at.fhooe.im440.workbench.components.StaticPose;
 import at.fhooe.im440.workbench.entities.TestEntity;
+import at.fhooe.im440.workbench.screens.MenuScreen;
 import at.fhooe.im440.workbench.screens.SplashScreen;
 import at.fhooe.im440.workbench.screens.TestScreen;
 import at.fhooe.im440.workbench.services.ServiceManager;
@@ -22,8 +23,10 @@ import at.fhooe.im440.workbench.services.CameraSystem.CameraTarget;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
-import at.fhooe.im440.workbench.services.Messenger.CoordinatesMessage;
+import at.fhooe.im440.workbench.services.Messenger.PositionMessage;
+import at.fhooe.im440.workbench.services.Messenger.IntegerMessage;
 import at.fhooe.im440.workbench.services.Messenger.Message;
+import at.fhooe.im440.workbench.services.Messenger.MessageType;
 import at.fhooe.im440.workbench.services.Messenger.Messenger;
 import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
 
@@ -59,15 +62,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		ServiceManager.addService(new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, new CameraTarget(new StaticPose())));
 		ServiceManager.addService(new RenderSystem(this.getBatch()));
 		
-		ServiceManager.getService(EditorSystem.class).subscribe();
-		
 		ServiceManager.activate();
-		
-		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).offset(.5f, .5f).setOriginCenter();
-		
-		Entity testEntity = new TestEntity().addComponents(new StaticPose(), new Editable(), spriteVisual);
-		
-		testEntity.addComponentsToManagers();
 		
 		//t.addComponent(new StaticPose());
 		//t.setAnimation(AssetManager.gearwheel);
@@ -81,7 +76,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		this.init();
 		// stage.setViewport(ServiceManager.getService(CameraSystem.class).getViewport());
 		
-		setScreen(new SplashScreen(this));
+		setScreen(new MenuScreen(this));
 		
 		Gdx.input.setInputProcessor(this);
 	}
@@ -135,7 +130,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
+		messenger.fire(new Message(MessageType.KEY_UP).with(new IntegerMessage(keycode)));
 		return false;
 	}
 
@@ -147,36 +142,32 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		messenger.fire(new Message("TOUCH_DOWN", new CoordinatesMessage(screenX, screenY)));
+		messenger.fire(new Message(MessageType.TOUCH_DOWN).with(new PositionMessage(screenX, screenY)));
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		messenger.fire(new Message("TOUCH_UP", new CoordinatesMessage(screenX, screenY)));
-		// TODO Auto-generated method stub
-		return false;
+		messenger.fire(new Message(MessageType.TOUCH_UP).with(new PositionMessage(screenX, screenY)));
+		return true;
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		messenger.fire(new Message("TOUCH_DRAGGED", new CoordinatesMessage(screenX, screenY)));
-		// TODO Auto-generated method stub
-		return false;
+		messenger.fire(new Message(MessageType.TOUCH_DRAGGED).with(new PositionMessage(screenX, screenY)));
+		return true;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		messenger.fire(new Message("MOUSE_MOVED", new CoordinatesMessage(screenX, screenY)));
-		// TODO Auto-generated method stub
-		return false;
+		messenger.fire(new Message(MessageType.MOUSE_MOVED).with(new PositionMessage(screenX, screenY)));
+		return true;
 	}
 
 	@Override
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	
-
 }

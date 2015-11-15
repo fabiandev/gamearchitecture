@@ -6,28 +6,28 @@ import com.badlogic.gdx.math.Vector3;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 
-public class CoordinatesMessage extends MessageData {
+public class PositionMessage extends MessageData {
 
-	private Vector2 coordinates;
+	private Vector2 position;
 	
-	public CoordinatesMessage(float x, float y) {
-		this.coordinates = this.toWorldCoordinates(x, y);
+	public PositionMessage(float x, float y) {
+		this.position = this.toWorldCoordinates(x, y);
 	}
 	
-	public CoordinatesMessage(int x, int y) {
+	public PositionMessage(int x, int y) {
 		this((float)x, (float) y);
 	}
 	
 	public float getX() {
-		return this.coordinates.x;
+		return this.position.x;
 	}
 	
 	public float getY() {
-		return this.coordinates.y;
+		return this.position.y;
 	}
 	
 	public Vector2 getVector() {
-		return this.coordinates;
+		return this.position;
 	}
 	
 	private Vector2 toWorldCoordinates(float x, float y) {
