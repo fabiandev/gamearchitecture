@@ -16,7 +16,7 @@ import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 
-public class SplashScreen  extends ScreenAdapter implements Screen, InputProcessor {
+public class SplashScreen  extends ScreenAdapter implements Screen {
 	private static final float FADE_TIME = 1.0f;
 	private static final float DELAY_TIME = 5.0f;
 	private Workbench workbench;
@@ -52,10 +52,12 @@ public class SplashScreen  extends ScreenAdapter implements Screen, InputProcess
 		
 		stage.addActor(img);
 		
+		stage.getViewport().getCamera().position.set(0, 0, 0);
+		stage.getViewport().update((int)Workbench.VIEWPORT_WIDTH, (int)Workbench.VIEWPORT_HEIGHT);
+		
 		//stage.setViewport(new FitViewport(Workbench.V_WIDTH, Workbench.V_HEIGHT));
 		//stage.setViewport(ServiceManager.getService(CameraSystem.class).getViewport());
 		
-		Gdx.input.setInputProcessor(this);
 		dead = false;
 	}
 	
@@ -95,8 +97,8 @@ public class SplashScreen  extends ScreenAdapter implements Screen, InputProcess
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		//stage.getViewport().getCamera().position.set(0, 0, 0);
-		//stage.getViewport().update(width, height);
+		stage.getViewport().getCamera().position.set(0, 0, 0);
+		stage.getViewport().update(width, height);
 	}
 
 	@Override
@@ -123,52 +125,10 @@ public class SplashScreen  extends ScreenAdapter implements Screen, InputProcess
 
 	}
 
-	@Override
-	public boolean keyDown(int keycode) {
-		fadeOut();
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public boolean keyDown(int keycode) {
+//		fadeOut();
+//		return false;
+//	}
 
 }

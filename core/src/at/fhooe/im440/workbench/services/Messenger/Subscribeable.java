@@ -5,5 +5,6 @@ public interface Subscribeable {
 	public void message(Message message);
 	public void subscribe();
 	public void unsubscribe();
+
 	
 }

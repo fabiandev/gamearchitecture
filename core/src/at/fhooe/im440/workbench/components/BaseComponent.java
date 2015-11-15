@@ -2,7 +2,7 @@ package at.fhooe.im440.workbench.components;
 
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 
-public class BaseComponent implements Component {
+public abstract class BaseComponent implements Component {
 
 	private Entity entity;
 	

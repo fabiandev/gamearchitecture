@@ -9,6 +9,7 @@ import at.fhooe.im440.workbench.services.Service;
 public class Messenger implements Service {
 
 	private HashMap<String, ArrayList<Subscribeable>> subscribers = new HashMap<String, ArrayList<Subscribeable>>();
+	
 	private ArrayList<Message> queue = new ArrayList<Message>();
 	
 	public void subscribe(Subscribeable subscriber, String messageType) {
@@ -25,6 +26,12 @@ public class Messenger implements Service {
 		}
 	}
 	
+	public void subscribe(Subscribeable subscriber, String... messageTypes) {
+		for (String messageType : messageTypes) {
+			this.subscribe(subscriber, messageType);
+		}	
+	}
+	
 	public void unsubscribe(Subscribeable subscriber) {
 		for (Map.Entry<String, ArrayList<Subscribeable>> entry : this.subscribers.entrySet()) {
 			ArrayList<Subscribeable> list = entry.getValue();
@@ -36,6 +43,12 @@ public class Messenger implements Service {
 				}
 			}
 		}
+	}
+	
+	public void unsubscribe(Subscribeable subscriber, String... messageTypes) {
+		for (String messageType : messageTypes) {
+			this.unsubscribe(subscriber, messageType);
+		}	
 	}
 	
 	public void unsubscribe(Subscribeable subscriber, String messageType) {

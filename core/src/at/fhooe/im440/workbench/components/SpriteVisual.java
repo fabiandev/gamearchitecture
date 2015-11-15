@@ -6,18 +6,15 @@
 * ALL REAL WORLD PROBLEMS AND ISSUES IN DETAIL.
  */
 
-package at.fhooe.im440.workbench.components.visuals;
+package at.fhooe.im440.workbench.components;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
-import at.fhooe.im440.workbench.components.BaseComponent;
-import at.fhooe.im440.workbench.components.poses.Pose;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
-import at.fhooe.im440.workbench.services.RenderSystem.Visual;
 
 /**
  * Visual that renders bitmap graphics (sprites) using a SpriteBatch.
@@ -210,15 +207,18 @@ public class SpriteVisual extends BaseComponent implements Visual {
 		return this;
 	}
 
+	// TODO: change those to activate() and remove the boolean activated flag?
 	@Override
-	public void activate() {
+	public void addToManager() {
 		ServiceManager.getService(RenderSystem.class).addVisual(this);
 		this.pose = this.getEntity().getComponent(Pose.class);
+		this.activate();
 	}
 
 	@Override
-	public void deactivate() {
+	public void removeFromManager() {
 		ServiceManager.getService(RenderSystem.class).removeVisual(this);
+		this.deactivate();
 	}
 
 	@Override
@@ -241,5 +241,10 @@ public class SpriteVisual extends BaseComponent implements Visual {
 	 */
 	public Color getColor() {
 		return this.color;
+	}
+
+	@Override
+	public boolean contains(float x, float y) {
+		return false;
 	}
 }

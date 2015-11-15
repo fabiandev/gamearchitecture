@@ -22,6 +22,14 @@ public class GenericArrayList<I> implements Iterable<I> {
 		return null;
 	}
 	
+	public <T extends I> boolean has(T instance) {
+		if (this.get(instance) != null) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T extends I> T getFirst(Class<T> type) {
 		for (I element : this.list) {
@@ -31,6 +39,14 @@ public class GenericArrayList<I> implements Iterable<I> {
 		}
 		
 		return null;
+	}
+	
+	public <T extends I> boolean hasOne(Class<T> type) {
+		if (this.getFirst(type) != null) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public <T extends I> int indexOfFirst(Class<T> type) {

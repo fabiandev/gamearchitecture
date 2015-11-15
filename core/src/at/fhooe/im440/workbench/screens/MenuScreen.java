@@ -43,12 +43,16 @@ public class MenuScreen extends ScreenAdapter implements Screen, InputProcessor 
 	private void createMenu() {
 		this.menu = new Menu();
 		
-		this.menu.add(new MenuElement<GameScreen>("start", new Label("START", defaultLabelStyle), GameScreen.class));
+		
+		Label start = new Label("START", defaultLabelStyle);
+		this.menu.add(new MenuElement<EditorScreen>("editor", new Label("EDITOR", defaultLabelStyle), EditorScreen.class));
 		this.menu.add(new MenuElement<Screen>("settings", new Label("SETTINGS", defaultLabelStyle)));
+		this.menu.add(new MenuElement<GameScreen>("start", start, GameScreen.class));
 		this.menu.add(new MenuElement<Screen>("credits", new Label("CREDITS", defaultLabelStyle)));
 		this.menu.add(new MenuElement<ExitScreen>("exit", new Label("EXIT", defaultLabelStyle), ExitScreen.class));
 		
 		this.menu.highlight("start");
+		this.menu.position();
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -63,7 +67,7 @@ public class MenuScreen extends ScreenAdapter implements Screen, InputProcessor 
 		this.resetMenu();
 		Actor active = this.menu.getActive().getElement();
 		((Label)active).setStyle(activeLabelStyle);
-		this.menu.position();
+		
 	}
 	
 	private void animateMenu() {
@@ -91,7 +95,7 @@ public class MenuScreen extends ScreenAdapter implements Screen, InputProcessor 
 
 	@Override
 	public void render(float delta) {
-		Picasso.paintBackground(Picasso.LIGHT_GRAY);
+		Picasso.paintBackground(Picasso.GAME_PALEGREEN);
 		
 		this.renderMenu();
 		

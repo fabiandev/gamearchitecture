@@ -14,12 +14,28 @@ public abstract class Entity {
 		ServiceManager.getService(EntityManager.class).addEntity(this);
 	}
 
+	public void addComponentsToManagers() {
+		for (Component component : this.components) {
+			component.addToManager();
+		}
+	}
+	
+	public void removeComponentsFromManagers() {
+		for (Component component : this.components) {
+			component.removeFromManager();
+		}
+	}
+	
 	public void deactivate() {
 		ServiceManager.getService(EntityManager.class).removeEntity(this);
 	}
 	
 	public <T extends Component> T getComponent(Class<T> type) {
 		return this.components.getFirst(type);
+	}
+	
+	public <T extends Component> boolean hasComponent(Class<T> type) {
+		return this.components.hasOne(type);
 	}
 	
 	public Entity addComponent(Component component) {

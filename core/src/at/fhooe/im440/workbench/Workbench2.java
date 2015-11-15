@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import at.fhooe.im440.workbench.components.poses.StaticPose;
-import at.fhooe.im440.workbench.components.visuals.SpriteVisual;
+import at.fhooe.im440.workbench.components.SpriteVisual;
+import at.fhooe.im440.workbench.components.StaticPose;
 import at.fhooe.im440.workbench.entities.TestEntity;
 import at.fhooe.im440.workbench.screens.SplashScreen;
 import at.fhooe.im440.workbench.services.ServiceManager;

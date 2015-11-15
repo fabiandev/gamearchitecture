@@ -4,6 +4,10 @@ import at.fhooe.im440.workbench.services.EntityManager.Entity;
 
 public interface Component {
 	
+	public void addToManager();
+	
+	public void removeFromManager();
+	
 	public Entity getEntity();
 	
 	public void setEntity(Entity entity);

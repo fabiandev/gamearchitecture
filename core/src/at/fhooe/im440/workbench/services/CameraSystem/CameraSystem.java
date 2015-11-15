@@ -1,15 +1,9 @@
 package at.fhooe.im440.workbench.services.CameraSystem;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import at.fhooe.im440.workbench.Workbench;
@@ -22,17 +16,14 @@ public class CameraSystem implements Service {
 	private Viewport viewport;
 	private Camera camera;
 
-	private float worldWidth;
-	private float worldHeight;
-
 	private float movement = 0;
 
 	public CameraSystem(float worldWidth, float worldHeight, CameraTarget target) {
-		float aspectRatio = (float) Workbench.WINDOW_HEIGHT / (float) Workbench.WINDOW_WIDTH;
-		float aspectRatio2 = (float) Workbench.WINDOW_WIDTH / (float) Workbench.WINDOW_HEIGHT;
-		System.out.println(aspectRatio);
-		System.out.println(Workbench.VIEWPORT_WIDTH*aspectRatio);
-		System.out.println(Workbench.VIEWPORT_HEIGHT * aspectRatio2);
+		// float aspectRatio = (float) Workbench.WINDOW_HEIGHT / (float) Workbench.WINDOW_WIDTH;
+		// float aspectRatio2 = (float) Workbench.WINDOW_WIDTH / (float) Workbench.WINDOW_HEIGHT;
+		// System.out.println(aspectRatio);
+		// System.out.println(Workbench.VIEWPORT_WIDTH*aspectRatio);
+		// System.out.println(Workbench.VIEWPORT_HEIGHT * aspectRatio2);
 		
 		camera = new OrthographicCamera();
 		
@@ -61,11 +52,18 @@ public class CameraSystem implements Service {
 	public boolean isMoving() {
 		return (movement > 0);
 	}
+	
+	public Vector3 toWorldCoordinates(int screenX, int screenY) {
+		 return this.toWorldCoordinates((float)screenX, (float)screenY);
+	}
+	
+	public Vector3 toWorldCoordinates(float screenX, float screenY) {
+		 return this.camera.unproject(new Vector3(screenX, screenY, 0));
+	}
 
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-
 	}
 
 }

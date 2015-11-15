@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import at.fhooe.im440.workbench.components.Visual;
 import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.Service;
 import at.fhooe.im440.workbench.services.ServiceManager;
@@ -39,7 +40,7 @@ public class RenderSystem implements Service {
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		//Gdx.gl.glClearColor(1,0,0,1);
-		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		//
 		batch.begin();
 		for (Visual visual : this.visuals) {
 			visual.render(this.batch);

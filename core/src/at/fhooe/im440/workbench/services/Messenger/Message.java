@@ -3,7 +3,7 @@ package at.fhooe.im440.workbench.services.Messenger;
 public class Message {
 
 	private String type;
-	private String data;
+	private MessageData data;
 	
 	public Message() {
 		this.type = "DEFAULT";
@@ -13,7 +13,7 @@ public class Message {
 		this.type = type.toUpperCase();
 	}
 	
-	public Message(String type, String data) {
+	public Message(String type, MessageData data) {
 		this(type);
 		this.data = data;
 	}
@@ -22,7 +22,7 @@ public class Message {
 		return this.type;
 	}
 	
-	public String getData() {
+	public MessageData getData() {
 		return this.data;
 	}
 	

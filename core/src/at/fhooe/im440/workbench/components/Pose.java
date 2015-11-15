@@ -1,6 +1,4 @@
-package at.fhooe.im440.workbench.components.poses;
-
-import at.fhooe.im440.workbench.components.Component;
+package at.fhooe.im440.workbench.components;
 
 public interface Pose extends Component {
 

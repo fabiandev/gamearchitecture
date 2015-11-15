@@ -1,6 +1,4 @@
-package at.fhooe.im440.workbench.components.poses;
-
-import at.fhooe.im440.workbench.components.BaseComponent;
+package at.fhooe.im440.workbench.components;
 
 public class StaticPose extends BaseComponent implements Pose {
 
@@ -46,6 +44,16 @@ public class StaticPose extends BaseComponent implements Pose {
 	@Override
 	public void setAngle(float angleRadians) {
 		this.angleRadians = angleRadians;
+	}
+
+	@Override
+	public void addToManager() {
+		
+	}
+
+	@Override
+	public void removeFromManager() {
+		
 	}
 
 }
