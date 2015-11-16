@@ -18,17 +18,15 @@ import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
 public class EditorSystem implements Service, Subscribeable {
 	
-	private GenericArrayList<Entity> entities = new GenericArrayList<Entity>();
+	private GenericArrayList<Editable> editables = new GenericArrayList<Editable>();
 	
 	private SelectState selectState = SelectState.SINGLE_SELECTING;
 	private ActionState actionState = ActionState.IDLE;
 	
 	private MessageType[] listenTo = new MessageType[] { MessageType.TOUCH_DOWN, MessageType.MOUSE_MOVED };
 	
-	public boolean addEditable(Entity entity) {
-		if (!entity.hasComponent(Editable.class)) {
-			throw new IllegalArgumentException("An editable must have an Editable component.");
-		}
+	public boolean addEditable(Editable editable) {
+		Entity entity = editable.getEntity();
 		
 		if (!entity.hasComponent(Pose.class)) {
 			throw new IllegalArgumentException("An editable must have a Pose component.");
@@ -38,14 +36,14 @@ public class EditorSystem implements Service, Subscribeable {
 			throw new IllegalArgumentException("An editable must have a Visual component.");
 		}
 		
-		return this.entities.add(entity);
+		return this.editables.add(editable);
 	}
 	
-	public int addEditables(Entity... entities) {
+	public int addEditables(Editable... editables) {
 		int count = 0;
 		
-		for (Entity entity : entities) {
-			if (this.addEditable(entity)) {
+		for (Editable editable : editables) {
+			if (this.addEditable(editable)) {
 				count++;
 			}
 		}
@@ -53,16 +51,17 @@ public class EditorSystem implements Service, Subscribeable {
 		return count;
 	}
 	
-	public boolean removeEditable(Entity entity) {
-		return this.entities.remove(entity);
+	public boolean removeEditable(Editable editable) {
+		return this.editables.remove(editable);
 	}
 	
 	public void clearEditables() {
-		this.entities.clear();
+		this.editables.clear();
 	}
 	
 	public boolean select(float x, float y) {
-		for (Entity entity : this.entities) {
+		for (Editable editable : this.editables) {
+			Entity entity = editable.getEntity();
 			entity.getComponent(Pose.class).setPos(x, y);
 			if (entity.getComponent(Visual.class).contains(x, y)) {
 				entity.getComponent(Editable.class).select();
@@ -100,7 +99,8 @@ public class EditorSystem implements Service, Subscribeable {
 	}
 	
 	private void handleMouseMoved(Vector2 position) {
-		for (Entity entity : this.entities) {
+		for (Editable editable : this.editables) {
+			Entity entity = editable.getEntity();
 			if (entity.getComponent(Editable.class).isSelected()) {
 				entity.getComponent(Pose.class).setPos(position.x, position.y);
 			}
@@ -108,7 +108,8 @@ public class EditorSystem implements Service, Subscribeable {
 	}
 	
 	private void handleTouchDown(Vector2 position) {
-		for (Entity entity : this.entities) {
+		for (Editable editable : this.editables) {
+			Entity entity = editable.getEntity();
 			if(entity.getComponent(Visual.class).contains(position.x, position.y)) {
 				if (this.selectState == SelectState.SINGLE_SELECTED) {
 					entity.getComponent(Editable.class).deselect();

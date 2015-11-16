@@ -9,13 +9,13 @@ public class Editable extends BaseComponent {
 	
 	@Override
 	public void addToManager() {
-		ServiceManager.getService(EditorSystem.class).addEditable(this.getEntity());
+		ServiceManager.getService(EditorSystem.class).addEditable(this);
 		this.activate();
 	}
 
 	@Override
 	public void removeFromManager() {
-		ServiceManager.getService(EditorSystem.class).removeEditable(this.getEntity());
+		ServiceManager.getService(EditorSystem.class).removeEditable(this);
 		this.deactivate();
 	}
 	

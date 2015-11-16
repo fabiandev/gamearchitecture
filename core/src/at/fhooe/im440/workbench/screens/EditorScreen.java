@@ -48,7 +48,7 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 	public void show() {
 		super.show();
 		ServiceManager.addService(this.editorSystem);
-		this.editorSystem.addEditable(this.testEntity);
+		this.editorSystem.addEditable(this.testEntity.getComponent(Editable.class));
 		this.testEntity.addComponentsToManagers();
 		this.editorSystem.subscribe();
 	}
@@ -57,7 +57,7 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 	public void hide() {
 		super.hide();
 		ServiceManager.removeService(EditorSystem.class);
-		this.editorSystem.removeEditable(this.testEntity);
+		this.editorSystem.removeEditable(this.testEntity.getComponent(Editable.class));
 		this.testEntity.removeComponentsFromManagers();
 		this.editorSystem.unsubscribe();
 	}
