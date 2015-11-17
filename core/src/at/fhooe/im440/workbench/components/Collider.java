@@ -45,6 +45,12 @@ public abstract class Collider extends BaseComponent implements Collideable {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	// Self included method
+	@Override
+	public boolean isColliding() {
+		return !this.collisions.isEmpty();
+	}
 
 	@Override
 	public boolean addCollision(Collideable c) {

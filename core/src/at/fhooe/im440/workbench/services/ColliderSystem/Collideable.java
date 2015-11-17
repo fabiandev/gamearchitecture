@@ -9,6 +9,7 @@ public interface Collideable {
 	public boolean isHit(Collideable c);
 	public boolean isHit(BoxCollider c);
 	public boolean isHit(CircleCollider c);
+	public boolean isColliding();
 	public boolean addCollision(Collideable c);
 	public void clearCollisions();
 	
