@@ -8,6 +8,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import at.fhooe.im440.workbench.Workbench;
+import at.fhooe.im440.workbench.components.CircleCollider;
 import at.fhooe.im440.workbench.components.Editable;
 import at.fhooe.im440.workbench.components.SpriteVisual;
 import at.fhooe.im440.workbench.components.StaticPose;
@@ -31,7 +32,7 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		
 		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).offset(.5f, .5f).setOriginCenter();
 		
-		this.testEntity = new TestEntity().addComponents(new StaticPose(), new Editable(), spriteVisual);
+		this.testEntity = new TestEntity().addComponents(new StaticPose(), new Editable(), spriteVisual, new CircleCollider());
 	}
 	
 	@Override

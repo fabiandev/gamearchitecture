@@ -12,8 +12,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 
 import at.fhooe.im440.workbench.services.ServiceManager;
+import at.fhooe.im440.workbench.services.ColliderSystem.Collideable;
 import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
 
 /**
@@ -90,6 +92,22 @@ public class SpriteVisual extends BaseComponent implements Visual {
 		this.region = region;
 		this.width = region.getRegionWidth();
 		this.height = region.getRegionHeight();
+	}
+	
+	// Getters needed for Colliders
+	public float getWidth() {
+		return width;
+	}
+
+	public float getHeight() {
+		return height;
+	}
+	
+	public Vector2 getCenterCoordinates() {
+		Vector2 center = new Vector2();
+		center.x = this.offX + this.originX;
+		center.y = this.offY + this.originY;
+		return center;
 	}
 
 	/**
@@ -245,6 +263,15 @@ public class SpriteVisual extends BaseComponent implements Visual {
 
 	@Override
 	public boolean contains(float x, float y) {
-		return true;
+		
+		if (this.getEntity().hasComponent(CircleCollider.class)) {
+			return this.getEntity().getComponent(CircleCollider.class).isHit(x, y);
+		}
+
+		if (this.getEntity().hasComponent(BoxCollider.class)) {
+			return this.getEntity().getComponent(BoxCollider.class).isHit(x, y);
+		}
+		
+		return false;
 	}
 }

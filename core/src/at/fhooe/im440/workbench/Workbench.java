@@ -20,6 +20,7 @@ import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.AssetManager.AssetManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraTarget;
+import at.fhooe.im440.workbench.services.ColliderSystem.ColliderSystem;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
@@ -61,6 +62,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		ServiceManager.addService(new EditorSystem());
 		ServiceManager.addService(new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, new CameraTarget(new StaticPose())));
 		ServiceManager.addService(new RenderSystem(this.getBatch()));
+		ServiceManager.addService(new ColliderSystem());
 		
 		ServiceManager.activate();
 		

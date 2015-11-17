@@ -23,26 +23,16 @@ public abstract class Collider extends BaseComponent implements Collideable {
 	}
 
 	@Override
-	public boolean isHit(float x, float y) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean isHit(Collideable c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	@Override
-	public boolean isHit(BoxCollider c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isHit(CircleCollider c) {
-		// TODO Auto-generated method stub
+		if (c instanceof CircleCollider) {
+			return this.isHit((CircleCollider) c);
+		}
+		
+		if (c instanceof BoxCollider) {
+			return this.isHit((BoxCollider) c);
+		}
+		
 		return false;
 	}
 	
