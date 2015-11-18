@@ -2,7 +2,7 @@ package at.fhooe.im440.workbench.services.EntityManager;
 
 import at.fhooe.im440.workbench.services.Service;
 
-public class EnitityFactory implements Service {
+public class EntityFactory implements Service {
 
 	@Override
 	public void update() {
