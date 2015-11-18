@@ -34,8 +34,8 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).setOriginCenter();
 		SpriteVisual spriteVisual2 = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).setOriginCenter();
 		
-		this.testEntity = new TestEntity().addComponents(new StaticPose(.5f, .5f), new Editable(), spriteVisual, new CircleCollider());
-		this.testEntity2 = new TestEntity().addComponents(new StaticPose(5f, 5f), new Editable(), spriteVisual2, new CircleCollider());
+		this.testEntity = new TestEntity().addComponents(new StaticPose(.5f, .5f), new Editable(), spriteVisual, new CircleCollider(1f));
+		this.testEntity2 = new TestEntity().addComponents(new StaticPose(5f, 5f), new Editable(), spriteVisual2, new CircleCollider(1f));
 	}
 	
 	@Override
@@ -53,6 +53,7 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		super.show();
 		ServiceManager.addService(this.editorSystem);
 		this.editorSystem.addEditable(this.testEntity.getComponent(Editable.class));
+		this.editorSystem.addEditable(this.testEntity2.getComponent(Editable.class));
 		this.testEntity.addComponentsToManagers();
 		this.testEntity2.addComponentsToManagers();
 		this.editorSystem.subscribe();

@@ -2,17 +2,17 @@ package at.fhooe.im440.workbench.services.EditorSystem;
 
 import com.badlogic.gdx.math.Vector2;
 
+import at.fhooe.im440.workbench.components.Collider;
 import at.fhooe.im440.workbench.components.Editable;
 import at.fhooe.im440.workbench.components.Pose;
 import at.fhooe.im440.workbench.components.Visual;
 import at.fhooe.im440.workbench.services.Service;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
-import at.fhooe.im440.workbench.services.Messenger.PositionMessage;
 import at.fhooe.im440.workbench.services.Messenger.Message;
-import at.fhooe.im440.workbench.services.Messenger.MessageData;
 import at.fhooe.im440.workbench.services.Messenger.MessageType;
 import at.fhooe.im440.workbench.services.Messenger.Messenger;
+import at.fhooe.im440.workbench.services.Messenger.PositionMessage;
 import at.fhooe.im440.workbench.services.Messenger.Subscribeable;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
@@ -110,7 +110,7 @@ public class EditorSystem implements Service, Subscribeable {
 	private void handleTouchDown(Vector2 position) {
 		for (Editable editable : this.editables) {
 			Entity entity = editable.getEntity();
-			if(entity.getComponent(Visual.class).contains(position.x, position.y)) {
+			if(entity.getComponent(Visual.class).contains(position.x, position.y) && !entity.getComponent(Collider.class).isColliding()) {
 				if (this.selectState == SelectState.SINGLE_SELECTED) {
 					entity.getComponent(Editable.class).deselect();
 					this.selectState = SelectState.SINGLE_SELECTING;

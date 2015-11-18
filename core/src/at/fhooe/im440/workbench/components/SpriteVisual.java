@@ -93,22 +93,6 @@ public class SpriteVisual extends BaseComponent implements Visual {
 		this.width = region.getRegionWidth();
 		this.height = region.getRegionHeight();
 	}
-	
-	// Getters needed for Colliders
-	public float getWidth() {
-		return width;
-	}
-
-	public float getHeight() {
-		return height;
-	}
-	
-	public Vector2 getCenterCoordinates() {
-		Vector2 center = new Vector2();
-		center.x = this.offX + this.originX;
-		center.y = this.offY + this.originY;
-		return center;
-	}
 
 	/**
 	 * Sets the layer value of this visual. The default layer value is zero.

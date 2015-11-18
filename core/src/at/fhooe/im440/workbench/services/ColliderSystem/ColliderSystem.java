@@ -26,7 +26,6 @@ public class ColliderSystem implements Service {
 	@Override
 	public void update() {
 		Iterator<Collideable> iter = this.colliders.iterator();
-
 		while (iter.hasNext()) {
 			Collideable temp = iter.next();
 			temp.clearCollisions();
@@ -38,7 +37,7 @@ public class ColliderSystem implements Service {
 
 				// Checking if both objects are not the same (by comparing memory address)
 				if (temp != other) {
-
+					
 					if ((other instanceof BoxCollider && temp.isHit((BoxCollider) other))
 							|| (other instanceof CircleCollider && temp.isHit((CircleCollider) other))) {
 
