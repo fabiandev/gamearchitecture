@@ -25,14 +25,17 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 	private Workbench workbench;
 	private EditorSystem editorSystem;
 	private Entity testEntity;
+	private Entity testEntity2;
 	
 	public EditorScreen(Workbench workbench) {
 		this.workbench = workbench;
 		this.editorSystem = new EditorSystem();
 		
-		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).offset(.5f, .5f).setOriginCenter();
+		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).setOriginCenter();
+		SpriteVisual spriteVisual2 = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).setOriginCenter();
 		
-		this.testEntity = new TestEntity().addComponents(new StaticPose(), new Editable(), spriteVisual, new CircleCollider());
+		this.testEntity = new TestEntity().addComponents(new StaticPose(.5f, .5f), new Editable(), spriteVisual, new CircleCollider());
+		this.testEntity2 = new TestEntity().addComponents(new StaticPose(5f, 5f), new Editable(), spriteVisual2, new CircleCollider());
 	}
 	
 	@Override
@@ -51,6 +54,7 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		ServiceManager.addService(this.editorSystem);
 		this.editorSystem.addEditable(this.testEntity.getComponent(Editable.class));
 		this.testEntity.addComponentsToManagers();
+		this.testEntity2.addComponentsToManagers();
 		this.editorSystem.subscribe();
 	}
 
@@ -60,6 +64,7 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		ServiceManager.removeService(EditorSystem.class);
 		this.editorSystem.removeEditable(this.testEntity.getComponent(Editable.class));
 		this.testEntity.removeComponentsFromManagers();
+		this.testEntity2.removeComponentsFromManagers();
 		this.editorSystem.unsubscribe();
 	}
 
