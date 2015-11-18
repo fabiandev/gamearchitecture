@@ -18,13 +18,13 @@ public abstract class Collider extends BaseComponent implements Collideable {
 	// Constructors and getters/setters for fixed height/width included.
 	public Collider(float width) {
 		super();
-		this.width = width;
+		this.width = width / 2f;
 	}
 
 	public Collider(float width, float height) {
 		super();
-		this.width = width;
-		this.height = height;
+		this.width = width / 2f;
+		this.height = height / 2f;
 	}
 
 	public float getWidth() {
