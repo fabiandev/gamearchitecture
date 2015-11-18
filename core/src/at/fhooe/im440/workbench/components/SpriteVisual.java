@@ -248,12 +248,8 @@ public class SpriteVisual extends BaseComponent implements Visual {
 	@Override
 	public boolean contains(float x, float y) {
 		
-		if (this.getEntity().hasComponent(CircleCollider.class)) {
-			return this.getEntity().getComponent(CircleCollider.class).isHit(x, y);
-		}
-
-		if (this.getEntity().hasComponent(BoxCollider.class)) {
-			return this.getEntity().getComponent(BoxCollider.class).isHit(x, y);
+		if (this.getEntity().hasComponent(Collider.class)) {
+			return this.getEntity().getComponent(Collider.class).isHit(x, y);
 		}
 		
 		return false;
