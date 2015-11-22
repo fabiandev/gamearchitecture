@@ -23,6 +23,7 @@ import at.fhooe.im440.workbench.services.CameraSystem.CameraTarget;
 import at.fhooe.im440.workbench.services.ColliderSystem.ColliderSystem;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
+import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
 import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
 import at.fhooe.im440.workbench.services.Messenger.PositionMessage;
 import at.fhooe.im440.workbench.services.Messenger.IntegerMessage;
@@ -60,6 +61,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		ServiceManager.addService(new AssetManager());
 		ServiceManager.addService(new EntityManager());
 		ServiceManager.addService(new EditorSystem());
+		ServiceManager.addService(new EntityFactory());
 		ServiceManager.addService(new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, new CameraTarget(new StaticPose())));
 		ServiceManager.addService(new RenderSystem(this.getBatch()));
 		ServiceManager.addService(new ColliderSystem());
@@ -126,7 +128,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
+		messenger.fire(new Message(MessageType.KEY_DOWN).with(new IntegerMessage(keycode)));
 		return false;
 	}
 

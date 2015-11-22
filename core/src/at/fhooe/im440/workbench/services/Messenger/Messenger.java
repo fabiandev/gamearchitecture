@@ -16,7 +16,7 @@ public class Messenger implements Service {
 		ArrayList<Subscribeable> list = this.subscribers.get(messageType);
 		
 		if (list != null) {
-			list.add(subscriber);	
+			list.add(subscriber);
 		} else {
 			ArrayList<Subscribeable> temp = new ArrayList<Subscribeable>();
 			temp.add(subscriber);
@@ -27,7 +27,7 @@ public class Messenger implements Service {
 	public void subscribe(Subscribeable subscriber, MessageType... messageTypes) {
 		for (MessageType messageType : messageTypes) {
 			this.subscribe(subscriber, messageType);
-		}	
+		}
 	}
 	
 	public void unsubscribe(Subscribeable subscriber) {
@@ -64,7 +64,11 @@ public class Messenger implements Service {
 		MessageType messageType = message.getType();
 		ArrayList<Subscribeable> list = this.subscribers.get(messageType);
 		if (list != null) {
-			for (Subscribeable e : list) {
+			
+			// Needed to avoid ConcurrentModificationException, as list could be modified during loop
+			// Maybe think of better solution?
+			ArrayList<Subscribeable> cloneDummy = (ArrayList<Subscribeable>) list.clone();
+			for (Subscribeable e : cloneDummy) {
 				e.message(message);
 			}
 		}
