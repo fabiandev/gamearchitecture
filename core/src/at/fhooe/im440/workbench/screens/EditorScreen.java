@@ -19,6 +19,7 @@ import at.fhooe.im440.workbench.services.AssetManager.AssetManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
+import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
 
 public class EditorScreen extends ScreenAdapter implements Screen {
 	
@@ -33,9 +34,10 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		
 		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).setOriginCenter();
 		SpriteVisual spriteVisual2 = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).setOriginCenter();
-		
+
 		this.testEntity = new TestEntity().addComponents(new StaticPose(.5f, .5f), new Editable(), spriteVisual, new CircleCollider(1f));
 		this.testEntity2 = new TestEntity().addComponents(new StaticPose(5f, 5f), new Editable(), spriteVisual2, new CircleCollider(1f));
+		
 	}
 	
 	@Override

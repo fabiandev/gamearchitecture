@@ -1,5 +1,6 @@
 package at.fhooe.im440.workbench.services.EntityManager;
 
+import at.fhooe.im440.workbench.components.Collider;
 import at.fhooe.im440.workbench.components.StaticPose;
 import at.fhooe.im440.workbench.services.Service;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;

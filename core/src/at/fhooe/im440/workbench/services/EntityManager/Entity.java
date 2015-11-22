@@ -1,6 +1,7 @@
 package at.fhooe.im440.workbench.services.EntityManager;
 
 import at.fhooe.im440.workbench.components.Component;
+import at.fhooe.im440.workbench.components.SpriteVisual;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
@@ -28,6 +29,14 @@ public abstract class Entity {
 	
 	public void deactivate() {
 		ServiceManager.getService(EntityManager.class).removeEntity(this);
+	}
+	
+	public void switchVisual() {
+		Component dummy = this.getComponent(SpriteVisual.class);
+		if (dummy != null) {
+			this.removeComponent(SpriteVisual.class);
+			this.addComponent(dummy);
+		}
 	}
 	
 	public <T extends Component> T getComponent(Class<T> type) {
