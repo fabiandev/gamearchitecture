@@ -19,6 +19,7 @@ import at.fhooe.im440.workbench.services.AssetManager.AssetManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
+import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
 import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
 
 public class EditorScreen extends ScreenAdapter implements Screen {

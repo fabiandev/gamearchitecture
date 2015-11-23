@@ -43,7 +43,9 @@ public class RenderSystem implements Service {
 		//
 		batch.begin();
 		for (Visual visual : this.visuals) {
-			visual.render(this.batch);
+			if (visual.isActive()) {
+				visual.render(this.batch);
+			}
 		}
 		batch.end();
 	}

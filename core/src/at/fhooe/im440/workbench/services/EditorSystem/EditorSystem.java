@@ -83,7 +83,8 @@ public class EditorSystem implements Service, Subscribeable {
 		for (Editable editable : this.editables) {
 			Entity entity = editable.getEntity();
 			if (entity.getComponent(Collider.class).isColliding()) {
-				entity.switchVisual();
+				// Add some sprite exchange here.
+				//entity.getComponent(Visual.class).deactivate();
 			}
 		}
 	}

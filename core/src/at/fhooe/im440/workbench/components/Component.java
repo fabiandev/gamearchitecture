@@ -2,9 +2,7 @@ package at.fhooe.im440.workbench.components;
 
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 
-public interface Component extends Cloneable {
-	
-	public Component clone();
+public interface Component {
 	
 	public void addToManager();
 	

@@ -31,14 +31,6 @@ public abstract class Entity {
 		ServiceManager.getService(EntityManager.class).removeEntity(this);
 	}
 	
-	public void switchVisual() {
-		Component dummy = this.getComponent(SpriteVisual.class);
-		if (dummy != null) {
-			this.removeComponent(SpriteVisual.class);
-			this.addComponent(dummy);
-		}
-	}
-	
 	public <T extends Component> T getComponent(Class<T> type) {
 		return this.components.getFirst(type);
 	}

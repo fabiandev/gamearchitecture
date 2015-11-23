@@ -8,17 +8,6 @@ public abstract class BaseComponent implements Component {
 	
 	private boolean active = true;
 	
-	public Component clone() {
-		Component dummy = null;
-		try {
-			dummy = (Component) super.clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return dummy;
-	}
-	
 	public Entity getEntity() {
 		return this.entity;
 	}
