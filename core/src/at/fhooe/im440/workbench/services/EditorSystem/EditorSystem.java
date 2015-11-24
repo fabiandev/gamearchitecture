@@ -43,7 +43,7 @@ public class EditorSystem implements Service, Subscribeable {
 		if (!entity.hasComponent(Visual.class)) {
 			throw new IllegalArgumentException("An editable must have a Visual component.");
 		}
-		
+
 		if (!entity.hasComponent(CollisionVisual.class)) {
 			throw new IllegalArgumentException("An editable must have a CollisionVisual component.");
 		}
@@ -159,11 +159,25 @@ public class EditorSystem implements Service, Subscribeable {
 			}
 		}
 	}
-	
+
 	private void handleClone(Vector2 position) {
-		// Implement cloning here.
-		System.out.println("CLONE mode detected @ EditorSystem.java!");
-		this.handleTouchDown(position);
+		if (this.selectState == SelectState.SINGLE_SELECTED) {
+			this.handleTouchDown(position);
+			return;
+		}
+		
+		// Attention! Crap might follow below, as well as in EntityFactory!
+		for (Editable editable : this.editables) {
+			Entity entity = editable.getEntity();
+			if (entity.getComponent(Visual.class).contains(position.x, position.y)) {
+				if (this.selectState == SelectState.SINGLE_SELECTING) {
+					this.addEditable(ServiceManager.getService(EntityFactory.class).cloneEntity(entity).getComponent(Editable.class));
+					entity.getComponent(Editable.class).select();
+					this.selectState = SelectState.SINGLE_SELECTED;
+					break;
+				}
+			}
+		}
 	}
 
 	@Override

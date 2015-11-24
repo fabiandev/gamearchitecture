@@ -1,15 +1,20 @@
 package at.fhooe.im440.workbench.services.EntityManager;
 
+import at.fhooe.im440.workbench.components.BoxCollider;
 import at.fhooe.im440.workbench.components.CircleCollider;
+import at.fhooe.im440.workbench.components.Collider;
 import at.fhooe.im440.workbench.components.CollisionVisual;
 import at.fhooe.im440.workbench.components.Component;
 import at.fhooe.im440.workbench.components.Editable;
+import at.fhooe.im440.workbench.components.Pose;
 import at.fhooe.im440.workbench.components.SpriteVisual;
 import at.fhooe.im440.workbench.components.StaticPose;
 import at.fhooe.im440.workbench.entities.TestEntity;
 import at.fhooe.im440.workbench.services.Service;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.AssetManager.AssetManager;
+import at.fhooe.im440.workbench.services.ColliderSystem.Collideable;
+import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
 
 public class EntityFactory implements Service {
 	
@@ -45,7 +50,12 @@ public class EntityFactory implements Service {
 	}
 	
 	public Entity cloneEntity(Entity entity) {
-		// Clone Entity here, make sure that properties are copied by value!
+		if (entity.getComponent(Collider.class) instanceof CircleCollider) {
+			return this.createCogwheel(entity.getComponent(Pose.class).getPosX(), entity.getComponent(Pose.class).getPosY()).addComponent(new Editable());
+		}
+		if (entity.getComponent(Collider.class) instanceof BoxCollider) {
+			return null;
+		}
 		return null;
 	}
 
