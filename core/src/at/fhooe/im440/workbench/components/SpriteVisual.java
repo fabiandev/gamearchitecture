@@ -93,6 +93,20 @@ public class SpriteVisual extends BaseComponent implements Visual {
 		this.width = region.getRegionWidth();
 		this.height = region.getRegionHeight();
 	}
+	
+	/**
+	 * Sets the region with a given region.
+	 * 
+	 * @param region
+	 * 			Texture region to be set by this visual.
+	 */
+	public void setRegion(TextureRegion region) {
+		this.region = region;
+	}
+	
+	public TextureRegion getRegion() {
+		return this.region;
+	}
 
 	/**
 	 * Sets the layer value of this visual. The default layer value is zero.

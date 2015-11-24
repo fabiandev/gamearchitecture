@@ -47,6 +47,20 @@ public class ColliderSystem implements Service {
 
 				}
 			}
+			
+			if (temp instanceof CircleCollider) {
+				if (temp.isColliding()) {
+					
+				} else {
+					
+				}
+			} else if (temp instanceof BoxCollider) {
+				if (temp.isColliding()) {
+					
+				} else {
+					
+				}
+			}
 		}
 	}
 

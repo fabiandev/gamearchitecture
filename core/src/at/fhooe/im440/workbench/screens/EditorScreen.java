@@ -1,5 +1,7 @@
 package at.fhooe.im440.workbench.screens;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -26,19 +28,14 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 	
 	private Workbench workbench;
 	private EditorSystem editorSystem;
-	private Entity testEntity;
-	private Entity testEntity2;
+	private ArrayList<Entity> entities;
 	
 	public EditorScreen(Workbench workbench) {
 		this.workbench = workbench;
 		this.editorSystem = new EditorSystem();
-		
-		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).setOriginCenter();
-		SpriteVisual spriteVisual2 = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog1")).width(1f).height(1f).setOriginCenter();
-
-		this.testEntity = new TestEntity().addComponents(new StaticPose(.5f, .5f), new Editable(), spriteVisual, new CircleCollider(1f));
-		this.testEntity2 = new TestEntity().addComponents(new StaticPose(5f, 5f), new Editable(), spriteVisual2, new CircleCollider(1f));
-		
+		this.entities = new ArrayList<Entity>();
+		this.entities.add(ServiceManager.getService(EntityFactory.class).createCogwheel(5f, 5f).addComponent(new Editable()));
+		this.entities.add(ServiceManager.getService(EntityFactory.class).createCogwheel(.5f, .5f).addComponent(new Editable()));
 	}
 	
 	@Override
@@ -55,10 +52,9 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 	public void show() {
 		super.show();
 		ServiceManager.addService(this.editorSystem);
-		this.editorSystem.addEditable(this.testEntity.getComponent(Editable.class));
-		this.editorSystem.addEditable(this.testEntity2.getComponent(Editable.class));
-		this.testEntity.addComponentsToManagers();
-		this.testEntity2.addComponentsToManagers();
+		for (Entity entity : this.entities) {
+			this.editorSystem.addEditable(entity.getComponent(Editable.class));
+		}
 		this.editorSystem.subscribe();
 	}
 
@@ -66,9 +62,10 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 	public void hide() {
 		super.hide();
 		ServiceManager.removeService(EditorSystem.class);
-		this.editorSystem.removeEditable(this.testEntity.getComponent(Editable.class));
-		this.testEntity.removeComponentsFromManagers();
-		this.testEntity2.removeComponentsFromManagers();
+		for (Entity entity : this.entities) {
+			this.editorSystem.removeEditable(entity.getComponent(Editable.class));
+			entity.removeComponentsFromManagers();
+		}
 		this.editorSystem.unsubscribe();
 	}
 
