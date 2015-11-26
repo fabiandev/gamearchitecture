@@ -49,6 +49,12 @@ public class EntityFactory implements Service {
 		return this.createEntity(TestEntity.class, new StaticPose(x, y), spriteVisual, collisionVisual, new CircleCollider(1f));
 	}
 	
+	public Entity createBar(float x, float y) {
+		CollisionVisual collisionVisual = new CollisionVisual().setRegion(ServiceManager.getService(AssetManager.class).getRegion("bar1_shadow"));
+		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("bar1")).width(5f).height(.5f).setOriginCenter();
+		return this.createEntity(TestEntity.class, new StaticPose(x, y), spriteVisual, collisionVisual, new BoxCollider(5f, .5f));
+	}
+	
 	public Entity cloneEntity(Entity entity) {
 		if (entity.getComponent(Collider.class) instanceof CircleCollider) {
 			return this.createCogwheel(entity.getComponent(Pose.class).getPosX(), entity.getComponent(Pose.class).getPosY()).addComponent(new Editable());
