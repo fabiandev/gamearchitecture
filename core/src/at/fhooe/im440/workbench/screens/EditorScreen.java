@@ -36,7 +36,7 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		this.entities = new ArrayList<Entity>();
 		this.entities.add(ServiceManager.getService(EntityFactory.class).createCogwheel(5f, 5f).addComponent(new Editable()));
 		this.entities.add(ServiceManager.getService(EntityFactory.class).createCogwheel(.5f, .5f).addComponent(new Editable()));
-		this.entities.add(ServiceManager.getService(EntityFactory.class).createBar(2f, 10f).addComponent(new Editable()));
+		this.entities.add(ServiceManager.getService(EntityFactory.class).createBar(7f, 10f).addComponent(new Editable()));
 	}
 	
 	@Override

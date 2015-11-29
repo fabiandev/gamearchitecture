@@ -12,35 +12,25 @@ public abstract class Collider extends BaseComponent implements Collideable {
 
 	protected ArrayList<Collideable> collisions = new ArrayList<Collideable>();
 
-	protected float width;
-	protected float height;
+	protected float hRad;
+	protected float vRad;
 
 	// Constructors and getters/setters for fixed height/width included.
-	public Collider(float width) {
-		super();
-		this.width = width / 2f;
-	}
 
-	public Collider(float width, float height) {
-		super();
-		this.width = width / 2f;
-		this.height = height / 2f;
-	}
-
-	public float getWidth() {
-		return width;
+	public float getHalfWidth() {
+		return hRad;
 	}
 
 	public void setWidth(float width) {
-		this.width = width;
+		this.hRad = width / 2;
 	}
 
-	public float getHeight() {
-		return height;
+	public float getHalfHeight() {
+		return vRad;
 	}
 
 	public void setHeight(float height) {
-		this.height = height;
+		this.vRad = height / 2;
 	}
 
 	public Vector2 getCenter() {

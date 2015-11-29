@@ -5,14 +5,13 @@ import com.badlogic.gdx.math.Vector2;
 public class CircleCollider extends Collider {
 
 	public CircleCollider(float width) {
-		super(width);
-		// TODO Auto-generated constructor stub
+		this.hRad = width / 2f;
 	}
 
 	@Override
 	public boolean isHit(float x, float y) {
 
-		float w = this.getWidth();
+		float w = this.getHalfWidth();
 		Vector2 center = this.getCenter();
 
 		float deltaX = (float) Math.pow(x - center.x, 2);
@@ -25,16 +24,16 @@ public class CircleCollider extends Collider {
 	@Override
 	public boolean isHit(BoxCollider c) {
 		// TODO Auto-generated method stub
-		return false;
+		return c.isHit(this);
 	}
 
 	@Override
 	public boolean isHit(CircleCollider c) {
 
-		float w = this.getWidth();
+		float w = this.getHalfWidth();
 		Vector2 center = this.getCenter();
 
-		float otherW = c.getEntity().getComponent(Collider.class).getWidth();
+		float otherW = c.getEntity().getComponent(Collider.class).getHalfWidth();
 		Vector2 otherCenter = c.getCenter();
 		
 		float deltaX = (float) Math.pow(otherCenter.x - center.x, 2);

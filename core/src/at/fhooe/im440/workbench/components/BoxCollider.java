@@ -1,10 +1,13 @@
 package at.fhooe.im440.workbench.components;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class BoxCollider extends Collider {
 
+
 	public BoxCollider(float width, float height) {
-		super(width, height);
-		// TODO Auto-generated constructor stub
+		this.hRad = width / 2f;
+		this.vRad = height / 2f;
 	}
 
 	@Override
@@ -21,8 +24,69 @@ public class BoxCollider extends Collider {
 
 	@Override
 	public boolean isHit(CircleCollider c) {
-		// TODO Auto-generated method stub
-		return false;
+		/* Roadmap:
+		 * ---------
+		 * 
+		 * 1. Calculate angle between this.hRad and delta of center points
+		 * 2. Get maximum delta inside the box.
+		 * 3. Check if calculated delta of center points is lower than max. allowed delta.
+		 * -----
+		 * 4. Do the same shit when angle of box collider is other than 0. 
+		 */
+		float hRad = this.getHalfWidth();
+		float vRad = this.getHalfHeight();
+		float angle = this.getEntity().getComponent(Pose.class).getAngle();
+		float radius = c.getHalfWidth();
+		
+		Vector2 centerBox = this.getCenter();
+		Vector2 centerCircle = c.getCenter();
+		Vector2 circleCorrected;
+		
+		// Get diagonal angle of box (when hypotenuse is pointing directly into the corner)
+		float diagonalAngle = (float) Math.toDegrees(Math.atan(vRad / hRad));
+		
+		
+		// 1. Calculate angle in center of box
+		float deltaX = (float) Math.pow(centerBox.x - centerCircle.x, 2);
+		float deltaY = (float) Math.pow(centerBox.y - centerCircle.y, 2);
+		float delta = (float) Math.sqrt(deltaX + deltaY);
+		
+		float centerAngle = (float) Math.toDegrees(Math.asin(Math.sqrt(deltaY) / delta));
+		
+		
+		// 4. Rotate the colliding circle around angle of box
+		// (Correct the centerAngle)
+		centerAngle += angle;
+		
+		// Calculate new coordinates after circle transformation
+		// Calculation: delta * cos(centerAngle + angle) + current centerBox.x, y dimension with sin
+		circleCorrected = new Vector2(centerBox.x + (float) (delta * Math.cos(Math.toRadians(angle + centerAngle))), centerBox.y + (float) (delta * Math.sin(Math.toRadians(angle + centerAngle))));
+		deltaX = (float) Math.sqrt(Math.pow(centerBox.x - circleCorrected.x, 2));
+		deltaY = (float) Math.sqrt(Math.pow(centerBox.y - circleCorrected.y, 2));
+		
+		// 2. Get maximum delta inside box
+		float maxDelta;
+		float halfParam = hRad;
+		
+		if (centerAngle > diagonalAngle) {
+			// If centerAngle is greater than the diagonal angle of the box,
+			// invert the angle and use vRad as reference length.
+			centerAngle = 90f - centerAngle;
+			halfParam = vRad;
+		} 
+		
+		// 3. Calculate the hypotenuse of the virtual triangle (maxDelta), given by centerAngle
+		// and the corresponding reference length from above.
+		maxDelta = halfParam / (float) Math.cos(Math.toRadians(centerAngle));
+		
+		
+		// As a second condition, perform check if sum of vRad or hRad + Radius < delta of its axis
+		// Needed due to a lack of exact values towards the edges.
+		boolean x = deltaX < (hRad + radius);
+		boolean y = deltaY < (vRad + radius);
+		
+		return delta < (maxDelta + radius) || (x && y);
+		
 	}
 	
 }
