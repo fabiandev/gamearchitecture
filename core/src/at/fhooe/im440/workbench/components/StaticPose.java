@@ -43,7 +43,13 @@ public class StaticPose extends BaseComponent implements Pose {
 
 	@Override
 	public void setAngle(float angleRadians) {
-		this.angleRadians = angleRadians;
+		if (angleRadians > (2 * Math.PI)) {
+			this.angleRadians = (float)(angleRadians - 2 * Math.PI);
+		} else if (angleRadians < 0) {
+			this.angleRadians = (float)(angleRadians + 2 * Math.PI);
+		} else {
+			this.angleRadians = angleRadians;
+		}
 	}
 
 	@Override

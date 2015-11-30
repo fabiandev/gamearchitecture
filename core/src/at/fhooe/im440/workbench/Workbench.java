@@ -26,6 +26,7 @@ import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
 import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
 import at.fhooe.im440.workbench.services.Messenger.PositionMessage;
+import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsEngine;
 import at.fhooe.im440.workbench.services.Messenger.IntegerMessage;
 import at.fhooe.im440.workbench.services.Messenger.Message;
 import at.fhooe.im440.workbench.services.Messenger.MessageType;
@@ -54,7 +55,6 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		this.batch = new SpriteBatch();
 		this.stage = new Stage();
 		this.font = new BitmapFont(Gdx.files.internal("arial_black_32.fnt"), Gdx.files.internal("arial_black_32.png"), false);
-		// Make an update service??
 	
 		this.messenger = new Messenger();
 		
@@ -67,6 +67,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		ServiceManager.addService(new RenderSystem(this.getBatch()));
 		ServiceManager.addService(new ColliderSystem());
 		ServiceManager.addService(new UpdateService());
+		ServiceManager.addService(new PhysicsEngine());
 		
 		ServiceManager.activate();
 		
