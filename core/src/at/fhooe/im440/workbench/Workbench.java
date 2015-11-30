@@ -61,7 +61,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		ServiceManager.addService(this.messenger);
 		ServiceManager.addService(new AssetManager());
 		ServiceManager.addService(new EntityManager());
-		//ServiceManager.addService(new EditorSystem());
+		ServiceManager.addService(new EditorSystem());
 		ServiceManager.addService(new EntityFactory());
 		ServiceManager.addService(new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, new CameraTarget(new StaticPose())));
 		ServiceManager.addService(new RenderSystem(this.getBatch()));
