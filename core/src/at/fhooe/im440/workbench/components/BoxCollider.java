@@ -46,12 +46,14 @@ public class BoxCollider extends Collider {
 	@Override
 	public boolean isHit(CircleCollider c) {
 		/*
-		 * Roadmap: ---------
+		 * Roadmap: 
+		 * ---------
 		 * 
-		 * 1. Calculate angle between this.hRad and delta of center points 2.
-		 * Get maximum delta inside the box. 3. Check if calculated delta of
-		 * center points is lower than max. allowed delta. ----- 4. Do the same
-		 * shit when angle of box collider is other than 0.
+		 * 1. Calculate angle between this.hRad and delta of center points 
+		 * 2. Get maximum delta inside the box. 
+		 * 3. Check if calculated delta of center points is lower than max. allowed delta. 
+		 * ----- 
+		 * 4. Do the same shit when angle of box collider is other than 0.
 		 */
 		float hRad = this.getHalfWidth();
 		float vRad = this.getHalfHeight();
@@ -74,8 +76,6 @@ public class BoxCollider extends Collider {
 		float centerAngle = (float) Math.toDegrees(Math.asin(Math.sqrt(deltaY) / delta));
 
 		// 4. Rotate the colliding circle around angle of box
-		// (Correct the centerAngle)
-		centerAngle += angle;
 
 		// Calculate new coordinates after circle transformation
 		// Calculation: delta * cos(centerAngle + angle) + current centerBox.x,
