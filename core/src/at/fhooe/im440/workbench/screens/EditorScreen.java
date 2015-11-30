@@ -65,7 +65,7 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		ServiceManager.removeService(EditorSystem.class);
 		for (Entity entity : this.entities) {
 			this.editorSystem.removeEditable(entity.getComponent(Editable.class));
-			entity.removeComponentsFromManagers();
+			entity.deactivateComponents();
 		}
 		this.editorSystem.unsubscribe();
 	}

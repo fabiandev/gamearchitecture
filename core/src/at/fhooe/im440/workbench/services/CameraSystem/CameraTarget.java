@@ -32,12 +32,12 @@ public class CameraTarget extends BaseComponent {
 	}
 
 	@Override
-	public void addToManager() {
+	public void activate() {
 		// TODO add to camera system
 	}
 
 	@Override
-	public void removeFromManager() {
+	public void deactivate() {
 		// TODO remove from camera system
 	}
 	

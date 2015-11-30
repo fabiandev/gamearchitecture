@@ -31,6 +31,7 @@ import at.fhooe.im440.workbench.services.Messenger.Message;
 import at.fhooe.im440.workbench.services.Messenger.MessageType;
 import at.fhooe.im440.workbench.services.Messenger.Messenger;
 import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
+import at.fhooe.im440.workbench.services.UpdateService.UpdateService;
 
 public class Workbench extends Game implements ApplicationListener, InputProcessor {
 	
@@ -65,6 +66,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		ServiceManager.addService(new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, new CameraTarget(new StaticPose())));
 		ServiceManager.addService(new RenderSystem(this.getBatch()));
 		ServiceManager.addService(new ColliderSystem());
+		ServiceManager.addService(new UpdateService());
 		
 		ServiceManager.activate();
 		

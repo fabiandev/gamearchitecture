@@ -12,10 +12,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 
 import at.fhooe.im440.workbench.services.ServiceManager;
-import at.fhooe.im440.workbench.services.ColliderSystem.Collideable;
 import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
 
 /**
@@ -225,16 +223,14 @@ public class SpriteVisual extends BaseComponent implements Visual {
 
 	// TODO: change those to activate() and remove the boolean activated flag?
 	@Override
-	public void addToManager() {
+	public void activate() {
 		ServiceManager.getService(RenderSystem.class).addVisual(this);
 		this.pose = this.getEntity().getComponent(Pose.class);
-		this.activate();
 	}
 
 	@Override
-	public void removeFromManager() {
+	public void deactivate() {
 		ServiceManager.getService(RenderSystem.class).removeVisual(this);
-		this.deactivate();
 	}
 
 	@Override
@@ -267,5 +263,11 @@ public class SpriteVisual extends BaseComponent implements Visual {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public Visual setColor(Color color) {
+		this.color = color;
+		return this;
 	}
 }

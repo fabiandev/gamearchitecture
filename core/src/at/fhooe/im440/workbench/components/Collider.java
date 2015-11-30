@@ -39,15 +39,13 @@ public abstract class Collider extends BaseComponent implements Collideable {
 	}
 
 	@Override
-	public void addToManager() {
+	public void activate() {
 		ServiceManager.getService(ColliderSystem.class).addCollider(this);
-		this.activate();
 	}
 
 	@Override
-	public void removeFromManager() {
+	public void deactivate() {
 		ServiceManager.getService(ColliderSystem.class).removeCollider(this);
-		this.deactivate();
 	}
 
 	@Override

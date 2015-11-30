@@ -4,10 +4,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
 import at.fhooe.im440.workbench.components.Collider;
-import at.fhooe.im440.workbench.components.CollisionVisual;
+import at.fhooe.im440.workbench.components.CollisionMarker;
 import at.fhooe.im440.workbench.components.Editable;
 import at.fhooe.im440.workbench.components.Pose;
-import at.fhooe.im440.workbench.components.SpriteVisual;
 import at.fhooe.im440.workbench.components.Visual;
 import at.fhooe.im440.workbench.services.Service;
 import at.fhooe.im440.workbench.services.ServiceManager;
@@ -44,7 +43,7 @@ public class EditorSystem implements Service, Subscribeable {
 			throw new IllegalArgumentException("An editable must have a Visual component.");
 		}
 
-		if (!entity.hasComponent(CollisionVisual.class)) {
+		if (!entity.hasComponent(CollisionMarker.class)) {
 			throw new IllegalArgumentException("An editable must have a CollisionVisual component.");
 		}
 
@@ -85,14 +84,14 @@ public class EditorSystem implements Service, Subscribeable {
 
 	@Override
 	public void update() {
-		for (Editable editable : this.editables) {
-			Entity entity = editable.getEntity();
-			if (entity.getComponent(Collider.class).isColliding()) {
-				entity.getComponent(CollisionVisual.class).activate();
-			} else {
-				entity.getComponent(CollisionVisual.class).deactivate();
-			}
-		}
+//		for (Editable editable : this.editables) {
+//			Entity entity = editable.getEntity();
+//			if (entity.getComponent(Collider.class).isColliding()) {
+//				entity.getComponent(CollisionVisual.class).activate();
+//			} else {
+//				entity.getComponent(CollisionVisual.class).deactivate();
+//			}
+//		}
 	}
 
 	@Override

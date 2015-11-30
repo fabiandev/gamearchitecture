@@ -8,15 +8,13 @@ public class Editable extends BaseComponent {
 	private boolean selected = false;
 	
 	@Override
-	public void addToManager() {
+	public void activate() {
 		ServiceManager.getService(EditorSystem.class).addEditable(this);
-		this.activate();
 	}
 
 	@Override
-	public void removeFromManager() {
+	public void deactivate() {
 		ServiceManager.getService(EditorSystem.class).removeEditable(this);
-		this.deactivate();
 	}
 	
 	public void select() {

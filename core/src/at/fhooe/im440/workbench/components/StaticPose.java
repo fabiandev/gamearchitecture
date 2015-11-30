@@ -47,12 +47,12 @@ public class StaticPose extends BaseComponent implements Pose {
 	}
 
 	@Override
-	public void addToManager() {
+	public void activate() {
 		
 	}
 
 	@Override
-	public void removeFromManager() {
+	public void deactivate() {
 		
 	}
 
