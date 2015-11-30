@@ -39,7 +39,24 @@ public class BoxCollider extends Collider {
 
 	@Override
 	public boolean isHit(BoxCollider c) {
-		// TODO Auto-generated method stub
+		
+		// Warning; only contains colliding checks if angle is 0
+		float x = c.getCenter().x;
+		float y = c.getCenter().y;
+		float w = c.getHalfWidth();
+		float h = c.getHalfHeight();
+		
+		Vector2[] corners = { new Vector2(x + w, y + h), 
+				new Vector2(x + w, y - h), 
+				new Vector2(x - w, y + h), 
+				new Vector2(x - w, y - h) };
+		
+		for (Vector2 v : corners) {
+			if (this.isHit(v.x, v.y)) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 
