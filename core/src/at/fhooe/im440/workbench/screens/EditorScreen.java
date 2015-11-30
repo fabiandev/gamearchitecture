@@ -7,6 +7,8 @@ import com.badlogic.gdx.ScreenAdapter;
 
 import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.components.Editable;
+import at.fhooe.im440.workbench.components.Pose;
+import at.fhooe.im440.workbench.entities.WallEntity;
 import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
@@ -46,6 +48,10 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 			entity.activate();
 			this.editorSystem.addEditable(entity.getComponent(Editable.class));
 			entity.activateComponents();
+			// Angle testing for rectangle below:
+//			if (entity instanceof WallEntity) {
+//				entity.getComponent(Pose.class).setAngle((float) Math.toRadians(12.3465)); 
+//			}
 		}
 		this.editorSystem.subscribe();
 	}

@@ -68,7 +68,6 @@ public class BoxCollider extends Collider {
 		 * 
 		 * 1. Calculate angle between this.hRad and delta of center points 
 		 * 2. Get maximum delta inside the box. 
-		 * 3. Check if calculated delta of center points is lower than max. allowed delta. 
 		 * ----- 
 		 * 4. Do the same shit when angle of box collider is other than 0.
 		 */
@@ -93,14 +92,16 @@ public class BoxCollider extends Collider {
 		float centerAngle = (float) Math.toDegrees(Math.asin(Math.sqrt(deltaY) / delta));
 
 		// 4. Rotate the colliding circle around angle of box
-
+		centerAngle += angle;
+		
 		// Calculate new coordinates after circle transformation
 		// Calculation: delta * cos(centerAngle + angle) + current centerBox.x,
 		// y dimension with sin
-		circleCorrected = new Vector2(centerBox.x + (float) (delta * Math.cos(Math.toRadians(angle + centerAngle))),
-				centerBox.y + (float) (delta * Math.sin(Math.toRadians(angle + centerAngle))));
+		circleCorrected = new Vector2(centerBox.x + (float) (delta * Math.cos(Math.toRadians(centerAngle))),
+				centerBox.y + (float) (delta * Math.sin(Math.toRadians(centerAngle))));
 		deltaX = (float) Math.sqrt(Math.pow(centerBox.x - circleCorrected.x, 2));
 		deltaY = (float) Math.sqrt(Math.pow(centerBox.y - circleCorrected.y, 2));
+		centerAngle = (float) Math.toDegrees(Math.asin(deltaY / delta));
 
 		// 2. Get maximum delta inside box
 		float maxDelta;
@@ -112,10 +113,7 @@ public class BoxCollider extends Collider {
 			centerAngle = 90f - centerAngle;
 			halfParam = vRad;
 		}
-
-		// 3. Calculate the hypotenuse of the virtual triangle (maxDelta), given
-		// by centerAngle
-		// and the corresponding reference length from above.
+		
 		maxDelta = halfParam / (float) Math.cos(Math.toRadians(centerAngle));
 
 		// As a second condition, perform check if sum of vRad or hRad + Radius
@@ -124,6 +122,7 @@ public class BoxCollider extends Collider {
 		boolean x = deltaX < (hRad + radius);
 		boolean y = deltaY < (vRad + radius);
 
+		// When rectangle is turned, there seems to be an issue with x && y... No clue.
 		return delta < (maxDelta + radius) || (x && y);
 
 	}
