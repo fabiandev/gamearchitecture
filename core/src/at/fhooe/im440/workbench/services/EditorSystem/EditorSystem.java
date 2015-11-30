@@ -170,7 +170,9 @@ public class EditorSystem implements Service, Subscribeable {
 			Entity entity = editable.getEntity();
 			if (entity.getComponent(Visual.class).contains(position.x, position.y)) {
 				if (this.selectState == SelectState.SINGLE_SELECTING) {
-					this.addEditable(ServiceManager.getService(EntityFactory.class).cloneEntity(entity).getComponent(Editable.class));
+					Entity cloned = ServiceManager.getService(EntityFactory.class).cloneEntity(entity).addComponent(new Editable());
+					cloned.activateComponents();
+					this.addEditable(cloned.getComponent(Editable.class));
 					entity.getComponent(Editable.class).select();
 					this.selectState = SelectState.SINGLE_SELECTED;
 					break;

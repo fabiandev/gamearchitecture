@@ -40,7 +40,7 @@ bar1_shadow
   index: -1
 bar_n
   rotate: false
-  xy: 0, 87
+  xy: 0, 80
   size: 127, 13
   orig: 127, 13
   offset: 0, 0

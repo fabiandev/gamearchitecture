@@ -2,25 +2,20 @@ package at.fhooe.im440.workbench.screens;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import at.fhooe.im440.workbench.Workbench;
-import at.fhooe.im440.workbench.components.CircleCollider;
 import at.fhooe.im440.workbench.components.Editable;
 import at.fhooe.im440.workbench.components.Physics;
 import at.fhooe.im440.workbench.components.SpriteVisual;
 import at.fhooe.im440.workbench.components.StaticPose;
 import at.fhooe.im440.workbench.entities.Spring;
 import at.fhooe.im440.workbench.entities.TestEntity;
+import at.fhooe.im440.workbench.components.Pose;
+import at.fhooe.im440.workbench.entities.WallEntity;
 import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.ServiceManager;
-import at.fhooe.im440.workbench.services.AssetManager.AssetManager;
-import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
@@ -41,13 +36,14 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		Entity te = ServiceManager.getService(EntityFactory.class).createCogwheel(7f, 10f).addComponent(new Editable()).addComponent(new Physics());
 		
 		this.entities.add(te);
-		this.entities.add(ServiceManager.getService(EntityFactory.class).createCogwheel(.5f, .5f).addComponent(new Editable()));
-		this.entities.add(ServiceManager.getService(EntityFactory.class).createBar(7f, 10f).addComponent(new Editable()));
+		this.entities.add(ServiceManager.getService(EntityFactory.class).createCogwheel(6.5f, 1f).addComponent(new Editable()));
+		this.entities.add(ServiceManager.getService(EntityFactory.class).createWall(7f, 6f).addComponent(new Editable()));
 		
 		Spring spring = new Spring();
 		spring.attachObject(te.getComponent(Physics.class));
 		
 		this.entities.add(spring);
+
 	}
 	
 	@Override
@@ -65,8 +61,12 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		super.show();
 		ServiceManager.addService(this.editorSystem);
 		for (Entity entity : this.entities) {
-			entity.activate();
 			entity.activateComponents();
+			entity.activate();
+			// Angle testing for rectangle below:
+//			if (entity instanceof WallEntity) {
+//				entity.getComponent(Pose.class).setAngle((float) Math.toRadians(12.3465)); 
+//			}
 		}
 		this.editorSystem.subscribe();
 	}
@@ -76,8 +76,8 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		super.hide();
 		ServiceManager.removeService(EditorSystem.class);
 		for (Entity entity : this.entities) {
-			entity.deactivate();
 			entity.deactivateComponents();
+			entity.deactivate();
 		}
 		this.editorSystem.unsubscribe();
 	}
