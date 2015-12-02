@@ -54,11 +54,11 @@ public class Physics extends BaseComponent implements PhysicsObject {
 	@Override
 	public void update(float delta) {
 		float lastAcceleration = this.acceleration;
-		float position = this.velocity * delta + (0.5f * lastAcceleration * delta * delta);
 		//this.acceleration = this.spring.getForce() / this.mass;
 		this.acceleration = -9.81f * this.pose.getPosY() - this.velocity * 0.5f;
-		float avgAcceleration = (lastAcceleration + this.acceleration);
+		float avgAcceleration = (lastAcceleration + this.acceleration) / 2f;
 		this.velocity += avgAcceleration * delta;
+		float position = this.velocity * delta - (0.5f * avgAcceleration * delta * delta);
 		//this.force = this.mass / this.acceleration;
 		this.pose.setPos(this.pose.getPosX(), this.pose.getPosY() + position);
 		

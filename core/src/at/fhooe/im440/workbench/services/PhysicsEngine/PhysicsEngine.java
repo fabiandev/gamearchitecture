@@ -8,6 +8,8 @@ import at.fhooe.im440.workbench.utilities.GenericArrayList;
 public class PhysicsEngine implements Service {
 
 	private GenericArrayList<PhysicsObject> physicsObjects = new GenericArrayList<PhysicsObject>();
+	private float accumulator = 0;
+	private final float step = 1f/120f;
 
 	public boolean addPhysicsObject(PhysicsObject physicsObject) {
 		return this.physicsObjects.add(physicsObject);
@@ -23,10 +25,17 @@ public class PhysicsEngine implements Service {
 
 	@Override
 	public void update() {
-		for (PhysicsObject physicsObject : this.physicsObjects) {
-			float delta = Gdx.graphics.getDeltaTime();
-			physicsObject.update(delta);
-		}
+		float dt = Gdx.graphics.getDeltaTime();
+		
+		this.accumulator += dt;
+		
+    	while (this.accumulator >= this.step) {
+    		for (PhysicsObject physicsObject : this.physicsObjects) {
+    			physicsObject.update(step);
+    		}
+    		
+        	this.accumulator -= this.step;
+    	}
 	}
 
 }
