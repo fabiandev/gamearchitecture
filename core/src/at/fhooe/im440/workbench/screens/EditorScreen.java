@@ -39,10 +39,10 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		this.entities.add(ServiceManager.getService(EntityFactory.class).createCogwheel(6.5f, 1f).addComponent(new Editable()));
 		this.entities.add(ServiceManager.getService(EntityFactory.class).createWall(7f, 6f).addComponent(new Editable()));
 		
-		Spring spring = new Spring();
-		spring.attachObject(te.getComponent(Physics.class));
+		//Spring spring = new Spring();
+		//spring.attachObject(te.getComponent(Physics.class));
 		
-		this.entities.add(spring);
+		//this.entities.add(spring);
 
 	}
 	

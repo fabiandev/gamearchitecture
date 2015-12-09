@@ -1,7 +1,5 @@
 package at.fhooe.im440.workbench.components;
 
-import com.badlogic.gdx.math.Vector2;
-
 import at.fhooe.im440.workbench.entities.Spring;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsEngine;
@@ -10,57 +8,69 @@ import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsObject;
 public class Physics extends BaseComponent implements PhysicsObject {
 
 	private Pose pose;
+	private PhysicsEngine physicsEngine;
 	private Spring spring;
+	
 	private float mass = 10f;
-	public float acceleration = 0;
-	//private Vector2 velocity = new Vector2(0, 0);
+	private float acceleration = 0;
+	private float decay = 0.5f;
 	private float velocity = 0f;
-	//private float force = 0f;
-	// private float velocityDecay = 0.9f;
+	private float force = 0f;
+	private float gravity;
 
+	public Physics(/*Spring spring*/) {
+		this.physicsEngine = ServiceManager.getService(PhysicsEngine.class);
+		this.acceleration = this.physicsEngine.getGravity();
+		//this.spring = spring;
+	}
+	
 	@Override
 	public void activate() {
-		ServiceManager.getService(PhysicsEngine.class).addPhysicsObject(this);
+		this.physicsEngine.addPhysicsObject(this);
 		this.pose = this.getEntity().getComponent(Pose.class);
 	}
 
 	@Override
 	public void deactivate() {
-		ServiceManager.getService(PhysicsEngine.class).removePhysicsObject(this);
+		this.physicsEngine.removePhysicsObject(this);
 
 	}
-
-	public void attachToSpring(Spring spring) {
-		this.spring = spring;
-	}
-
-	public void detachFromSpring() {
-		this.spring = null;
-	}
-
-	public Physics setMass(float mass) {
-		this.mass = mass;
-		return this;
-	}
-
-	public float getMass() {
-		return this.mass;
-	}
-
-	public float getVelocity() {
-		return this.velocity;
+	
+	public void applyForce(float force) {
+		this.force += force;
 	}
 
 	@Override
-	public void update(float delta) {
+	public void update(float timeStep) {
+		this.gravity = this.physicsEngine.getGravity();
+		
 		float lastAcceleration = this.acceleration;
-		//this.acceleration = this.spring.getForce() / this.mass;
-		this.acceleration = -9.81f * this.pose.getPosY() - this.velocity * 0.5f;
+		
+		this.acceleration = this.gravity * this.pose.getPosY() - this.velocity * this.decay;
+		//this.acceleration += this.mass / this.force;
+		
 		float avgAcceleration = (lastAcceleration + this.acceleration) / 2f;
-		this.velocity += avgAcceleration * delta;
-		float position = this.velocity * delta - (0.5f * avgAcceleration * delta * delta);
-		//this.force = this.mass / this.acceleration;
+		
+		this.velocity += avgAcceleration * timeStep;
+		
+		float position = this.velocity * timeStep + (0.5f * avgAcceleration * timeStep * timeStep);
+		
 		this.pose.setPos(this.pose.getPosX(), this.pose.getPosY() + position);
+		
+		this.force = 0f;
+		
+		//this.force = this.mass / this.acceleration;
+		
+		
+		//this.spring.applyForce(0f, this.force);
+		
+		
+		//this.acceleration = this.spring.getForce() / this.mass;
+		
+		//this.force = this.mass / this.acceleration;
+		
+		
+		
 		
 		//this.velocity.x += this.acceleration * Math.cos(this.pose.getAngle()) * delta;
 		//this.velocity.y += this.acceleration * /*Math.sin(this.pose.getAngle()) */ delta;
@@ -98,6 +108,31 @@ public class Physics extends BaseComponent implements PhysicsObject {
 		// System.out.print(" ");
 		// System.out.println(this.pose.getPosY());
 		// System.out.println("\n");
+	}
+	
+	public Physics setMass(float mass) {
+		this.mass = mass;
+		return this;
+	}
+
+	public float getMass() {
+		return this.mass;
+	}
+
+	public float getVelocity() {
+		return this.velocity;
+	}
+	
+	public float getForce() {
+		return this.force;
+	}
+	
+	public float getDecay() {
+		return this.decay;
+	}
+	
+	public float getAcceleration() {
+		return this.acceleration;
 	}
 
 }

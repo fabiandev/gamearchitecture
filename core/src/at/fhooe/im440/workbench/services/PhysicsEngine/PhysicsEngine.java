@@ -9,8 +9,10 @@ public class PhysicsEngine implements Service {
 
 	private GenericArrayList<PhysicsObject> physicsObjects = new GenericArrayList<PhysicsObject>();
 	private float accumulator = 0;
-	private final float step = 1f/120f;
+	private final float timeStep = 1f/120f;
 
+	private float gravity = -9.81f;
+	
 	public boolean addPhysicsObject(PhysicsObject physicsObject) {
 		return this.physicsObjects.add(physicsObject);
 	}
@@ -23,18 +25,26 @@ public class PhysicsEngine implements Service {
 		return this.physicsObjects.removeAll(type);
 	}
 
+	public float getGravity() {
+		return this.gravity;
+	}
+	
+	public void setGravity(float gravity) {
+		this.gravity = gravity;
+	}
+	
 	@Override
 	public void update() {
 		float dt = Gdx.graphics.getDeltaTime();
 		
 		this.accumulator += dt;
 		
-    	while (this.accumulator >= this.step) {
+    	while (this.accumulator >= this.timeStep) {
     		for (PhysicsObject physicsObject : this.physicsObjects) {
-    			physicsObject.update(step);
+    			physicsObject.update(timeStep);
     		}
     		
-        	this.accumulator -= this.step;
+        	this.accumulator -= this.timeStep;
     	}
 	}
 
