@@ -45,3 +45,10 @@ bar_n
   orig: 127, 13
   offset: 0, 0
   index: -1
+pixel
+  rotate: false
+  xy: 0, 1
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1

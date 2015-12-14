@@ -1,12 +1,12 @@
 package at.fhooe.im440.workbench.entities;
 
-import at.fhooe.im440.workbench.components.Physics;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
+import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsObject;
 
 public class Spring extends Entity {
 
-	Physics p1;
-	Physics p2;
+	PhysicsObject p1;
+	PhysicsObject p2;
 	
 	
 	// float acceleration = 9.81f;
@@ -16,7 +16,7 @@ public class Spring extends Entity {
 	float lengthY; // d
 	
 	
-	public Spring(Physics p1, Physics p2) {
+	public Spring(PhysicsObject p1, PhysicsObject p2) {
 		this.p1 = p1;
 		this.p2 = p2;
 		
@@ -26,6 +26,26 @@ public class Spring extends Entity {
 		this.lengthY = 2f;
 		
 		// distance p1 p2 = d
+	}
+	
+	public Spring setDesiredLengthY(float lengthY) {
+		this.lengthY = lengthY;
+		return this;
+	}
+	
+	public Spring setDesiredLengthX(float lengthX) {
+		this.lengthX = lengthX;
+		return this;
+	}
+	
+	public Spring setDecay(float decay) {
+		this.decay = decay;
+		return this;
+	}
+	
+	public Spring setStiffness(float stiffness) {
+		this.stiffness = stiffness;
+		return this;
 	}
 	
 //	private void calculateStretch() {
