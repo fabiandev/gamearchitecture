@@ -35,12 +35,13 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 //		this.entities.add(ServiceManager.getService(EntityFactory.class).createCogwheel(6.5f, 1f).addComponent(new Editable()));
 //		this.entities.add(ServiceManager.getService(EntityFactory.class).createWall(7f, 6f).addComponent(new Editable()));
 //		
+		
+		
 		Physics p1 = new Physics();
 		Physics p2 = new Physics();
-		//p1.setMass(15f);
 		Entity e1 = ServiceManager
 				.getService(EntityFactory.class)
-				.createCogwheel(5f, 12f, Picasso.GREEN)
+				.createCogwheel(20f, 12f, Picasso.GREEN)
 				.addComponent(p1);
 		
 		Entity e2 = ServiceManager
@@ -71,11 +72,98 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		s2.activateComponents();
 		s2.activate();
 		
-		//Spring spring = new Spring();
-		//spring.attachObject(te.getComponent(Physics.class));
-		
-		//this.entities.add(spring);
+		this.createSprings();
 
+	}
+	
+	private void createSprings() {
+		
+		NoPhysics noPhysics = new NoPhysics();
+		Physics p1 = new Physics();
+		Physics p2 = new Physics();
+		Physics p3 = new Physics();
+		Physics p4 = new Physics();
+		
+		Entity e4 = ServiceManager
+				.getService(EntityFactory.class)
+				.createCogwheel(5f, 15f, Picasso.GOLD)
+				.addComponent(new Editable())
+				.addComponent(noPhysics);
+		
+		Entity e5 = ServiceManager
+				.getService(EntityFactory.class)
+				.createCogwheel(5f, 10f, Picasso.BLUE)
+				.addComponent(p1);
+		
+		Entity s1 = new Spring(noPhysics, p1).setStiffness(500f).setDesiredLengthY(5f);
+		
+		Entity e6 = ServiceManager
+				.getService(EntityFactory.class)
+				.createCogwheel(5f, 5f, Picasso.GREEN)
+				.addComponent(p2);
+		
+		Entity e7 = ServiceManager
+				.getService(EntityFactory.class)
+				.createCogwheel(10f, 5f, Picasso.RED)
+				.addComponent(p3);
+		
+		Entity e8 = ServiceManager
+				.getService(EntityFactory.class)
+				.createCogwheel(10f, 10f, Picasso.BROWN)
+				.addComponent(p4);
+		
+		float stiffness = 300f;
+		
+		Entity s2 = new Spring(p1, p2).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		
+		Entity s3 = new Spring(p2, p3).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		
+		Entity s4 = new Spring(p3, p4).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		
+		Entity s5 = new Spring(p4, p1).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		
+		
+		
+		Entity s6 = new Spring(p1, p3).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		
+		Entity s7 = new Spring(p2, p4).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		
+		e4.activateComponents();
+		e4.activate();
+		
+		e5.activateComponents();
+		e5.activate();
+		
+		e6.activateComponents();
+		e6.activate();
+		
+		e7.activateComponents();
+		e7.activate();
+		
+		e8.activateComponents();
+		e8.activate();
+		
+		s1.activateComponents();
+		s1.activate();
+		
+		s2.activateComponents();
+		s2.activate();
+		
+		s3.activateComponents();
+		s3.activate();
+		
+		s4.activateComponents();
+		s4.activate();
+		
+		s5.activateComponents();
+		s5.activate();
+		
+		s6.activateComponents();
+		s6.activate();
+		
+		s7.activateComponents();
+		s7.activate();
+		
 	}
 	
 	@Override

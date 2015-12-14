@@ -1,5 +1,11 @@
 package at.fhooe.im440.workbench.entities;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+
+import at.fhooe.im440.workbench.helpers.Picasso;
+import at.fhooe.im440.workbench.services.ServiceManager;
+import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsObject;
 
@@ -15,6 +21,7 @@ public class Spring extends Entity {
 	float lengthX; // d
 	float lengthY; // d
 	
+	ShapeRenderer shapeRenderer = new ShapeRenderer();
 	
 	public Spring(PhysicsObject p1, PhysicsObject p2) {
 		this.p1 = p1;
@@ -74,6 +81,14 @@ public class Spring extends Entity {
 		
 		p1.applyForce(forceX1, forceY1);
 		p2.applyForce(forceX2, forceY2);
+		
+		CameraSystem cs = ServiceManager.getService(CameraSystem.class);
+		
+		shapeRenderer.setProjectionMatrix(cs.getCamera().combined); 
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Picasso.BLACK);
+		shapeRenderer.line(posX1, posY1, posX2, posY2);
+		shapeRenderer.end();
 	}
 	
 	private float calc(float position1, float position2, float desiredLength, float length, float velocity) {

@@ -54,10 +54,10 @@ public class Physics extends BaseComponent implements PhysicsObject {
 		
 //		this.accelerationX = this.accelerationX - this.velocityX * this.decayX;
 		
-		this.accelerationY = this.gravity * this.pose.getPosY() - this.velocityY * this.decayY;
+		this.accelerationY = this.gravity/* * this.pose.getPosY()*/ - this.velocityY * this.decayY;
 		
 		if (this.mass != 0) {
-			this.accelerationX = this.forceX / this.mass - (this.velocityX * this.decayX);
+			this.accelerationX = this.forceX / this.mass;
 			this.accelerationY += this.forceY / this.mass;
 		}
 		
