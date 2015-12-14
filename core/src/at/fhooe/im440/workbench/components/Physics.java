@@ -1,6 +1,5 @@
 package at.fhooe.im440.workbench.components;
 
-import at.fhooe.im440.workbench.entities.Spring;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsEngine;
 import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsObject;
@@ -9,19 +8,24 @@ public class Physics extends BaseComponent implements PhysicsObject {
 
 	private Pose pose;
 	private PhysicsEngine physicsEngine;
-	private Spring spring;
 	
-	private float mass = 10f;
-	private float acceleration = 0;
-	private float decay = 0.5f;
-	private float velocity = 0f;
-	private float force = 0f;
+	private float mass = 2f;
+	
+	private float accelerationX = 0f;
+	private float accelerationY = 0f;
+	
+	private float decayX = 0.5f;
+	private float decayY = 0.5f;
+	
+	private float velocityX = 0f;
+	private float velocityY = 0f;
+	
+	private float forceX = 0f;
+	private float forceY = 0f;
 	private float gravity;
 
-	public Physics(/*Spring spring*/) {
+	public Physics() {
 		this.physicsEngine = ServiceManager.getService(PhysicsEngine.class);
-		this.acceleration = this.physicsEngine.getGravity();
-		//this.spring = spring;
 	}
 	
 	@Override
@@ -33,31 +37,45 @@ public class Physics extends BaseComponent implements PhysicsObject {
 	@Override
 	public void deactivate() {
 		this.physicsEngine.removePhysicsObject(this);
-
 	}
 	
-	public void applyForce(float force) {
-		this.force += force;
+	@Override
+	public void applyForce(float forceX, float forceY) {
+		this.forceX += forceX;
+		this.forceY += forceY;
 	}
-
+	
 	@Override
 	public void update(float timeStep) {
 		this.gravity = this.physicsEngine.getGravity();
 		
-		float lastAcceleration = this.acceleration;
+		float lastAccelerationX = this.accelerationX;
+		float lastAccelerationY = this.accelerationY;
 		
-		this.acceleration = this.gravity * this.pose.getPosY() - this.velocity * this.decay;
-		//this.acceleration += this.mass / this.force;
+//		this.accelerationX = this.accelerationX - this.velocityX * this.decayX;
 		
-		float avgAcceleration = (lastAcceleration + this.acceleration) / 2f;
+		this.accelerationY = this.gravity * this.pose.getPosY() - this.velocityY * this.decayY;
 		
-		this.velocity += avgAcceleration * timeStep;
+		if (this.mass != 0) {
+			this.accelerationX = this.forceX / this.mass - (this.velocityX * this.decayX);
+			this.accelerationY += this.forceY / this.mass;
+		}
 		
-		float position = this.velocity * timeStep + (0.5f * avgAcceleration * timeStep * timeStep);
+		float avgAccelerationX = (lastAccelerationX + this.accelerationX) / 2f;
+		float avgAccelerationY = (lastAccelerationY + this.accelerationY) / 2f;
 		
-		this.pose.setPos(this.pose.getPosX(), this.pose.getPosY() + position);
+		this.velocityX += avgAccelerationX * timeStep;
+		this.velocityY += avgAccelerationY * timeStep;
 		
-		this.force = 0f;
+		float positionX = this.velocityX * timeStep + (0.5f * avgAccelerationX * timeStep * timeStep);
+		float positionY = this.velocityY * timeStep + (0.5f * avgAccelerationY * timeStep * timeStep);
+		
+		System.out.println(positionY);
+		System.out.println(positionX);
+		
+		this.pose.setPos(this.pose.getPosX() + positionX, this.pose.getPosY() + positionY);
+		
+		this.resetForce();
 		
 		//this.force = this.mass / this.acceleration;
 		
@@ -119,20 +137,30 @@ public class Physics extends BaseComponent implements PhysicsObject {
 		return this.mass;
 	}
 
-	public float getVelocity() {
-		return this.velocity;
+	public float getVelocityX() {
+		return this.velocityX;
 	}
 	
-	public float getForce() {
-		return this.force;
+	public float getVelocityY() {
+		return this.velocityY;
 	}
 	
-	public float getDecay() {
-		return this.decay;
+	public float getAccelerationX() {
+		return this.accelerationX;
 	}
 	
-	public float getAcceleration() {
-		return this.acceleration;
+	public float getAccelerationY() {
+		return this.accelerationY;
+	}
+
+	@Override
+	public Pose getPose() {
+		return this.pose;
+	}
+	
+	public void resetForce() {
+		this.forceX = 0f;
+		this.forceY = 0f;
 	}
 
 }

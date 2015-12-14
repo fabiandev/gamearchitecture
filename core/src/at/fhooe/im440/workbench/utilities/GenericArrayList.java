@@ -2,6 +2,7 @@ package at.fhooe.im440.workbench.utilities;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class GenericArrayList<I> implements Iterable<I> {
 
@@ -39,6 +40,19 @@ public class GenericArrayList<I> implements Iterable<I> {
 		}
 		
 		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends I> ArrayList<T> getAll(Class<T> type) {
+		ArrayList<T> list = new ArrayList<T>();
+		
+		for (I element : this.list) {
+			if (type.isAssignableFrom(element.getClass())) {
+				list.add((T)element);
+			}
+		}
+		
+		return list;
 	}
 	
 	public <T extends I> boolean hasOne(Class<T> type) {

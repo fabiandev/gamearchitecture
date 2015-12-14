@@ -1,17 +1,24 @@
 package at.fhooe.im440.workbench.services.EntityManager;
 
+import com.badlogic.gdx.graphics.Color;
+
 import at.fhooe.im440.workbench.components.BoxCollider;
 import at.fhooe.im440.workbench.components.CircleCollider;
 import at.fhooe.im440.workbench.components.Collider;
 import at.fhooe.im440.workbench.components.Pose;
 import at.fhooe.im440.workbench.entities.CogwheelEntity;
 import at.fhooe.im440.workbench.entities.WallEntity;
+import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.Service;
 
 public class EntityFactory implements Service {
 	
 	public Entity createCogwheel(float x, float y) {
 		return new CogwheelEntity(x, y);
+	}
+	
+	public Entity createCogwheel(float x, float y, Color color) {
+		return new CogwheelEntity(x, y, color);
 	}
 	
 	public Entity createWall(float x, float y) {

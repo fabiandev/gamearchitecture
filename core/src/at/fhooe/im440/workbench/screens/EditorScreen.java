@@ -33,11 +33,33 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		this.editorSystem = new EditorSystem();
 		this.entities = new ArrayList<Entity>();
 		
-		Entity te = ServiceManager.getService(EntityFactory.class).createCogwheel(7f, 10f).addComponent(new Editable()).addComponent(new Physics());
+//		Entity te = ServiceManager.getService(EntityFactory.class).createCogwheel(7f, 10f).addComponent(new Editable()).addComponent(new Physics());
+//		
+//		this.entities.add(te);
+//		this.entities.add(ServiceManager.getService(EntityFactory.class).createCogwheel(6.5f, 1f).addComponent(new Editable()));
+//		this.entities.add(ServiceManager.getService(EntityFactory.class).createWall(7f, 6f).addComponent(new Editable()));
+//		
+		Physics p1 = new Physics();
+		Physics p2 = new Physics();
+		//p1.setMass(15f);
+		Entity e1 = ServiceManager
+				.getService(EntityFactory.class)
+				.createCogwheel(5f, 12f, Picasso.GREEN)
+				.addComponent(p1);
 		
-		this.entities.add(te);
-		this.entities.add(ServiceManager.getService(EntityFactory.class).createCogwheel(6.5f, 1f).addComponent(new Editable()));
-		this.entities.add(ServiceManager.getService(EntityFactory.class).createWall(7f, 6f).addComponent(new Editable()));
+		Entity e2 = ServiceManager
+				.getService(EntityFactory.class)
+				.createCogwheel(10f, 8f, Picasso.RED)
+				.addComponent(p2);
+		
+		e1.activateComponents();
+		e1.activate();
+		e2.activateComponents();
+		e2.activate();
+		
+		Entity s = new Spring(p1, p2);
+		s.activateComponents();
+		s.activate();
 		
 		//Spring spring = new Spring();
 		//spring.attachObject(te.getComponent(Physics.class));
