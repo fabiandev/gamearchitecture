@@ -60,6 +60,7 @@ public class Messenger implements Service {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void fire(Message message) {
 		MessageType messageType = message.getType();
 		ArrayList<Subscribeable> list = this.subscribers.get(messageType);

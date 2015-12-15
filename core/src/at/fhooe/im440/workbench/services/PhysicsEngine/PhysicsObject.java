@@ -6,12 +6,12 @@ public interface PhysicsObject {
 
 	public void update(float delta);
 	public float getMass();
+	public PhysicsObject setMass(float mass);
 	public Pose getPose();
 	public float getVelocityX();
 	public float getVelocityY();
 	public float getAccelerationX();
 	public float getAccelerationY();
 	public void applyForce(float forceX, float forceY);
-	public void resetForce();
 	
 }

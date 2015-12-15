@@ -14,7 +14,7 @@ public class Physics extends BaseComponent implements PhysicsObject {
 	private float accelerationX = 0f;
 	private float accelerationY = 0f;
 	
-	private float decayX = 0.5f;
+	//private float decayX = 0.5f;
 	private float decayY = 0.5f;
 	
 	private float velocityX = 0f;
@@ -52,8 +52,6 @@ public class Physics extends BaseComponent implements PhysicsObject {
 		float lastAccelerationX = this.accelerationX;
 		float lastAccelerationY = this.accelerationY;
 		
-//		this.accelerationX = this.accelerationX - this.velocityX * this.decayX;
-		
 		this.accelerationY = this.gravity/* * this.pose.getPosY()*/ - this.velocityY * this.decayY;
 		
 		if (this.mass != 0) {
@@ -70,62 +68,14 @@ public class Physics extends BaseComponent implements PhysicsObject {
 		float positionX = this.velocityX * timeStep + (0.5f * avgAccelerationX * timeStep * timeStep);
 		float positionY = this.velocityY * timeStep + (0.5f * avgAccelerationY * timeStep * timeStep);
 		
-		System.out.println(positionY);
-		System.out.println(positionX);
-		
 		this.pose.setPos(this.pose.getPosX() + positionX, this.pose.getPosY() + positionY);
 		
 		this.resetForce();
-		
-		//this.force = this.mass / this.acceleration;
-		
-		
-		//this.spring.applyForce(0f, this.force);
-		
-		
-		//this.acceleration = this.spring.getForce() / this.mass;
-		
-		//this.force = this.mass / this.acceleration;
-		
-		
-		
-		
-		//this.velocity.x += this.acceleration * Math.cos(this.pose.getAngle()) * delta;
-		//this.velocity.y += this.acceleration * /*Math.sin(this.pose.getAngle()) */ delta;
-		
-//		float x = this.pose.getPosX()+this.velocity.x*delta;
-//		float y = this.pose.getPosY()+this.velocity.y*delta;
-		
-		
-//		float lastAcceleration = this.acceleration;
-//		float position = (float) (velocity.x * timeStep + (0.5 * lastAcceleration * timeStep * timeStep));
-//		this.acceleration = this.spring.getForce() / this.mass;
-//		float avgAcceleration = (lastAcceleration + this.acceleration) / 2;
-//		this.velocity.x += avgAcceleration * timeStep;
-
-		// this.velocity.x += acceleration * Math.cos(this.pose.getAngle()) *
-		// delta;
-		// this.velocity.y += acceleration * Math.sin(this.pose.getAngle()) *
-		// delta;
-		//
-		// this.pose.setAngle((float)Math.toRadians(90));
-		//
-		// this.pose.setPos(
-		// this.pose.getPosX() + this.velocity.x,
-		// this.pose.getPosY() + this.velocity.y
-		// );
-		//
-		// this.velocity.x *= this.velocityDecay;
-		// this.velocity.y *= this.velocityDecay;
-
-		// System.out.println("Velocity:");
-		// System.out.println(this.velocity);
-		// System.out.println();
-		// System.out.println("Position:");
-		// System.out.print(this.pose.getPosX());
-		// System.out.print(" ");
-		// System.out.println(this.pose.getPosY());
-		// System.out.println("\n");
+	}
+	
+	private void resetForce() {
+		this.forceX = 0f;
+		this.forceY = 0f;
 	}
 	
 	public Physics setMass(float mass) {
@@ -158,9 +108,5 @@ public class Physics extends BaseComponent implements PhysicsObject {
 		return this.pose;
 	}
 	
-	public void resetForce() {
-		this.forceX = 0f;
-		this.forceY = 0f;
-	}
 
 }

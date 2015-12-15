@@ -1,7 +1,5 @@
 package at.fhooe.im440.workbench.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,12 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.helpers.Picasso;
-import at.fhooe.im440.workbench.services.ServiceManager;
-import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 
 public class SplashScreen  extends ScreenAdapter implements Screen {
 	private static final float FADE_TIME = 1.0f;

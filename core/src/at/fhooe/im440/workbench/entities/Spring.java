@@ -14,12 +14,12 @@ public class Spring extends Entity {
 	PhysicsObject p1;
 	PhysicsObject p2;
 	
-	
-	// float acceleration = 9.81f;
 	float decay = 0.5f; // b
 	float stiffness = 3f; // k
 	float lengthX; // d
 	float lengthY; // d
+	
+	boolean drawSpring = false;
 	
 	ShapeRenderer shapeRenderer = new ShapeRenderer();
 	
@@ -27,12 +27,8 @@ public class Spring extends Entity {
 		this.p1 = p1;
 		this.p2 = p2;
 		
-		// Math.abs(p1.getPose().getPosX() - p2.getPose().getPosX());
-		
 		this.lengthX = 0f;
 		this.lengthY = 2f;
-		
-		// distance p1 p2 = d
 	}
 	
 	public Spring setDesiredLengthY(float lengthY) {
@@ -55,6 +51,12 @@ public class Spring extends Entity {
 		return this;
 	}
 	
+	public Spring drawSpring() {
+		this.drawSpring = true;
+		
+		return this;
+	}
+	
 //	private void calculateStretch() {
 //		this.stretch = (float) (0.00406 * this.force + 3.43f * 10e-5);
 //	}
@@ -73,22 +75,18 @@ public class Spring extends Entity {
 		float forceY1 = this.calc(posY1, posY2, this.lengthY, posY1 - posY2, p1.getVelocityY());
 		float forceY2 = this.calc(posY1, posY2, this.lengthY, posY2 - posY1, p2.getVelocityY());
 		
-		System.out.print("spring: ");
-		System.out.print(" ");
-		System.out.print(forceX1);
-		System.out.print(" ");
-		System.out.println(forceX2);
-		
 		p1.applyForce(forceX1, forceY1);
 		p2.applyForce(forceX2, forceY2);
 		
 		CameraSystem cs = ServiceManager.getService(CameraSystem.class);
 		
-		shapeRenderer.setProjectionMatrix(cs.getCamera().combined); 
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Picasso.BLACK);
-		shapeRenderer.line(posX1, posY1, posX2, posY2);
-		shapeRenderer.end();
+		if (this.drawSpring) {
+			shapeRenderer.setProjectionMatrix(cs.getCamera().combined); 
+			shapeRenderer.begin(ShapeType.Line);
+			shapeRenderer.setColor(Picasso.BLACK);
+			shapeRenderer.line(posX1, posY1, posX2, posY2);
+			shapeRenderer.end();
+		}
 	}
 	
 	private float calc(float position1, float position2, float desiredLength, float length, float velocity) {

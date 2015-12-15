@@ -1,12 +1,9 @@
 package at.fhooe.im440.workbench.services.RenderSystem;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import at.fhooe.im440.workbench.components.Visual;
-import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.Service;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
@@ -38,9 +35,9 @@ public class RenderSystem implements Service {
 	public void update() {
 		Camera camera = ServiceManager.getService(CameraSystem.class).getCamera();
 		camera.update();
+		
 		batch.setProjectionMatrix(camera.combined);
-		//Gdx.gl.glClearColor(1,0,0,1);
-		//
+		
 		batch.begin();
 		for (Visual visual : this.visuals) {
 			visual.render(this.batch);

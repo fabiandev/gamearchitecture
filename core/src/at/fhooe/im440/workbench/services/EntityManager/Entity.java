@@ -1,7 +1,6 @@
 package at.fhooe.im440.workbench.services.EntityManager;
 
 import at.fhooe.im440.workbench.components.Component;
-import at.fhooe.im440.workbench.components.SpriteVisual;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 

@@ -9,9 +9,11 @@ import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 public class PositionMessage extends MessageData {
 
 	private Vector2 position;
+	private Vector2 worldPosition;
 	
 	public PositionMessage(float x, float y) {
-		this.position = this.toWorldCoordinates(x, y);
+		this.position = new Vector2(x, y);
+		this.worldPosition = this.toWorldCoordinates(x, y);
 	}
 	
 	public PositionMessage(int x, int y) {
@@ -19,19 +21,32 @@ public class PositionMessage extends MessageData {
 	}
 	
 	public float getX() {
-		return this.position.x;
+		return this.worldPosition.x;
 	}
 	
 	public float getY() {
-		return this.position.y;
+		return this.worldPosition.y;
 	}
 	
 	public Vector2 getVector() {
+		return this.worldPosition;
+	}
+	
+	public float getOriginallX() {
+		return this.position.x;
+	}
+	
+	public float getOriginalY() {
+		return this.position.y;
+	}
+	
+	public Vector2 getOriginalVector() {
 		return this.position;
 	}
 	
 	private Vector2 toWorldCoordinates(float x, float y) {
 		Vector3 vector = ServiceManager.getService(CameraSystem.class).toWorldCoordinates(x, y);
+		
 		return new Vector2(vector.x, vector.y);
 	}
 

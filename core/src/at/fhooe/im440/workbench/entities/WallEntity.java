@@ -1,7 +1,6 @@
 package at.fhooe.im440.workbench.entities;
 
 import at.fhooe.im440.workbench.components.BoxCollider;
-import at.fhooe.im440.workbench.components.CircleCollider;
 import at.fhooe.im440.workbench.components.CollisionMarker;
 import at.fhooe.im440.workbench.components.SpriteVisual;
 import at.fhooe.im440.workbench.components.StaticPose;

@@ -8,7 +8,6 @@ import at.fhooe.im440.workbench.components.Collider;
 import at.fhooe.im440.workbench.components.Pose;
 import at.fhooe.im440.workbench.entities.CogwheelEntity;
 import at.fhooe.im440.workbench.entities.WallEntity;
-import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.Service;
 
 public class EntityFactory implements Service {

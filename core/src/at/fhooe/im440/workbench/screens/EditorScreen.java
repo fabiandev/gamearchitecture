@@ -18,12 +18,12 @@ import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
 
 public class EditorScreen extends ScreenAdapter implements Screen {
 	
-	private Workbench workbench;
+	//private Workbench workbench;
 	private EditorSystem editorSystem;
 	private ArrayList<Entity> entities;
 	
 	public EditorScreen(Workbench workbench) {
-		this.workbench = workbench;
+		//this.workbench = workbench;
 		this.editorSystem = new EditorSystem();
 		this.entities = new ArrayList<Entity>();
 		
@@ -64,11 +64,11 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		e3.activateComponents();
 		e3.activate();
 		
-		Entity s = new Spring(p1, p2).setStiffness(15f);
+		Entity s = new Spring(p1, p2).setStiffness(15f).drawSpring();
 		s.activateComponents();
 		s.activate();
 		
-		Entity s2 = new Spring(p3, p2).setStiffness(50f).setDesiredLengthY(1f);
+		Entity s2 = new Spring(p3, p2).setStiffness(50f).setDesiredLengthY(1f).drawSpring();
 		s2.activateComponents();
 		s2.activate();
 		
@@ -95,7 +95,7 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 				.createCogwheel(5f, 10f, Picasso.BLUE)
 				.addComponent(p1);
 		
-		Entity s1 = new Spring(noPhysics, p1).setStiffness(500f).setDesiredLengthY(5f);
+		Entity s1 = new Spring(noPhysics, p1).setStiffness(500f).setDesiredLengthY(5f).drawSpring();
 		
 		Entity e6 = ServiceManager
 				.getService(EntityFactory.class)
@@ -114,19 +114,19 @@ public class EditorScreen extends ScreenAdapter implements Screen {
 		
 		float stiffness = 300f;
 		
-		Entity s2 = new Spring(p1, p2).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		Entity s2 = new Spring(p1, p2).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f).drawSpring();
 		
-		Entity s3 = new Spring(p2, p3).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		Entity s3 = new Spring(p2, p3).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f).drawSpring();
 		
-		Entity s4 = new Spring(p3, p4).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		Entity s4 = new Spring(p3, p4).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f).drawSpring();
 		
-		Entity s5 = new Spring(p4, p1).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		Entity s5 = new Spring(p4, p1).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f).drawSpring();
 		
 		
 		
-		Entity s6 = new Spring(p1, p3).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		Entity s6 = new Spring(p1, p3).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f).drawSpring();
 		
-		Entity s7 = new Spring(p2, p4).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f);
+		Entity s7 = new Spring(p2, p4).setStiffness(stiffness).setDesiredLengthY(5f).setDesiredLengthX(5f).drawSpring();
 		
 		e4.activateComponents();
 		e4.activate();

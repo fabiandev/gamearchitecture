@@ -2,7 +2,6 @@ package at.fhooe.im440.workbench.utilities;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class GenericArrayList<I> implements Iterable<I> {
 
