@@ -24,19 +24,20 @@ public class CogwheelEntity extends Entity {
 	public CogwheelEntity(float x, float y, float w) {
 		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog_n")).width(w).height(w).setOriginCenter();
 		spriteVisual.setColor(Picasso.GAME_BLUEGREEN);
+		
 		this.addComponents(new StaticPose(x, y), spriteVisual, new CircleCollider(w), new CollisionMarker());
 	}
 	
 	public CogwheelEntity(float x, float y, float w, Color color) {
 		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog_n")).width(w).height(w).setOriginCenter();
 		spriteVisual.setColor(color);
+		
 		this.addComponents(new StaticPose(x, y), spriteVisual, new CircleCollider(w), new CollisionMarker());
 	}
 
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		
 	}
 
 }
