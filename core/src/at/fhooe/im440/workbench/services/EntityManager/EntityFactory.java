@@ -36,7 +36,6 @@ public class EntityFactory implements Service {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
 		
 	}
 
