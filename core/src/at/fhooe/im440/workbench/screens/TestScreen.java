@@ -6,7 +6,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.helpers.Picasso;
 
-public class GameScreen extends ScreenAdapter implements Screen {
+public class TestScreen extends ScreenAdapter implements Screen {
 	
 	//private Workbench workbench;
 	//private Stage stage;
@@ -15,7 +15,7 @@ public class GameScreen extends ScreenAdapter implements Screen {
 	// TODO: Camera testing variable
 	//private float start;
 
-	public GameScreen(Workbench workbench) {
+	public TestScreen(Workbench workbench) {
 		//this.workbench = workbench;
 		//this.stage = new Stage();				// Create new stage or use old one from MenuScreen?
 		
@@ -52,6 +52,7 @@ public class GameScreen extends ScreenAdapter implements Screen {
 	@Override
 	public void show() {
 		super.show();
+		//Gdx.input.setInputProcessor(this);
 	}
 
 	@Override

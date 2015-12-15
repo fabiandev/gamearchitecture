@@ -1,8 +1,12 @@
-package at.fhooe.im440.workbench.services.renderSystem;
+package at.fhooe.im440.workbench.services.RenderSystem;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import at.fhooe.im440.workbench.components.Visual;
 import at.fhooe.im440.workbench.services.Service;
+import at.fhooe.im440.workbench.services.ServiceManager;
+import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
 public class RenderSystem implements Service {
@@ -29,9 +33,16 @@ public class RenderSystem implements Service {
 	
 	@Override
 	public void update() {
+		Camera camera = ServiceManager.getService(CameraSystem.class).getCamera();
+		camera.update();
+		
+		batch.setProjectionMatrix(camera.combined);
+		
+		batch.begin();
 		for (Visual visual : this.visuals) {
-			visual.draw(this.batch);
+			visual.render(this.batch);
 		}
+		batch.end();
 	}
 
 }

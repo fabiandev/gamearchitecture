@@ -1,19 +1,17 @@
 package at.fhooe.im440.workbench.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.helpers.Picasso;
 
-public class SplashScreen implements Screen, InputProcessor {
+public class SplashScreen  extends ScreenAdapter implements Screen {
 	private static final float FADE_TIME = 1.0f;
 	private static final float DELAY_TIME = 5.0f;
 	private Workbench workbench;
@@ -49,9 +47,12 @@ public class SplashScreen implements Screen, InputProcessor {
 		
 		stage.addActor(img);
 		
-		stage.setViewport(new FitViewport(Workbench.V_WIDTH, Workbench.V_HEIGHT));
+		stage.getViewport().getCamera().position.set(0, 0, 0);
+		stage.getViewport().update((int)Workbench.VIEWPORT_WIDTH, (int)Workbench.VIEWPORT_HEIGHT);
 		
-		Gdx.input.setInputProcessor(this);
+		//stage.setViewport(new FitViewport(Workbench.V_WIDTH, Workbench.V_HEIGHT));
+		//stage.setViewport(ServiceManager.getService(CameraSystem.class).getViewport());
+		
 		dead = false;
 	}
 	
@@ -77,7 +78,7 @@ public class SplashScreen implements Screen, InputProcessor {
 	}
 	
 	public void endOfState() {
-		workbench.setScreen(new MenuScreen(workbench));
+		workbench.setScreen(new MenuScreen(this.workbench));
 	}
 
 	@Override
@@ -90,6 +91,7 @@ public class SplashScreen implements Screen, InputProcessor {
 
 	@Override
 	public void resize(int width, int height) {
+		super.resize(width, height);
 		stage.getViewport().getCamera().position.set(0, 0, 0);
 		stage.getViewport().update(width, height);
 	}
@@ -118,52 +120,10 @@ public class SplashScreen implements Screen, InputProcessor {
 
 	}
 
-	@Override
-	public boolean keyDown(int keycode) {
-		fadeOut();
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public boolean keyDown(int keycode) {
+//		fadeOut();
+//		return false;
+//	}
 
 }

@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
 
 @SuppressWarnings("rawtypes")
@@ -73,7 +74,26 @@ public class Menu {
 		String nextElement = this.order.get(requestedIndex);
 		this.active = requestedIndex;
 		
+		this.moveToActive();
+		
 		return this.elements.get(nextElement);
+	}
+	
+	public void moveToActive() {
+		this.moveToActive(.15f);
+	}
+	
+	public void moveToActive(float duration) {
+		MenuElement menuElement = this.elements.get(this.order.get(this.active));
+		Actor actor = menuElement.getElement();
+		
+		float offset = actor.getWidth() / 2f;
+		
+		this.group.clearActions();
+		this.group.addAction(Actions.sequence(
+				//Actions.moveToAligned((actor.getX() + offset) * -1f, 0f, Align.center, duration, Interpolation.sine)
+				Actions.moveTo((actor.getX() + offset) * -1f, 0f, duration)
+			));
 	}
 	
 	public MenuElement highlightPrev() {
@@ -90,6 +110,8 @@ public class Menu {
 		
 		String prevElement = this.order.get(requestedIndex);
 		this.active = requestedIndex;
+		
+		this.moveToActive();
 		
 		return this.elements.get(prevElement);
 	}
@@ -125,28 +147,29 @@ public class Menu {
 		
 		this.group.setHeight(maxHeight);
 		this.group.setWidth(menuWidth);
-		this.group.setPosition(menuWidth / this.elements.size() * -1f, 0.0f);
+		//this.group.setPosition(menuWidth / this.elements.size() * -1f, 0.0f);
+		this.moveToActive(0f);
 	}
 	
-	public void positionVertically() {
-		int i = this.elements.size();
-		float totalHeight = 0;
-		float maxWidth = 0;
-		
-		for(Entry<String, MenuElement> element : this.elements.entrySet()) {
-			Actor actor = element.getValue().getElement();
-			float height = actor.getHeight();
-			float width = actor.getWidth();
-			totalHeight += height;
-			if (maxWidth < width) maxWidth = width;
-			actor.setPosition(0, height * i, Align.center);
-			i--;
-		}
-		
-		this.group.setHeight(totalHeight);
-		this.group.setWidth(maxWidth);
-		this.group.setPosition(0, (totalHeight / 2) *-1);
-	}
+//	public void positionVertically() {
+//		int i = this.elements.size();
+//		float totalHeight = 0;
+//		float maxWidth = 0;
+//		
+//		for(Entry<String, MenuElement> element : this.elements.entrySet()) {
+//			Actor actor = element.getValue().getElement();
+//			float height = actor.getHeight();
+//			float width = actor.getWidth();
+//			totalHeight += height;
+//			if (maxWidth < width) maxWidth = width;
+//			actor.setPosition(0, height * i, Align.center);
+//			i--;
+//		}
+//		
+//		this.group.setHeight(totalHeight);
+//		this.group.setWidth(maxWidth);
+//		this.group.setPosition(0, (totalHeight / 2) *-1);
+//	}
 	
 	private void buildReflections() {
 		this.group.clear();

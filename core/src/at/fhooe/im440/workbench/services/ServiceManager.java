@@ -2,27 +2,48 @@ package at.fhooe.im440.workbench.services;
 
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
-public class ServiceManager implements Service {
+public abstract class ServiceManager {
+
+	private static GenericArrayList<Service> services = new GenericArrayList<Service>();
+
+	private static boolean active = false;
 	
-	private GenericArrayList<Service> services = new GenericArrayList<Service>();
-	
-	public <T extends Service> T getService(Class<T> type) {
-		return this.services.getFirst(type);
+	public static <T extends Service> T getService(Class<T> type) {
+		return services.getFirst(type);
+	}
+
+	public static boolean addService(Service service) {
+		return services.add(service);
+	}
+
+	public static void addServices(Service... services) {
+		for (Service service : services) {
+			addService(service);
+		}
+	}
+
+	public static <T extends Service> T removeService(Class<T> type) {
+		return services.removeFirst(type);
 	}
 	
-	public boolean addService(Service service) {
-		return this.services.add(service);
+	public static void activate() {
+		active = true;
 	}
 	
-	public <T extends Service> T removeService(Class<T> type) {
-		return this.services.removeFirst(type);
+	public static void deactivate() {
+		active = false;
 	}
 	
-	@Override
-	public void update() {
-		for (Service service : this.services) {
+	public static boolean isActive() {
+		return active;
+	}
+
+	public static void update() {
+		if (!active) return;
+		
+		for (Service service : services) {
 			service.update();
 		}
 	}
-	
+
 }

@@ -1,15 +1,15 @@
 package at.fhooe.im440.workbench.components;
 
-public abstract class Component {
+import at.fhooe.im440.workbench.services.EntityManager.Entity;
 
-	protected boolean active = true;
+public interface Component {
 	
-	public void activate() {
-		this.active = true;
-	}
+	public Entity getEntity();
 	
-	public void deactivate() {
-		this.active = false;
-	}
+	public void setEntity(Entity entity);
+	
+	public void activate();
+	
+	public void deactivate();
 	
 }

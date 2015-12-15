@@ -2,9 +2,7 @@ package at.fhooe.im440.workbench.screens;
 
 import java.util.Map.Entry;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,8 +17,14 @@ import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.menu.Menu;
 import at.fhooe.im440.workbench.menu.MenuElement;
+import at.fhooe.im440.workbench.services.ServiceManager;
+import at.fhooe.im440.workbench.services.Messenger.IntegerMessage;
+import at.fhooe.im440.workbench.services.Messenger.Message;
+import at.fhooe.im440.workbench.services.Messenger.MessageType;
+import at.fhooe.im440.workbench.services.Messenger.Messenger;
+import at.fhooe.im440.workbench.services.Messenger.Subscribeable;
 
-public class MenuScreen extends ScreenAdapter implements InputProcessor {
+public class MenuScreen extends ScreenAdapter implements Screen, Subscribeable {
 	
 	private Workbench workbench;
 	private BitmapFont font;
@@ -32,23 +36,28 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 	private boolean dead = false;
 
 	public MenuScreen(Workbench workbench) {
-		this.font = new BitmapFont(Gdx.files.internal("arial_black_32.fnt"));
 		this.workbench = workbench;
+		this.font = this.workbench.getFont();
 		this.stage = this.workbench.getStage();
 		this.defaultLabelStyle = new LabelStyle(this.font, Picasso.GRAY);
 		this.activeLabelStyle = new LabelStyle(this.font, Picasso.BLACK);
 		this.createMenu();
+		this.subscribe();
 	}
 	
 	private void createMenu() {
 		this.menu = new Menu();
 		
-		this.menu.add(new MenuElement<GameScreen>("start", new Label("START", defaultLabelStyle), GameScreen.class));
+		
+		Label start = new Label("START", defaultLabelStyle);
+		this.menu.add(new MenuElement<EditorScreen>("editor", new Label("EDITOR", defaultLabelStyle), EditorScreen.class));
 		this.menu.add(new MenuElement<Screen>("settings", new Label("SETTINGS", defaultLabelStyle)));
+		this.menu.add(new MenuElement<GameScreen>("start", start, GameScreen.class));
 		this.menu.add(new MenuElement<Screen>("credits", new Label("CREDITS", defaultLabelStyle)));
 		this.menu.add(new MenuElement<ExitScreen>("exit", new Label("EXIT", defaultLabelStyle), ExitScreen.class));
 		
 		this.menu.highlight("start");
+		this.menu.position();
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -63,7 +72,7 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 		this.resetMenu();
 		Actor active = this.menu.getActive().getElement();
 		((Label)active).setStyle(activeLabelStyle);
-		this.menu.position();
+		
 	}
 	
 	private void animateMenu() {
@@ -102,16 +111,23 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		this.stage.getViewport().getCamera().position.set(0, 0, 0);
-		this.stage.getViewport().update(width, height);
+		stage.getViewport().getCamera().position.set(0, 0, 0);
+		stage.getViewport().update(width, height);
+		//this.stage.getViewport().getCamera().position.set(0, 0, 0);
+		//this.stage.getViewport().update(width, height);
 	}
 
 	@Override
 	public void show() {
 		super.show();
+		
+		stage.getViewport().getCamera().position.set(0, 0, 0);
+		stage.getViewport().update((int)Workbench.VIEWPORT_WIDTH, (int)Workbench.VIEWPORT_HEIGHT);
+		
 		this.stage.addActor(this.menu.getGroup());
 		animateMenu();
-		Gdx.input.setInputProcessor(this);
+		// Gdx.input.setInputProcessor(this);
+	
 		this.dead = false;
 	}
 
@@ -130,14 +146,16 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 	}
 
 	@Override
-	public boolean keyDown(int keycode) {
+	public void message(Message message) {
 		if (dead) {
-			return false;
+			return;
 		}
 		
 		this.stopMenuAnimtation();
 		
-		switch(keycode) {
+		switch(message.getType()) {
+		case KEY_UP:
+			switch(message.get(IntegerMessage.class).getValue()) {
 			case Keys.RIGHT:
 				this.menu.highlightNext();
 				break;
@@ -151,46 +169,26 @@ public class MenuScreen extends ScreenAdapter implements InputProcessor {
 					this.workbench.setScreen(screen);
 				}
 				break;
+			}
+			default:
+				break;
 		}
 		
 		this.animateMenu();
-		
-		return false;
+	}
+
+	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_UP };
+	
+	@Override
+	public void subscribe() {
+		Messenger messenger = ServiceManager.getService(Messenger.class);
+		messenger.subscribe(this, this.listenTo);
 	}
 
 	@Override
-	public boolean keyUp(int keycode) {
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		return false;
+	public void unsubscribe() {
+		Messenger messenger = ServiceManager.getService(Messenger.class);
+		messenger.subscribe(this, this.listenTo);
 	}
 
 }
