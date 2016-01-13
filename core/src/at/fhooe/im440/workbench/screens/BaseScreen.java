@@ -37,7 +37,7 @@ public abstract class BaseScreen extends ScreenAdapter implements Screen, Subscr
 			int keyCode = message.get(IntegerMessage.class).getValue();
 
 			if (keyCode == Keys.ESCAPE) {
-				Workbench.get().setScreen(new MenuScreen());
+				Workbench.get().setScreen(Workbench.get().getMenuScreen());
 			}
 			break;
 		default:

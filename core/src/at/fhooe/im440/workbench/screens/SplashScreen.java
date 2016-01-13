@@ -8,16 +8,22 @@ import com.badlogic.gdx.utils.Align;
 
 import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.helpers.Picasso;
+import at.fhooe.im440.workbench.services.ServiceManager;
+import at.fhooe.im440.workbench.services.Messenger.Message;
+import at.fhooe.im440.workbench.services.Messenger.MessageType;
+import at.fhooe.im440.workbench.services.Messenger.Messenger;
+import at.fhooe.im440.workbench.services.Messenger.Subscribeable;
 
-public class SplashScreen extends BaseScreen {
+public class SplashScreen extends BaseScreen implements Subscribeable {
 	private static final float FADE_TIME = 1.0f;
 	private static final float DELAY_TIME = 5.0f;
 	private Workbench workbench;
 	private Stage stage;
 	private Texture texture;
 	private boolean dead;
+	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_UP };
 	
-	public SplashScreen(Workbench workbench) {
+	public SplashScreen() {
 		this.workbench = Workbench.get();
 		this.stage = workbench.getStage();
 		texture = new Texture("splash.png");
@@ -25,10 +31,13 @@ public class SplashScreen extends BaseScreen {
 
 	@Override
 	public void show() {
+		super.show();
+		this.subscribe();
+		
 		Image img = new Image(texture);
 		img.setPosition(0, 0, Align.center);
 		img.getColor().a = 0f;
-		img.setName("Arnold");
+		img.setName("splashImage");
 		
 		img.addAction(Actions.sequence(
 				Actions.delay(0.5f),
@@ -48,9 +57,6 @@ public class SplashScreen extends BaseScreen {
 		stage.getViewport().getCamera().position.set(0, 0, 0);
 		stage.getViewport().update((int)Workbench.VIEWPORT_WIDTH, (int)Workbench.VIEWPORT_HEIGHT);
 		
-		//stage.setViewport(new FitViewport(Workbench.V_WIDTH, Workbench.V_HEIGHT));
-		//stage.setViewport(ServiceManager.getService(CameraSystem.class).getViewport());
-		
 		dead = false;
 	}
 	
@@ -59,7 +65,7 @@ public class SplashScreen extends BaseScreen {
 			return;
 		}
 		dead = true;
-		Image img = stage.getRoot().findActor("Arnold");
+		Image img = stage.getRoot().findActor("splashImage");
 		img.clearActions();
 		img.addAction(Actions.sequence(
 				Actions.fadeOut(FADE_TIME),
@@ -76,7 +82,7 @@ public class SplashScreen extends BaseScreen {
 	}
 	
 	public void endOfState() {
-		workbench.setScreen(new MenuScreen());
+		Workbench.get().setScreen(Workbench.get().getMenuScreen());
 	}
 
 	@Override
@@ -93,35 +99,47 @@ public class SplashScreen extends BaseScreen {
 		stage.getViewport().getCamera().position.set(0, 0, 0);
 		stage.getViewport().update(width, height);
 	}
-
+	
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
+	public void message(Message message) {
+		switch(message.getType()) {
+		case KEY_UP:
+			this.fadeOut();
+			break;
+		default:
+			break;
+		}
+	}
+	
+	@Override
+	public void subscribe() {
+		ServiceManager.getService(Messenger.class).subscribe(this, this.listenTo);
 	}
 
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
+	public void unsubscribe() {
+		ServiceManager.getService(Messenger.class).unsubscribe(this, this.listenTo);
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		super.hide();
+		this.unsubscribe();
+	}
+	
+	@Override
+	public void pause() {
+		
+	}
 
+	@Override
+	public void resume() {
+		
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		
 	}
-
-//	@Override
-//	public boolean keyDown(int keycode) {
-//		fadeOut();
-//		return false;
-//	}
 
 }

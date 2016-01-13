@@ -9,19 +9,26 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.components.Editable;
+import at.fhooe.im440.workbench.components.StaticPose;
 import at.fhooe.im440.workbench.services.Service;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 
 public class CameraSystem implements Service {
 
+	CameraTarget defaultTarget;
 	CameraTarget target;
 
 	private Viewport viewport;
 	private Camera camera;
 
+	public CameraSystem(float worldWidth, float worldHeight) {
+		this(worldWidth, worldHeight, new CameraTarget(new StaticPose(worldWidth / 2f, worldHeight / 2f)));
+	}
+	
 	public CameraSystem(float worldWidth, float worldHeight, CameraTarget target) {
-		this.target = target;
+		this.defaultTarget = target;
+		this.target = this.defaultTarget;
 		
 		this.camera = new OrthographicCamera();
 
@@ -38,8 +45,29 @@ public class CameraSystem implements Service {
 		this.camera.update();
 	}
 	
-	public void setTarget(CameraTarget target) {
+	public CameraSystem setTarget(CameraTarget target) {
 		this.target = target;
+		
+		return this;
+	}
+	
+	public CameraSystem useDefaultTarget() {
+		this.target = this.defaultTarget;
+		
+		return this;
+	}
+	
+	public CameraSystem setDefaultTarget(CameraTarget target) {
+		this.defaultTarget = target;
+		
+		return this;
+	}
+	
+	public CameraSystem forceTargetPosition() {
+		this.camera.position.set(this.target.getPosX(), this.target.getPosY(), 0f);
+		this.camera.update();
+		
+		return this;
 	}
 
 	public Camera getCamera() {

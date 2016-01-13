@@ -4,16 +4,16 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import at.fhooe.im440.workbench.components.StaticPose;
 import at.fhooe.im440.workbench.screens.MenuScreen;
+import at.fhooe.im440.workbench.screens.SplashScreen;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.AssetManager.AssetManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
-import at.fhooe.im440.workbench.services.CameraSystem.CameraTarget;
 import at.fhooe.im440.workbench.services.ColliderSystem.ColliderSystem;
 import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
 import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
@@ -42,6 +42,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 	private SpriteBatch batch;
 	
 	private Messenger messenger;
+	private Screen menuScreen;
 	
 	public static Workbench get() {
 		return (Workbench) Gdx.app.getApplicationListener();
@@ -53,13 +54,12 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		this.font = new BitmapFont(Gdx.files.internal("arial_black_32.fnt"), Gdx.files.internal("arial_black_32.png"), false);
 	
 		this.messenger = new Messenger();
-		CameraTarget cameraTarget = new CameraTarget(new StaticPose(VIEWPORT_WIDTH / 2f, VIEWPORT_HEIGHT / 2f));
 		
 		this.messenger.activate();
 		new AssetManager().activate();
 		new EntityManager().activate();
 		new EntityFactory().activate();
-		new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, cameraTarget).activate();
+		new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT).activate();
 		new RenderSystem(this.getBatch()).activate();
 		new ColliderSystem().activate();
 		new UpdateService().activate();
@@ -71,9 +71,15 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 	@Override
 	public void create () {
 		this.init();
-		this.setScreen(new MenuScreen());
+		
+		this.menuScreen = new MenuScreen();
+		this.setScreen(new SplashScreen());
 		
 		Gdx.input.setInputProcessor(this);
+	}
+	
+	public Screen getMenuScreen() {
+		return this.menuScreen;
 	}
 
 	@Override

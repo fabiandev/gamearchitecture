@@ -45,13 +45,17 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 	private void createMenu() {
 		this.menu = new Menu();
 		
-		this.menu.add(new MenuElement<PhysicsScreen>("physics", new Label("PHYSICS", defaultLabelStyle), PhysicsScreen.class));
 		this.menu.add(new MenuElement<CameraTargetScreen>("cameraTarget", new Label("CAMERA TARGET", defaultLabelStyle), CameraTargetScreen.class));
-		this.menu.add(new MenuElement<GameScreen>("start", new Label("START", defaultLabelStyle), GameScreen.class));
+		this.menu.add(new MenuElement<PhysicsScreen>("physics", new Label("PHYSICS", defaultLabelStyle), PhysicsScreen.class));
+		this.menu.add(new MenuElement<GameScreen>("start", new Label("START GAME", defaultLabelStyle), GameScreen.class));
+		this.menu.add(new MenuElement<EditorScreen>("editor", new Label("EDITOR", defaultLabelStyle), EditorScreen.class));
 		this.menu.add(new MenuElement<ExitScreen>("exit", new Label("EXIT", defaultLabelStyle), ExitScreen.class));
 		
 		this.menu.highlight("start");
 		this.menu.position();
+		
+		this.menu.getGroup().addAction(Actions.hide());
+		this.stage.addActor(this.menu.getGroup());
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -117,8 +121,8 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 		stage.getViewport().getCamera().position.set(0, 0, 0);
 		stage.getViewport().update((int)Workbench.VIEWPORT_WIDTH, (int)Workbench.VIEWPORT_HEIGHT);
 		
-		this.stage.addActor(this.menu.getGroup());
-		animateMenu();
+		this.menu.getGroup().addAction(Actions.show());
+		this.animateMenu();
 	}
 
 	@Override
@@ -154,7 +158,7 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 				
 				if (screen != null) {
 					this.workbench.setScreen(screen);
-					this.dispose();
+					return;
 				}
 				break;
 			}

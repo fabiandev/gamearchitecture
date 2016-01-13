@@ -1,30 +1,33 @@
 package at.fhooe.im440.workbench.screens;
 
 import at.fhooe.im440.workbench.components.Editable;
-import at.fhooe.im440.workbench.components.Pose;
 import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.ServiceManager;
-import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
-import at.fhooe.im440.workbench.services.CameraSystem.CameraTarget;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
 
-public class CameraTargetScreen extends BaseScreen {
+public class EditorScreen extends BaseScreen {
 	
 	private EditorSystem editorSystem;
-	private Entity entity;
+	private Entity wheel;
+	private Entity wall;
 	
-	public CameraTargetScreen() {
+	public EditorScreen() {
 		if (ServiceManager.hasService(EditorSystem.class)) {
 			this.editorSystem = ServiceManager.getService(EditorSystem.class);
 		} else {
 			this.editorSystem = new EditorSystem();
 		}
 		
-		this.entity = ServiceManager
+		this.wheel = ServiceManager
 				.getService(EntityFactory.class)
-				.createCogwheel(10f, 10f, Picasso.GREEN)
+				.createCogwheel(10f, 10f)
+				.addComponent(new Editable());
+		
+		this.wall = ServiceManager
+				.getService(EntityFactory.class)
+				.createWall(6f, 10f)
 				.addComponent(new Editable());
 	}
 
@@ -43,22 +46,25 @@ public class CameraTargetScreen extends BaseScreen {
 		super.show();
 		
 		this.editorSystem.activate();
-		this.entity.activateComponents();
-		this.entity.activate();
 		
-		CameraTarget cameraTarget = new CameraTarget(this.entity.getComponent(Pose.class));
-		ServiceManager.getService(CameraSystem.class).setTarget(cameraTarget);
+		this.wheel.activateComponents();
+		this.wheel.activate();
+		
+		this.wall.activateComponents();
+		this.wall.activate();
 	}
 
 	@Override
 	public void hide() {
 		super.hide();
 		
-		this.entity.deactivateComponents();
-		this.entity.deactivate();
+		this.wheel.deactivateComponents();
+		this.wheel.deactivate();
+		
+		this.wall.deactivateComponents();
+		this.wall.deactivate();
 		
 		this.editorSystem.deactivate();
-		ServiceManager.getService(CameraSystem.class).useDefaultTarget().forceTargetPosition();
 	}
 
 	@Override
