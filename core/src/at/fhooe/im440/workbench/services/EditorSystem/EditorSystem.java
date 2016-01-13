@@ -20,6 +20,7 @@ import at.fhooe.im440.workbench.services.EditorSystem.states.SingleSelectedState
 import at.fhooe.im440.workbench.services.EditorSystem.states.SingleSelectingState;
 import at.fhooe.im440.workbench.services.EditorSystem.states.State;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
+import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
 public class EditorSystem implements Service {
@@ -28,6 +29,7 @@ public class EditorSystem implements Service {
 	private Map<EditorState, State> states = new HashMap<EditorState, State>();
 	private EditorState activeState;
 	private EditorState defaultState = EditorState.IDLE;
+	private EditorState previousState;
 
 	public EditorSystem() {
 		this.states.put(EditorState.IDLE, new IdleState(this));
@@ -36,6 +38,7 @@ public class EditorSystem implements Service {
 		this.states.put(EditorState.CLONE, new CloneState(this));
 	
 		this.activeState = this.defaultState;
+		this.previousState = this.defaultState;
 	}
 	
 	public State getState(EditorState stateType) {
@@ -50,7 +53,23 @@ public class EditorSystem implements Service {
 		if (this.states.containsKey(stateType)) {
 			this.states.get(this.activeState).off();
 			this.states.get(stateType).on();
+			this.previousState = this.activeState;
 			this.activeState = stateType;
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean setPreviousState() {
+		if (this.states.containsKey(this.previousState)) {
+			this.states.get(this.activeState).off();
+			this.states.get(this.previousState).on();
+			EditorState temp = this.activeState;
+			this.activeState = this.previousState;
+			this.previousState = temp;
+			
 			return true;
 		}
 		
@@ -121,7 +140,7 @@ public class EditorSystem implements Service {
 		}
 	}
 
-	public void selectCollidingEditable(Vector2 position) {
+	public boolean selectCollidingEditable(Vector2 position) {
 		for (Editable editable : this.editables) {
 			Entity entity = editable.getEntity();
 			if (entity.getComponent(Visual.class).contains(position.x, position.y)
@@ -134,11 +153,15 @@ public class EditorSystem implements Service {
 				}
 				
 				entity.getComponent(Editable.class).select();
+				
+				return true;
 			}
 		}
+		
+		return false;
 	}
 	
-	public boolean deselectAllEditables() {
+	public boolean deselectCollideables() {
 		for (Editable editable : this.editables) {
 			Entity entity = editable.getEntity();
 			
@@ -164,6 +187,38 @@ public class EditorSystem implements Service {
 		}
 		
 		return true;
+	}
+	
+	public void forceDeselectCollideables() {
+		for (Editable editable : this.editables) {
+			if (editable.isSelected()) {
+				Entity entity = editable.getEntity();
+				
+				editable.deselect();
+				
+				Physics physicsComponent = entity.getComponent(Physics.class);
+				
+				if (physicsComponent != null) {
+					physicsComponent.activate();
+				}
+			}
+		}
+	}
+	
+	public boolean cloneCollidingEditable(Vector2 position) {
+		for (Editable editable : this.editables) {
+			Entity entity = editable.getEntity();
+			if (entity.getComponent(Visual.class).contains(position.x, position.y)) {
+				Entity cloned = ServiceManager.getService(EntityFactory.class).cloneEntity(entity).addComponent(new Editable());
+				cloned.activateComponents();
+				cloned.activate();
+				this.addEditable(cloned.getComponent(Editable.class));
+				cloned.getComponent(Editable.class).select();
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	@Override

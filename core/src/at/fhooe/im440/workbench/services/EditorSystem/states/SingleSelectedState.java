@@ -44,8 +44,8 @@ public class SingleSelectedState implements State, Subscribeable {
 			
 			break;
 		case TOUCH_DOWN:
-			if (this.editorSystem.deselectAllEditables()) {
-				this.editorSystem.setState(EditorState.SINGLE_SELECTING);
+			if (this.editorSystem.deselectCollideables()) {
+				this.editorSystem.setPreviousState();
 			}
 			
 			break;

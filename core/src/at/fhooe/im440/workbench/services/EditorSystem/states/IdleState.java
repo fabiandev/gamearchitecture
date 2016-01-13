@@ -13,7 +13,7 @@ import at.fhooe.im440.workbench.services.Messenger.Subscribeable;
 public class IdleState implements State, Subscribeable {
 
 	private EditorSystem editorSystem;
-	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_UP };
+	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_DOWN };
 
 	public IdleState(EditorSystem editorSystem) {
 		this.editorSystem = editorSystem;
@@ -34,7 +34,7 @@ public class IdleState implements State, Subscribeable {
 		MessageType type = message.getType();
 
 		switch (type) {
-		case KEY_UP:
+		case KEY_DOWN:
 			int keyCode = message.get(IntegerMessage.class).getValue();
 			
 			if (keyCode == Keys.S) {
