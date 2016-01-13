@@ -9,9 +9,9 @@ import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.AssetManager.AssetManager;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 
-public class WallEntity extends Entity {
+public class Wall extends Entity {
 	
-	public WallEntity(float x, float y) {
+	public Wall(float x, float y) {
 		this(x, y, 5f);
 	}
 	
@@ -22,7 +22,7 @@ public class WallEntity extends Entity {
 	 * @param y - The y coordinate of the center point
 	 * @param w - The width (equals 10 times the size of height)
 	 */
-	public WallEntity(float x, float y, float w) {
+	public Wall(float x, float y, float w) {
 		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("bar_n")).width(w).height((float) Math.floor((w * 100)) / 1000).setOriginCenter();
 		spriteVisual.setColor(Picasso.GAME_PALEGREEN);
 		this.addComponents(new StaticPose(x, y), spriteVisual, new BoxCollider(w, (float) Math.floor((w * 100)) / 1000), new CollisionMarker());
