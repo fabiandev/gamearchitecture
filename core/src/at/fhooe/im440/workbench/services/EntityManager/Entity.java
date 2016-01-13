@@ -18,16 +18,20 @@ public abstract class Entity {
 		ServiceManager.getService(EntityManager.class).removeEntity(this);
 	}
 
-	public void activateComponents() {
+	public Entity activateComponents() {
 		for (Component component : this.components) {
 			component.activate();
 		}
+		
+		return this;
 	}
 	
-	public void deactivateComponents() {
+	public Entity deactivateComponents() {
 		for (Component component : this.components) {
 			component.deactivate();
 		}
+		
+		return this;
 	}
 	
 	public <T extends Component> T getComponent(Class<T> type) {

@@ -4,7 +4,7 @@ import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsEngine;
 import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsObject;
 
-public class NoPhysics extends BaseComponent implements PhysicsObject {
+public class NoPhysics extends Component implements PhysicsObject {
 
 	private Pose pose;
 	private PhysicsEngine physicsEngine;

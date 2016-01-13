@@ -8,7 +8,7 @@ import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.ColliderSystem.Collideable;
 import at.fhooe.im440.workbench.services.ColliderSystem.ColliderSystem;
 
-public abstract class Collider extends BaseComponent implements Collideable {
+public abstract class Collider extends Component implements Collideable {
 
 	protected ArrayList<Collideable> collisions = new ArrayList<Collideable>();
 

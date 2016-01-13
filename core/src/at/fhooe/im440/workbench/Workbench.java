@@ -43,39 +43,33 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 	
 	private Messenger messenger;
 	
+	public static Workbench get() {
+		return (Workbench) Gdx.app.getApplicationListener();
+	}
+	
 	private void init() {
 		this.batch = new SpriteBatch();
 		this.stage = new Stage();
 		this.font = new BitmapFont(Gdx.files.internal("arial_black_32.fnt"), Gdx.files.internal("arial_black_32.png"), false);
 	
 		this.messenger = new Messenger();
-		
-		ServiceManager.addService(this.messenger);
-		ServiceManager.addService(new AssetManager());
-		ServiceManager.addService(new EntityManager());
-		//ServiceManager.addService(new EditorSystem());
-		ServiceManager.addService(new EntityFactory());
-		ServiceManager.addService(new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, new CameraTarget(new StaticPose())));
-		ServiceManager.addService(new RenderSystem(this.getBatch()));
-		ServiceManager.addService(new ColliderSystem());
-		ServiceManager.addService(new UpdateService());
-		ServiceManager.addService(new PhysicsEngine());
+		this.messenger.activate();
+		new AssetManager().activate();
+		new EntityManager().activate();
+		new EntityFactory().activate();
+		new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, new CameraTarget(new StaticPose())).activate();
+		new RenderSystem(this.getBatch()).activate();
+		new ColliderSystem().activate();
+		new UpdateService().activate();
+		new PhysicsEngine().activate();
 		
 		ServiceManager.activate();
-		
-		//t.addComponent(new StaticPose());
-		//t.setAnimation(AssetManager.gearwheel);
 	}
 	
 	@Override
 	public void create () {
-		
-		//Gdx.graphics.setDisplayMode((int)V_WIDTH, (int)V_HEIGHT, false);
-		
 		this.init();
-		// stage.setViewport(ServiceManager.getService(CameraSystem.class).getViewport());
-		
-		setScreen(new MenuScreen(this));
+		this.setScreen(new MenuScreen());
 		
 		Gdx.input.setInputProcessor(this);
 	}

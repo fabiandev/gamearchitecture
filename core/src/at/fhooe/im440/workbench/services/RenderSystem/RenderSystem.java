@@ -32,6 +32,16 @@ public class RenderSystem implements Service {
 	}
 	
 	@Override
+	public void activate() {
+		ServiceManager.addService(this);
+	}
+
+	@Override
+	public void deactivate() {
+		ServiceManager.removeService(this.getClass());
+	}
+	
+	@Override
 	public void update() {
 		Camera camera = ServiceManager.getService(CameraSystem.class).getCamera();
 		camera.update();

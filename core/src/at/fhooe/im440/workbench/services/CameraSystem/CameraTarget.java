@@ -1,9 +1,9 @@
 package at.fhooe.im440.workbench.services.CameraSystem;
 
-import at.fhooe.im440.workbench.components.BaseComponent;
+import at.fhooe.im440.workbench.components.Component;
 import at.fhooe.im440.workbench.components.Pose;
 
-public class CameraTarget extends BaseComponent {
+public class CameraTarget extends Component {
 
 	private Pose pose;
 	

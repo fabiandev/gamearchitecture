@@ -8,7 +8,7 @@ import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.UpdateService.UpdateService;
 import at.fhooe.im440.workbench.services.UpdateService.Updateable;
 
-public class CollisionMarker extends BaseComponent implements Updateable {
+public class CollisionMarker extends Component implements Updateable {
 
 	private Color initialColor;
 	

@@ -9,6 +9,7 @@ import at.fhooe.im440.workbench.components.Pose;
 import at.fhooe.im440.workbench.entities.CogwheelEntity;
 import at.fhooe.im440.workbench.entities.WallEntity;
 import at.fhooe.im440.workbench.services.Service;
+import at.fhooe.im440.workbench.services.ServiceManager;
 
 public class EntityFactory implements Service {
 	
@@ -34,6 +35,16 @@ public class EntityFactory implements Service {
 		return null;
 	}
 
+	@Override
+	public void activate() {
+		ServiceManager.addService(this);
+	}
+
+	@Override
+	public void deactivate() {
+		ServiceManager.removeService(this.getClass());
+	}
+	
 	@Override
 	public void update() {
 		

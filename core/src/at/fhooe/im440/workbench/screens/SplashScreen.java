@@ -1,7 +1,5 @@
 package at.fhooe.im440.workbench.screens;
 
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -11,7 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.helpers.Picasso;
 
-public class SplashScreen  extends ScreenAdapter implements Screen {
+public class SplashScreen extends BaseScreen {
 	private static final float FADE_TIME = 1.0f;
 	private static final float DELAY_TIME = 5.0f;
 	private Workbench workbench;
@@ -20,7 +18,7 @@ public class SplashScreen  extends ScreenAdapter implements Screen {
 	private boolean dead;
 	
 	public SplashScreen(Workbench workbench) {
-		this.workbench = workbench;
+		this.workbench = Workbench.get();
 		this.stage = workbench.getStage();
 		texture = new Texture("splash.png");
 	}
@@ -78,7 +76,7 @@ public class SplashScreen  extends ScreenAdapter implements Screen {
 	}
 	
 	public void endOfState() {
-		workbench.setScreen(new MenuScreen(this.workbench));
+		workbench.setScreen(new MenuScreen());
 	}
 
 	@Override

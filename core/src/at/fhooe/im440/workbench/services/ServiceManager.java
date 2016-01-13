@@ -23,7 +23,11 @@ public abstract class ServiceManager {
 	}
 
 	public static <T extends Service> T removeService(Class<T> type) {
-		return services.removeFirst(type);
+		if (services.hasOne(type)) {
+			return services.removeFirst(type);
+		}
+		
+		return null;
 	}
 	
 	public static void activate() {

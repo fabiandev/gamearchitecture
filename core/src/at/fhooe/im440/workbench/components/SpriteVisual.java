@@ -37,7 +37,7 @@ import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
  *
  * @author Roman Divotkey
  */
-public class SpriteVisual extends BaseComponent implements Visual {
+public class SpriteVisual extends Visual {
 
 	/** Texture region used for rendering. */
 	private TextureRegion region;

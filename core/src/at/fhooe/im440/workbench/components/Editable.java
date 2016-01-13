@@ -3,7 +3,7 @@ package at.fhooe.im440.workbench.components;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
 
-public class Editable extends BaseComponent {
+public class Editable extends Component {
 
 	private boolean selected = false;
 	

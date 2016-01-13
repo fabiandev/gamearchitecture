@@ -4,7 +4,7 @@ import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsEngine;
 import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsObject;
 
-public class Physics extends BaseComponent implements PhysicsObject {
+public class Physics extends Component implements PhysicsObject {
 
 	private Pose pose;
 	private PhysicsEngine physicsEngine;
@@ -23,6 +23,8 @@ public class Physics extends BaseComponent implements PhysicsObject {
 	private float forceX = 0f;
 	private float forceY = 0f;
 	private float gravity;
+	
+	private boolean active = false;
 
 	public Physics() {
 		this.physicsEngine = ServiceManager.getService(PhysicsEngine.class);
@@ -30,17 +32,23 @@ public class Physics extends BaseComponent implements PhysicsObject {
 	
 	@Override
 	public void activate() {
+		this.active = true;
 		this.physicsEngine.addPhysicsObject(this);
 		this.pose = this.getEntity().getComponent(Pose.class);
 	}
 
 	@Override
 	public void deactivate() {
+		this.active = false;
 		this.physicsEngine.removePhysicsObject(this);
 	}
 	
 	@Override
 	public void applyForce(float forceX, float forceY) {
+		if (!active) {
+			return;
+		}
+		
 		this.forceX += forceX;
 		this.forceY += forceY;
 	}

@@ -5,9 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import at.fhooe.im440.workbench.Workbench;
+import at.fhooe.im440.workbench.screens.BaseScreen;
 
-public class MenuElement<T extends Screen> {
+public class MenuElement<T extends BaseScreen> {
 	
 	String name;
 	Actor element;
@@ -40,7 +40,7 @@ public class MenuElement<T extends Screen> {
 		this.element = element;
 	}
 	
-	public Screen getScreen(Workbench workbench) {
+	public Screen getScreen() {
 		if (screenClass == null) {
 			return null;
 		}
@@ -48,7 +48,8 @@ public class MenuElement<T extends Screen> {
 		if (screen == null) {
 				
 			try {
-				this.screen = this.screenClass.getConstructor(Workbench.class).newInstance(workbench);
+				this.screen = this.screenClass.getConstructor().newInstance();
+				this.screen.subscribe();
 			} catch (InstantiationException e) {
 				return null;
 			} catch (IllegalAccessException e) {

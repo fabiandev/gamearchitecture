@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 
 import at.fhooe.im440.workbench.services.Service;
+import at.fhooe.im440.workbench.services.ServiceManager;
 
 public class AssetManager implements Service {
 
@@ -40,5 +41,15 @@ public class AssetManager implements Service {
 	@Override
 	public void update() {
 
+	}
+
+	@Override
+	public void activate() {
+		ServiceManager.addService(this);
+	}
+
+	@Override
+	public void deactivate() {
+		ServiceManager.removeService(this.getClass());
 	}
 }

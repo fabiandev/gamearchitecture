@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import at.fhooe.im440.workbench.services.Service;
+import at.fhooe.im440.workbench.services.ServiceManager;
 
 public class Messenger implements Service {
 
@@ -12,11 +13,13 @@ public class Messenger implements Service {
 	
 	private ArrayList<Message> queue = new ArrayList<Message>();
 	
-	public void subscribe(Subscribeable subscriber, MessageType messageType) {
-		ArrayList<Subscribeable> list = this.subscribers.get(messageType);
-		
-		if (list != null) {
-			list.add(subscriber);
+	public void subscribe(Subscribeable subscriber, MessageType messageType) {		
+		if (this.subscribers.containsKey(messageType)) {
+			if (this.subscribers.get(messageType).contains(subscriber)) {
+				return;
+			}
+			
+			this.subscribers.get(messageType).add(subscriber);
 		} else {
 			ArrayList<Subscribeable> temp = new ArrayList<Subscribeable>();
 			temp.add(subscriber);
@@ -65,9 +68,6 @@ public class Messenger implements Service {
 		MessageType messageType = message.getType();
 		ArrayList<Subscribeable> list = this.subscribers.get(messageType);
 		if (list != null) {
-			
-			// Needed to avoid ConcurrentModificationException, as list could be modified during loop
-			// Maybe think of better solution?
 			ArrayList<Subscribeable> cloneDummy = (ArrayList<Subscribeable>) list.clone();
 			for (Subscribeable e : cloneDummy) {
 				e.message(message);
@@ -77,6 +77,16 @@ public class Messenger implements Service {
 	
 	public void send(Message message) {
 		this.queue.add(message);
+	}
+	
+	@Override
+	public void activate() {
+		ServiceManager.addService(this);
+	}
+
+	@Override
+	public void deactivate() {
+		ServiceManager.removeService(this.getClass());
 	}
 	
 	@Override

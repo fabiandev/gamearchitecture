@@ -2,14 +2,20 @@ package at.fhooe.im440.workbench.components;
 
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 
-public interface Component {
+public abstract class Component {
 	
-	public Entity getEntity();
+	private Entity entity;
 	
-	public void setEntity(Entity entity);
+	public abstract void activate();
 	
-	public void activate();
+	public abstract void deactivate();
 	
-	public void deactivate();
+	public Entity getEntity() {
+		return this.entity;
+	}
+	
+	public void setEntity(Entity entity) {
+		this.entity = entity;
+	}
 	
 }

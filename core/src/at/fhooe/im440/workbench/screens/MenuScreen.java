@@ -4,7 +4,6 @@ import java.util.Map.Entry;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -24,7 +23,7 @@ import at.fhooe.im440.workbench.services.Messenger.MessageType;
 import at.fhooe.im440.workbench.services.Messenger.Messenger;
 import at.fhooe.im440.workbench.services.Messenger.Subscribeable;
 
-public class MenuScreen extends ScreenAdapter implements Screen, Subscribeable {
+public class MenuScreen extends BaseScreen implements Subscribeable {
 	
 	private Workbench workbench;
 	private BitmapFont font;
@@ -32,28 +31,22 @@ public class MenuScreen extends ScreenAdapter implements Screen, Subscribeable {
 	private Menu menu;
 	private LabelStyle defaultLabelStyle;
 	private LabelStyle activeLabelStyle;
-	
-	private boolean dead = false;
+	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_UP };
 
-	public MenuScreen(Workbench workbench) {
-		this.workbench = workbench;
+	public MenuScreen() {
+		this.workbench = Workbench.get();
 		this.font = this.workbench.getFont();
 		this.stage = this.workbench.getStage();
 		this.defaultLabelStyle = new LabelStyle(this.font, Picasso.GRAY);
 		this.activeLabelStyle = new LabelStyle(this.font, Picasso.BLACK);
 		this.createMenu();
-		this.subscribe();
 	}
 	
 	private void createMenu() {
 		this.menu = new Menu();
 		
-		
-		Label start = new Label("START", defaultLabelStyle);
-		this.menu.add(new MenuElement<EditorScreen>("editor", new Label("EDITOR", defaultLabelStyle), EditorScreen.class));
-		this.menu.add(new MenuElement<Screen>("settings", new Label("SETTINGS", defaultLabelStyle)));
-		this.menu.add(new MenuElement<GameScreen>("start", start, GameScreen.class));
-		this.menu.add(new MenuElement<Screen>("credits", new Label("CREDITS", defaultLabelStyle)));
+		this.menu.add(new MenuElement<PhysicsScreen>("physics", new Label("PHYSICS", defaultLabelStyle), PhysicsScreen.class));
+		this.menu.add(new MenuElement<GameScreen>("start", new Label("START", defaultLabelStyle), GameScreen.class));
 		this.menu.add(new MenuElement<ExitScreen>("exit", new Label("EXIT", defaultLabelStyle), ExitScreen.class));
 		
 		this.menu.highlight("start");
@@ -113,44 +106,37 @@ public class MenuScreen extends ScreenAdapter implements Screen, Subscribeable {
 		super.resize(width, height);
 		stage.getViewport().getCamera().position.set(0, 0, 0);
 		stage.getViewport().update(width, height);
-		//this.stage.getViewport().getCamera().position.set(0, 0, 0);
-		//this.stage.getViewport().update(width, height);
 	}
 
 	@Override
 	public void show() {
 		super.show();
+		this.subscribe();
 		
 		stage.getViewport().getCamera().position.set(0, 0, 0);
 		stage.getViewport().update((int)Workbench.VIEWPORT_WIDTH, (int)Workbench.VIEWPORT_HEIGHT);
 		
 		this.stage.addActor(this.menu.getGroup());
 		animateMenu();
-		// Gdx.input.setInputProcessor(this);
-	
-		this.dead = false;
 	}
 
 	@Override
 	public void hide() {
 		super.hide();
+		this.unsubscribe();
+		
 		this.menu.getGroup().addAction(Actions.hide());
 		this.stopMenuAnimtation();
 	}
 
 	@Override
 	public void dispose() {
+		this.hide();
 		super.dispose();
-		this.stage.dispose();
-		this.font.dispose();
 	}
 
 	@Override
 	public void message(Message message) {
-		if (dead) {
-			return;
-		}
-		
 		this.stopMenuAnimtation();
 		
 		switch(message.getType()) {
@@ -163,10 +149,11 @@ public class MenuScreen extends ScreenAdapter implements Screen, Subscribeable {
 				this.menu.highlightPrev();
 				break;
 			case Keys.ENTER:
-				Screen screen = this.menu.getActive().getScreen(this.workbench);
+				Screen screen = this.menu.getActive().getScreen();
+				
 				if (screen != null) {
-					this.dead = true;
 					this.workbench.setScreen(screen);
+					this.dispose();
 				}
 				break;
 			}
@@ -176,19 +163,15 @@ public class MenuScreen extends ScreenAdapter implements Screen, Subscribeable {
 		
 		this.animateMenu();
 	}
-
-	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_UP };
 	
 	@Override
 	public void subscribe() {
-		Messenger messenger = ServiceManager.getService(Messenger.class);
-		messenger.subscribe(this, this.listenTo);
+		ServiceManager.getService(Messenger.class).subscribe(this, this.listenTo);
 	}
 
 	@Override
 	public void unsubscribe() {
-		Messenger messenger = ServiceManager.getService(Messenger.class);
-		messenger.subscribe(this, this.listenTo);
+		ServiceManager.getService(Messenger.class).unsubscribe(this, this.listenTo);
 	}
 
 }

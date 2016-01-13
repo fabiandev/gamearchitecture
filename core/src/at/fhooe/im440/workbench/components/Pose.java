@@ -1,11 +1,11 @@
 package at.fhooe.im440.workbench.components;
 
-public interface Pose extends Component {
+public abstract class Pose extends Component {
 
-	public float getPosX();
-	public float getPosY();
-	public float getAngle();
-	public void setPos(float x, float y);
-	public void setAngle(float angleRadians);
+	public abstract float getPosX();
+	public abstract float getPosY();
+	public abstract float getAngle();
+	public abstract void setPos(float x, float y);
+	public abstract void setAngle(float angleRadians);
 	
 }

@@ -1,6 +1,7 @@
 package at.fhooe.im440.workbench.services.ColliderSystem;
 
 import at.fhooe.im440.workbench.services.Service;
+import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
 public class ColliderSystem implements Service {
@@ -19,6 +20,16 @@ public class ColliderSystem implements Service {
 		return this.colliders.removeAll(type);
 	}
 
+	@Override
+	public void activate() {
+		ServiceManager.addService(this);
+	}
+
+	@Override
+	public void deactivate() {
+		ServiceManager.removeService(this.getClass());
+	}
+	
 	@Override
 	public void update() {
 		for (Collideable c1 : this.colliders) {

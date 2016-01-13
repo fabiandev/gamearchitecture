@@ -3,6 +3,7 @@ package at.fhooe.im440.workbench.services.PhysicsEngine;
 import com.badlogic.gdx.Gdx;
 
 import at.fhooe.im440.workbench.services.Service;
+import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
 public class PhysicsEngine implements Service {
@@ -33,6 +34,16 @@ public class PhysicsEngine implements Service {
 		this.gravity = gravity;
 	}
 
+	@Override
+	public void activate() {
+		ServiceManager.addService(this);
+	}
+
+	@Override
+	public void deactivate() {
+		ServiceManager.removeService(this.getClass());
+	}
+	
 	@Override
 	public void update() {
 		float dt = Gdx.graphics.getDeltaTime();

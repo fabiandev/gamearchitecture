@@ -1,6 +1,7 @@
 package at.fhooe.im440.workbench.services.UpdateService;
 
 import at.fhooe.im440.workbench.services.Service;
+import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
 public class UpdateService implements Service {
@@ -17,6 +18,16 @@ public class UpdateService implements Service {
 	
 	public <T> int removeAll(Class<T> type) {
 		return this.updateables.removeAll(type);
+	}
+	
+	@Override
+	public void activate() {
+		ServiceManager.addService(this);
+	}
+
+	@Override
+	public void deactivate() {
+		ServiceManager.removeService(this.getClass());
 	}
 	
 	@Override

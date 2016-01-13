@@ -1,12 +1,9 @@
 package at.fhooe.im440.workbench.screens;
 
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.ScreenAdapter;
-
 import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.helpers.Picasso;
 
-public class TestScreen extends ScreenAdapter implements Screen {
+public class TestScreen extends BaseScreen {
 	
 	//private Workbench workbench;
 	//private Stage stage;

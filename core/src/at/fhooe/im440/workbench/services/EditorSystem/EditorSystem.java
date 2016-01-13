@@ -1,37 +1,62 @@
 package at.fhooe.im440.workbench.services.EditorSystem;
 
-import com.badlogic.gdx.Input.Keys;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.math.Vector2;
 
 import at.fhooe.im440.workbench.components.Collider;
 import at.fhooe.im440.workbench.components.CollisionMarker;
 import at.fhooe.im440.workbench.components.Editable;
+import at.fhooe.im440.workbench.components.Physics;
 import at.fhooe.im440.workbench.components.Pose;
 import at.fhooe.im440.workbench.components.Visual;
 import at.fhooe.im440.workbench.services.Service;
 import at.fhooe.im440.workbench.services.ServiceManager;
+import at.fhooe.im440.workbench.services.EditorSystem.states.CloneState;
+import at.fhooe.im440.workbench.services.EditorSystem.states.EditorState;
+import at.fhooe.im440.workbench.services.EditorSystem.states.IdleState;
+import at.fhooe.im440.workbench.services.EditorSystem.states.SingleSelectedState;
+import at.fhooe.im440.workbench.services.EditorSystem.states.SingleSelectingState;
+import at.fhooe.im440.workbench.services.EditorSystem.states.State;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
-import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
-import at.fhooe.im440.workbench.services.Messenger.IntegerMessage;
-import at.fhooe.im440.workbench.services.Messenger.Message;
-import at.fhooe.im440.workbench.services.Messenger.MessageType;
-import at.fhooe.im440.workbench.services.Messenger.Messenger;
-import at.fhooe.im440.workbench.services.Messenger.PositionMessage;
-import at.fhooe.im440.workbench.services.Messenger.Subscribeable;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
-public class EditorSystem implements Service, Subscribeable {
+public class EditorSystem implements Service {
 
 	private GenericArrayList<Editable> editables = new GenericArrayList<Editable>();
+	private Map<EditorState, State> states = new HashMap<EditorState, State>();
+	private EditorState activeState;
+	private EditorState defaultState = EditorState.IDLE;
 
-	private SelectState selectState = SelectState.SINGLE_SELECTING;
-	private SelectState cloneState = null;
-
-	private ActionState actionState = ActionState.IDLE;
-
-	private MessageType[] listenTo = new MessageType[] { MessageType.TOUCH_DOWN, MessageType.MOUSE_MOVED,
-			MessageType.KEY_DOWN, MessageType.KEY_UP };
-
+	public EditorSystem() {
+		this.states.put(EditorState.IDLE, new IdleState(this));
+		this.states.put(EditorState.SINGLE_SELECTING, new SingleSelectingState(this));
+		this.states.put(EditorState.SINGLE_SELECTED, new SingleSelectedState(this));
+		this.states.put(EditorState.CLONE, new CloneState(this));
+	
+		this.activeState = this.defaultState;
+	}
+	
+	public State getState(EditorState stateType) {
+		if (this.states.containsKey(stateType)) {
+			return this.states.get(stateType);
+		}
+		
+		return null;
+	}
+	
+	public boolean setState(EditorState stateType) {
+		if (this.states.containsKey(stateType)) {
+			this.states.get(this.activeState).off();
+			this.states.get(stateType).on();
+			this.activeState = stateType;
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public boolean addEditable(Editable editable) {
 		Entity entity = editable.getEntity();
 
@@ -84,54 +109,10 @@ public class EditorSystem implements Service, Subscribeable {
 
 	@Override
 	public void update() {
-//		for (Editable editable : this.editables) {
-//			Entity entity = editable.getEntity();
-//			if (entity.getComponent(Collider.class).isColliding()) {
-//				entity.getComponent(CollisionVisual.class).activate();
-//			} else {
-//				entity.getComponent(CollisionVisual.class).deactivate();
-//			}
-//		}
+
 	}
 
-	@Override
-	public void message(Message message) {
-		MessageType type = message.getType();
-
-		switch (type) {
-		case TOUCH_DOWN:
-			PositionMessage clickPosition = message.get(PositionMessage.class);
-			if (this.cloneState == SelectState.CLONE) {
-				this.handleClone(clickPosition.getVector());
-			} else if (clickPosition != null) {
-				this.handleTouchDown(clickPosition.getVector());
-				break;
-			}
-			break;
-		case MOUSE_MOVED:
-			PositionMessage mousePosition = message.get(PositionMessage.class);
-			if (mousePosition != null) {
-				this.handleMouseMoved(mousePosition.getVector());
-			}
-			break;
-		case KEY_DOWN:
-			int keyCode = message.get(IntegerMessage.class).getValue();
-			if (keyCode == Keys.ALT_LEFT) {
-				this.cloneState = SelectState.CLONE;
-			}
-			break;
-		case KEY_UP:
-			keyCode = message.get(IntegerMessage.class).getValue();
-			if (keyCode == Keys.ALT_LEFT) {
-				this.cloneState = null;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-
-	private void handleMouseMoved(Vector2 position) {
+	public void positionSelectedEditables(Vector2 position) {
 		for (Editable editable : this.editables) {
 			Entity entity = editable.getEntity();
 			if (entity.getComponent(Editable.class).isSelected()) {
@@ -140,57 +121,85 @@ public class EditorSystem implements Service, Subscribeable {
 		}
 	}
 
-	private void handleTouchDown(Vector2 position) {
+	public void selectCollidingEditable(Vector2 position) {
 		for (Editable editable : this.editables) {
 			Entity entity = editable.getEntity();
 			if (entity.getComponent(Visual.class).contains(position.x, position.y)
 					&& !entity.getComponent(Collider.class).isColliding()) {
-				if (this.selectState == SelectState.SINGLE_SELECTED) {
-					entity.getComponent(Editable.class).deselect();
-					this.selectState = SelectState.SINGLE_SELECTING;
-				} else {
-					entity.getComponent(Editable.class).select();
-					if (this.selectState == SelectState.SINGLE_SELECTING) {
-						this.selectState = SelectState.SINGLE_SELECTED;
-						break;
-					}
+				
+				Physics physicsComponent = entity.getComponent(Physics.class);
+				
+				if (physicsComponent != null) {
+					physicsComponent.deactivate();
 				}
+				
+				entity.getComponent(Editable.class).select();
 			}
 		}
 	}
-
-	private void handleClone(Vector2 position) {
-		if (this.selectState == SelectState.SINGLE_SELECTED) {
-			this.handleTouchDown(position);
-			return;
-		}
-		
-		// Attention! Crap might follow below, as well as in EntityFactory!
+	
+	public boolean deselectAllEditables() {
 		for (Editable editable : this.editables) {
 			Entity entity = editable.getEntity();
-			if (entity.getComponent(Visual.class).contains(position.x, position.y)) {
-				if (this.selectState == SelectState.SINGLE_SELECTING) {
-					Entity cloned = ServiceManager.getService(EntityFactory.class).cloneEntity(entity).addComponent(new Editable());
-					cloned.activateComponents();
-					this.addEditable(cloned.getComponent(Editable.class));
-					entity.getComponent(Editable.class).select();
-					this.selectState = SelectState.SINGLE_SELECTED;
-					break;
+			
+			if (editable.isSelected()) {
+				if (entity.getComponent(Collider.class).isColliding()) {
+					return false;
 				}
 			}
 		}
+		
+		for (Editable editable : this.editables) {
+			if (editable.isSelected()) {
+				Entity entity = editable.getEntity();
+				
+				editable.deselect();
+				
+				Physics physicsComponent = entity.getComponent(Physics.class);
+				
+				if (physicsComponent != null) {
+					physicsComponent.activate();
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public void activate() {
+		this.setState(this.defaultState);
+		this.getState(this.activeState).on();
+		ServiceManager.addService(this);
 	}
 
 	@Override
-	public void subscribe() {
-		Messenger messenger = ServiceManager.getService(Messenger.class);
-		messenger.subscribe(this, this.listenTo);
+	public void deactivate() {
+		ServiceManager.removeService(this.getClass());
+		this.setState(this.defaultState);
+		this.getState(this.activeState).off();
 	}
 
-	@Override
-	public void unsubscribe() {
-		Messenger messenger = ServiceManager.getService(Messenger.class);
-		messenger.unsubscribe(this, this.listenTo);
-	}
+//	private void handleClone(Vector2 position) {
+//		if (this.selectState == SelectState.SINGLE_SELECTED) {
+//			this.handleTouchDown(position);
+//			return;
+//		}
+//		
+//		// Attention! Crap might follow below, as well as in EntityFactory!
+//		for (Editable editable : this.editables) {
+//			Entity entity = editable.getEntity();
+//			if (entity.getComponent(Visual.class).contains(position.x, position.y)) {
+//				if (this.selectState == SelectState.SINGLE_SELECTING) {
+//					Entity cloned = ServiceManager.getService(EntityFactory.class).cloneEntity(entity).addComponent(new Editable());
+//					cloned.activateComponents();
+//					this.addEditable(cloned.getComponent(Editable.class));
+//					entity.getComponent(Editable.class).select();
+//					this.selectState = SelectState.SINGLE_SELECTED;
+//					break;
+//				}
+//			}
+//		}
+//	}
 
 }

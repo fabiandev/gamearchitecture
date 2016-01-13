@@ -1,6 +1,6 @@
 package at.fhooe.im440.workbench.components;
 
-public class StaticPose extends BaseComponent implements Pose {
+public class StaticPose extends Pose {
 
 	private float x;
 	private float y;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import at.fhooe.im440.workbench.entities.Spring;
 import at.fhooe.im440.workbench.services.Service;
+import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
 public class EntityManager implements Service {
@@ -24,6 +25,16 @@ public class EntityManager implements Service {
 	
 	public ArrayList<Spring> getSprings() {
 		return this.entities.getAll(Spring.class);
+	}
+	
+	@Override
+	public void activate() {
+		ServiceManager.addService(this);
+	}
+
+	@Override
+	public void deactivate() {
+		ServiceManager.removeService(this.getClass());
 	}
 	
 	@Override

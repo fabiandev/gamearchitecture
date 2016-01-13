@@ -78,9 +78,9 @@ public class Spring extends Entity {
 		p1.applyForce(forceX1, forceY1);
 		p2.applyForce(forceX2, forceY2);
 		
-		CameraSystem cs = ServiceManager.getService(CameraSystem.class);
-		
 		if (this.drawSpring) {
+			CameraSystem cs = ServiceManager.getService(CameraSystem.class);
+			
 			shapeRenderer.setProjectionMatrix(cs.getCamera().combined); 
 			shapeRenderer.begin(ShapeType.Line);
 			shapeRenderer.setColor(Picasso.BLACK);

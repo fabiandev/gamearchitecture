@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.services.Service;
+import at.fhooe.im440.workbench.services.ServiceManager;
 
 public class CameraSystem implements Service {
 
@@ -68,6 +69,16 @@ public class CameraSystem implements Service {
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public void activate() {
+		ServiceManager.addService(this);
+	}
+
+	@Override
+	public void deactivate() {
+		ServiceManager.removeService(this.getClass());
 	}
 
 }
