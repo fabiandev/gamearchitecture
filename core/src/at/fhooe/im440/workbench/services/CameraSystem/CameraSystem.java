@@ -1,5 +1,6 @@
 package at.fhooe.im440.workbench.services.CameraSystem;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
@@ -7,8 +8,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import at.fhooe.im440.workbench.Workbench;
+import at.fhooe.im440.workbench.components.Editable;
 import at.fhooe.im440.workbench.services.Service;
 import at.fhooe.im440.workbench.services.ServiceManager;
+import at.fhooe.im440.workbench.services.EntityManager.Entity;
 
 public class CameraSystem implements Service {
 
@@ -17,32 +20,26 @@ public class CameraSystem implements Service {
 	private Viewport viewport;
 	private Camera camera;
 
-	private float movement = 0;
-
 	public CameraSystem(float worldWidth, float worldHeight, CameraTarget target) {
-		// float aspectRatio = (float) Workbench.WINDOW_HEIGHT / (float)
-		// Workbench.WINDOW_WIDTH;
-		// float aspectRatio2 = (float) Workbench.WINDOW_WIDTH / (float)
-		// Workbench.WINDOW_HEIGHT;
-		// System.out.println(aspectRatio);
-		// System.out.println(Workbench.VIEWPORT_WIDTH*aspectRatio);
-		// System.out.println(Workbench.VIEWPORT_HEIGHT * aspectRatio2);
+		this.target = target;
+		
+		this.camera = new OrthographicCamera();
 
-		camera = new OrthographicCamera();
+		this.viewport = new FitViewport(Workbench.VIEWPORT_WIDTH, Workbench.VIEWPORT_HEIGHT, camera);
+		this.viewport.apply();
 
-		viewport = new FitViewport(Workbench.VIEWPORT_WIDTH, Workbench.VIEWPORT_HEIGHT, camera);
-		viewport.apply();
-
-		camera.position.set(Workbench.VIEWPORT_WIDTH / 2f, Workbench.VIEWPORT_HEIGHT / 2f, 0f);
-		camera.update();
+		this.camera.position.set(Workbench.VIEWPORT_WIDTH / 2f, Workbench.VIEWPORT_HEIGHT / 2f, 0f);
+		this.camera.update();
 	}
 
 	public void update(int width, int height) {
 		this.viewport.update(width, height);
-		// camera.viewportHeight = (Workbench.VIEWPORT_HEIGHT /
-		// Workbench.VIEWPORT_WIDTH) * width;
-		camera.position.set(Workbench.VIEWPORT_WIDTH / 2f, Workbench.VIEWPORT_HEIGHT / 2f, 0f);
-		camera.update();
+		this.camera.position.set(this.target.getPosX(), this.target.getPosY(), 0f);
+		this.camera.update();
+	}
+	
+	public void setTarget(CameraTarget target) {
+		this.target = target;
 	}
 
 	public Camera getCamera() {
@@ -53,22 +50,37 @@ public class CameraSystem implements Service {
 		return this.viewport;
 	}
 
-	public boolean isMoving() {
-		return (movement > 0);
-	}
-
 	public Vector3 toWorldCoordinates(int screenX, int screenY) {
 		return this.toWorldCoordinates((float) screenX, (float) screenY);
 	}
 
 	public Vector3 toWorldCoordinates(float screenX, float screenY) {
-		return this.camera.unproject(new Vector3(screenX, screenY, 0), viewport.getScreenX(),
-				viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
+		return this.camera.unproject(new Vector3(screenX, screenY, 0), this.viewport.getScreenX(),
+				this.viewport.getScreenY(), this.viewport.getScreenWidth(), this.viewport.getScreenHeight());
 	}
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
+		Entity targetEntity = this.target.getPose().getEntity();
+		
+		if (targetEntity != null && targetEntity.hasComponent(Editable.class)) {
+			if(targetEntity.getComponent(Editable.class).isSelected()) {
+				return;
+			}
+		}
+		
+		float dt = Gdx.graphics.getDeltaTime();
+		Vector3 position = this.getCamera().position;
+		float lerp = this.target.getLerp() * dt;
+		
+		float distanceX = this.target.getPosX() - position.x;
+		float distanceY = this.target.getPosY() - position.y;
+		
+		float posX = position.x + distanceX * lerp;
+		float posY = position.y + distanceY * lerp;
+		
+		this.camera.position.set(posX, posY, 0f);
+		this.camera.update();
 	}
 	
 	@Override

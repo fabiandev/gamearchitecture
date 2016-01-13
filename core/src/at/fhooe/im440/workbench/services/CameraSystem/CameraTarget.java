@@ -6,7 +6,16 @@ import at.fhooe.im440.workbench.components.Pose;
 public class CameraTarget extends Component {
 
 	private Pose pose;
+	private float lerp = 1f;
 	
+	public float getLerp() {
+		return lerp;
+	}
+
+	public void setLerp(float lerp) {
+		this.lerp = lerp;
+	}
+
 	public CameraTarget(Pose pose) {
 		this.pose = pose;
 	}

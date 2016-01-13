@@ -46,6 +46,7 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 		this.menu = new Menu();
 		
 		this.menu.add(new MenuElement<PhysicsScreen>("physics", new Label("PHYSICS", defaultLabelStyle), PhysicsScreen.class));
+		this.menu.add(new MenuElement<CameraTargetScreen>("cameraTarget", new Label("CAMERA TARGET", defaultLabelStyle), CameraTargetScreen.class));
 		this.menu.add(new MenuElement<GameScreen>("start", new Label("START", defaultLabelStyle), GameScreen.class));
 		this.menu.add(new MenuElement<ExitScreen>("exit", new Label("EXIT", defaultLabelStyle), ExitScreen.class));
 		

@@ -20,7 +20,12 @@ public class PhysicsScreen extends BaseScreen {
 	
 	public PhysicsScreen() {
 		this.entities = new ArrayList<Entity>();
-		this.editorSystem = new EditorSystem();
+		
+		if (ServiceManager.hasService(EditorSystem.class)) {
+			this.editorSystem = ServiceManager.getService(EditorSystem.class);
+		} else {
+			this.editorSystem = new EditorSystem();
+		}
 		
 		Physics p1 = new Physics();
 		Physics p2 = new Physics();
@@ -52,7 +57,6 @@ public class PhysicsScreen extends BaseScreen {
 		}));
 		
 		this.createSprings();
-
 	}
 	
 	private void createSprings() {
@@ -138,10 +142,6 @@ public class PhysicsScreen extends BaseScreen {
 		for (Entity entity : this.entities) {
 			entity.activateComponents();
 			entity.activate();
-			// Angle testing for rectangle below:
-//			if (entity instanceof WallEntity) {
-//				entity.getComponent(Pose.class).setAngle((float) Math.toRadians(12.3465)); 
-//			}
 		}
 	}
 

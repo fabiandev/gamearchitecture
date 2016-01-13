@@ -53,11 +53,13 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		this.font = new BitmapFont(Gdx.files.internal("arial_black_32.fnt"), Gdx.files.internal("arial_black_32.png"), false);
 	
 		this.messenger = new Messenger();
+		CameraTarget cameraTarget = new CameraTarget(new StaticPose(VIEWPORT_WIDTH / 2f, VIEWPORT_HEIGHT / 2f));
+		
 		this.messenger.activate();
 		new AssetManager().activate();
 		new EntityManager().activate();
 		new EntityFactory().activate();
-		new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, new CameraTarget(new StaticPose())).activate();
+		new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, cameraTarget).activate();
 		new RenderSystem(this.getBatch()).activate();
 		new ColliderSystem().activate();
 		new UpdateService().activate();

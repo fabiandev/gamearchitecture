@@ -14,7 +14,8 @@ public class SingleSelectedState implements State, Subscribeable {
 	private MessageType[] listenTo = new MessageType[] { 
 			MessageType.MOUSE_MOVED,
 			MessageType.TOUCH_DOWN,
-			MessageType.TOUCH_UP
+			MessageType.TOUCH_UP,
+			MessageType.KEY_UP,
 		};
 
 	public SingleSelectedState(EditorSystem editorSystem) {

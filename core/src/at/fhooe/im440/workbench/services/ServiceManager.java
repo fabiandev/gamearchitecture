@@ -30,6 +30,10 @@ public abstract class ServiceManager {
 		return null;
 	}
 	
+	public static <T extends Service> boolean hasService(Class<T> type) {
+		return services.hasOne(type);
+	}
+	
 	public static void activate() {
 		active = true;
 	}

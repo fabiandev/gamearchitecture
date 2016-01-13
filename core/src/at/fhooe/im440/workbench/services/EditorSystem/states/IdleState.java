@@ -1,10 +1,7 @@
 package at.fhooe.im440.workbench.services.EditorSystem.states;
 
-import com.badlogic.gdx.Input.Keys;
-
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
-import at.fhooe.im440.workbench.services.Messenger.IntegerMessage;
 import at.fhooe.im440.workbench.services.Messenger.Message;
 import at.fhooe.im440.workbench.services.Messenger.MessageType;
 import at.fhooe.im440.workbench.services.Messenger.Messenger;
@@ -12,11 +9,11 @@ import at.fhooe.im440.workbench.services.Messenger.Subscribeable;
 
 public class IdleState implements State, Subscribeable {
 
-	private EditorSystem editorSystem;
-	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_DOWN };
+	// private EditorSystem editorSystem;
+	private MessageType[] listenTo = new MessageType[] { };
 
 	public IdleState(EditorSystem editorSystem) {
-		this.editorSystem = editorSystem;
+		// this.editorSystem = editorSystem;
 	}
 	
 	@Override
@@ -35,14 +32,7 @@ public class IdleState implements State, Subscribeable {
 
 		switch (type) {
 		case KEY_DOWN:
-			int keyCode = message.get(IntegerMessage.class).getValue();
-			
-			if (keyCode == Keys.S) {
-				this.editorSystem.setState(EditorState.SINGLE_SELECTING);
-			} else if (keyCode == Keys.C) {
-				this.editorSystem.setState(EditorState.CLONE);
-			}
-			
+			// int keyCode = message.get(IntegerMessage.class).getValue();
 			break;
 		default:
 			break;

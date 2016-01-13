@@ -39,7 +39,7 @@ public class CloneState implements State, Subscribeable {
 			PositionMessage mousePosition = message.get(PositionMessage.class);
 			this.editorSystem.cloneCollidingEditable(mousePosition.getVector());
 			this.editorSystem.setState(EditorState.SINGLE_SELECTED);
-			
+
 			break;
 		case KEY_UP:
 			int keyCode = message.get(IntegerMessage.class).getValue();

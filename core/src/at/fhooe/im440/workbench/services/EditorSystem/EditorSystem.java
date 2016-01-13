@@ -3,6 +3,7 @@ package at.fhooe.im440.workbench.services.EditorSystem;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
 import at.fhooe.im440.workbench.components.Collider;
@@ -21,15 +22,22 @@ import at.fhooe.im440.workbench.services.EditorSystem.states.SingleSelectingStat
 import at.fhooe.im440.workbench.services.EditorSystem.states.State;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
+import at.fhooe.im440.workbench.services.Messenger.IntegerMessage;
+import at.fhooe.im440.workbench.services.Messenger.Message;
+import at.fhooe.im440.workbench.services.Messenger.MessageType;
+import at.fhooe.im440.workbench.services.Messenger.Messenger;
+import at.fhooe.im440.workbench.services.Messenger.Subscribeable;
 import at.fhooe.im440.workbench.utilities.GenericArrayList;
 
-public class EditorSystem implements Service {
+public class EditorSystem implements Service, Subscribeable {
 
 	private GenericArrayList<Editable> editables = new GenericArrayList<Editable>();
 	private Map<EditorState, State> states = new HashMap<EditorState, State>();
+	private Map<Integer, EditorState> stateKeyMapping = new HashMap<Integer, EditorState>();
 	private EditorState activeState;
 	private EditorState defaultState = EditorState.IDLE;
 	private EditorState previousState;
+	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_UP, MessageType.KEY_DOWN };
 
 	public EditorSystem() {
 		this.states.put(EditorState.IDLE, new IdleState(this));
@@ -37,6 +45,9 @@ public class EditorSystem implements Service {
 		this.states.put(EditorState.SINGLE_SELECTED, new SingleSelectedState(this));
 		this.states.put(EditorState.CLONE, new CloneState(this));
 	
+		this.stateKeyMapping.put(Keys.S, EditorState.SINGLE_SELECTING);
+		this.stateKeyMapping.put(Keys.C, EditorState.CLONE);
+		
 		this.activeState = this.defaultState;
 		this.previousState = this.defaultState;
 	}
@@ -143,8 +154,7 @@ public class EditorSystem implements Service {
 	public boolean selectCollidingEditable(Vector2 position) {
 		for (Editable editable : this.editables) {
 			Entity entity = editable.getEntity();
-			if (entity.getComponent(Visual.class).contains(position.x, position.y)
-					&& !entity.getComponent(Collider.class).isColliding()) {
+			if (entity.getComponent(Visual.class).contains(position.x, position.y)) {
 				
 				Physics physicsComponent = entity.getComponent(Physics.class);
 				
@@ -226,35 +236,59 @@ public class EditorSystem implements Service {
 		this.setState(this.defaultState);
 		this.getState(this.activeState).on();
 		ServiceManager.addService(this);
+		this.subscribe();
 	}
 
 	@Override
 	public void deactivate() {
+		this.unsubscribe();
 		ServiceManager.removeService(this.getClass());
 		this.setState(this.defaultState);
 		this.getState(this.activeState).off();
 	}
 
-//	private void handleClone(Vector2 position) {
-//		if (this.selectState == SelectState.SINGLE_SELECTED) {
-//			this.handleTouchDown(position);
-//			return;
-//		}
-//		
-//		// Attention! Crap might follow below, as well as in EntityFactory!
-//		for (Editable editable : this.editables) {
-//			Entity entity = editable.getEntity();
-//			if (entity.getComponent(Visual.class).contains(position.x, position.y)) {
-//				if (this.selectState == SelectState.SINGLE_SELECTING) {
-//					Entity cloned = ServiceManager.getService(EntityFactory.class).cloneEntity(entity).addComponent(new Editable());
-//					cloned.activateComponents();
-//					this.addEditable(cloned.getComponent(Editable.class));
-//					entity.getComponent(Editable.class).select();
-//					this.selectState = SelectState.SINGLE_SELECTED;
-//					break;
-//				}
-//			}
-//		}
-//	}
+	@Override
+	public void message(Message message) {
+		MessageType type = message.getType();
+		int keyCode;
+		
+		switch (type) {
+		case KEY_UP:
+			keyCode = message.get(IntegerMessage.class).getValue();
+			this.handleKeyUp(keyCode);
+			
+			break;
+		case KEY_DOWN:
+			keyCode = message.get(IntegerMessage.class).getValue();
+			this.handleKeyDown(keyCode);
+			
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void subscribe() {
+		ServiceManager.getService(Messenger.class).subscribe(this, this.listenTo);
+	}
+
+	@Override
+	public void unsubscribe() {
+		ServiceManager.getService(Messenger.class).unsubscribe(this, this.listenTo);
+	}
+	
+	private void handleKeyUp(int keyCode) {
+		if (this.stateKeyMapping.containsKey(keyCode)) {
+			this.forceDeselectCollideables();
+			this.setState(this.defaultState);
+		}
+	}
+	
+	private void handleKeyDown(int keyCode) {
+		if (this.stateKeyMapping.containsKey(keyCode)) {
+			this.setState(this.stateKeyMapping.get(keyCode));
+		}
+	}
 
 }
