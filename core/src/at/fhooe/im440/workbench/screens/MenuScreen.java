@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
@@ -102,9 +103,9 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 		this.resetActiveMenuElementPosition(duration);
 	}
 	
-	private void stopMenuAnimtation() {
-		this.stopMenuAnimtation(0.3f);
-	}
+//	private void stopMenuAnimtation() {
+//		this.stopMenuAnimtation(0.3f);
+//	}
 
 	@Override
 	public void render(float delta) {
@@ -126,6 +127,10 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 	@Override
 	public void show() {
 		super.show();
+		
+		stage.getRoot().getColor().a = 0;
+		stage.getRoot().addAction(Actions.fadeIn(0.5f));
+		
 		this.subscribe();
 		
 		stage.getViewport().getCamera().position.set(0, 0, 0);
@@ -133,6 +138,19 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 		
 		this.menu.getGroup().addAction(Actions.show());
 		this.animateMenu();
+	}
+	
+	public void switchScreen(final Screen newScreen){
+	    stage.getRoot().getColor().a = 1;
+	    SequenceAction sequenceAction = new SequenceAction();
+	    sequenceAction.addAction(Actions.fadeOut(0f));
+	    sequenceAction.addAction(Actions.run(new Runnable() {
+	        @Override
+	        public void run() {
+	            Workbench.get().setScreen(newScreen);
+	        }
+	    }));
+	    stage.getRoot().addAction(sequenceAction);
 	}
 
 	@Override
@@ -155,9 +173,9 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 		active.addAction(Actions.moveTo(this.activeMenuElementPosition.x, this.activeMenuElementPosition.y, duration, Interpolation.sineIn));
 	}
 	
-	private void resetActiveMenuElementPosition() {
-		this.resetActiveMenuElementPosition(0.3f);
-	}
+//	private void resetActiveMenuElementPosition() {
+//		this.resetActiveMenuElementPosition(0.3f);
+//	}
 	
 	private void rememberActiveMenuElementPosition() {
 		Actor active = this.menu.getActive().getElement();
@@ -187,7 +205,7 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 				Screen screen = this.menu.getActive().getScreen();
 				
 				if (screen != null) {
-					this.workbench.setScreen(screen);
+					this.switchScreen(screen);
 					return;
 				}
 				break;
