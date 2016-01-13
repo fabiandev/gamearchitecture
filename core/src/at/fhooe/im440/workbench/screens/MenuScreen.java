@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -32,13 +33,14 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 	private LabelStyle defaultLabelStyle;
 	private LabelStyle activeLabelStyle;
 	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_UP };
-
+	private Vector2 activeMenuElementPosition = new Vector2();
+	
 	public MenuScreen() {
 		this.workbench = Workbench.get();
 		this.font = this.workbench.getFont();
 		this.stage = this.workbench.getStage();
-		this.defaultLabelStyle = new LabelStyle(this.font, Picasso.GRAY);
-		this.activeLabelStyle = new LabelStyle(this.font, Picasso.BLACK);
+		this.defaultLabelStyle = new LabelStyle(this.font, Picasso.SLATE);
+		this.activeLabelStyle = new LabelStyle(this.font, Picasso.DARK_GRAY);
 		this.createMenu();
 	}
 	
@@ -53,9 +55,11 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 		
 		this.menu.highlight("start");
 		this.menu.position();
-		
+
 		this.menu.getGroup().addAction(Actions.hide());
 		this.stage.addActor(this.menu.getGroup());
+		
+		this.rememberActiveMenuElementPosition();
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -75,10 +79,12 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 	
 	private void animateMenu() {
 		Actor active = this.menu.getActive().getElement();
-		active.clearActions();
+		
 		active.addAction(Actions.sequence(
-				Actions.fadeOut(0.3f, Interpolation.sine),
-				Actions.fadeIn(0.4f, Interpolation.sine),
+				Actions.moveBy(0f, 20f, 0.4f, Interpolation.sineOut),
+				Actions.moveTo(this.activeMenuElementPosition.x, this.activeMenuElementPosition.y, 0.3f, Interpolation.sineIn),
+				//Actions.fadeOut(0.3f, Interpolation.sine),
+				//Actions.fadeIn(0.4f, Interpolation.sine),
 				Actions.run(new Runnable() {
 
 					@Override
@@ -90,10 +96,14 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 			));
 	}
 	
-	private void stopMenuAnimtation() {
+	private void stopMenuAnimtation(float duration) {
 		Actor active = this.menu.getActive().getElement();
 		active.clearActions();
-		active.addAction(Actions.fadeIn(0f));
+		this.resetActiveMenuElementPosition(duration);
+	}
+	
+	private void stopMenuAnimtation() {
+		this.stopMenuAnimtation(0.3f);
 	}
 
 	@Override
@@ -127,11 +137,11 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 
 	@Override
 	public void hide() {
+		this.stopMenuAnimtation(0f);
 		super.hide();
 		this.unsubscribe();
 		
 		this.menu.getGroup().addAction(Actions.hide());
-		this.stopMenuAnimtation();
 	}
 
 	@Override
@@ -140,18 +150,38 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 		super.dispose();
 	}
 
+	private void resetActiveMenuElementPosition(float duration) {
+		Actor active = this.menu.getActive().getElement();
+		active.addAction(Actions.moveTo(this.activeMenuElementPosition.x, this.activeMenuElementPosition.y, duration, Interpolation.sineIn));
+	}
+	
+	private void resetActiveMenuElementPosition() {
+		this.resetActiveMenuElementPosition(0.3f);
+	}
+	
+	private void rememberActiveMenuElementPosition() {
+		Actor active = this.menu.getActive().getElement();
+		this.activeMenuElementPosition.x = active.getX();
+		this.activeMenuElementPosition.y = active.getY();
+	}
+	
 	@Override
 	public void message(Message message) {
-		this.stopMenuAnimtation();
 		
 		switch(message.getType()) {
 		case KEY_UP:
 			switch(message.get(IntegerMessage.class).getValue()) {
 			case Keys.RIGHT:
+				this.stopMenuAnimtation(0.3f);
 				this.menu.highlightNext();
+				this.rememberActiveMenuElementPosition();
+				this.animateMenu();
 				break;
 			case Keys.LEFT:
+				this.stopMenuAnimtation(0.3f);
 				this.menu.highlightPrev();
+				this.rememberActiveMenuElementPosition();
+				this.animateMenu();
 				break;
 			case Keys.ENTER:
 				Screen screen = this.menu.getActive().getScreen();
@@ -162,11 +192,11 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 				}
 				break;
 			}
+			break;
 			default:
 				break;
 		}
 		
-		this.animateMenu();
 	}
 	
 	@Override
