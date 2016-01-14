@@ -7,6 +7,7 @@ import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraTarget;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
+import at.fhooe.im440.workbench.services.EditorSystem.states.EditorState;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
 
@@ -43,6 +44,8 @@ public class CameraTargetScreen extends BaseScreen {
 		super.show();
 		
 		this.editorSystem.activate();
+		this.editorSystem.setState(EditorState.SINGLE_SELECTING);
+		
 		this.entity.activateComponents();
 		this.entity.activate();
 		
@@ -57,7 +60,9 @@ public class CameraTargetScreen extends BaseScreen {
 		this.entity.deactivateComponents();
 		this.entity.deactivate();
 		
+		this.editorSystem.setState(EditorState.IDLE);
 		this.editorSystem.deactivate();
+		
 		ServiceManager.getService(CameraSystem.class).useDefaultTarget().forceTargetPosition();
 	}
 

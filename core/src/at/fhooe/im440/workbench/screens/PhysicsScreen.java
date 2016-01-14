@@ -10,6 +10,7 @@ import at.fhooe.im440.workbench.entities.Spring;
 import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
+import at.fhooe.im440.workbench.services.EditorSystem.states.EditorState;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
 
@@ -138,6 +139,7 @@ public class PhysicsScreen extends BaseScreen {
 		super.show();
 		
 		this.editorSystem.activate();
+		this.editorSystem.setState(EditorState.SINGLE_SELECTING);
 		
 		for (Entity entity : this.entities) {
 			entity.activateComponents();
@@ -154,6 +156,7 @@ public class PhysicsScreen extends BaseScreen {
 			entity.deactivate();
 		}
 		
+		this.editorSystem.setState(EditorState.IDLE);
 		this.editorSystem.deactivate();
 	}
 

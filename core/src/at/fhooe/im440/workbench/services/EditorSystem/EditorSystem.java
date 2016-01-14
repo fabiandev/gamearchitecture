@@ -255,14 +255,14 @@ public class EditorSystem implements Service, Subscribeable {
 		switch (type) {
 		case KEY_UP:
 			keyCode = message.get(IntegerMessage.class).getValue();
-			this.handleKeyUp(keyCode);
+			this.handleStateMapping(keyCode);
 			
 			break;
-		case KEY_DOWN:
-			keyCode = message.get(IntegerMessage.class).getValue();
-			this.handleKeyDown(keyCode);
-			
-			break;
+//		case KEY_DOWN:
+//			keyCode = message.get(IntegerMessage.class).getValue();
+//			this.goToStateMapping(keyCode);
+//			
+//			break;
 		default:
 			break;
 		}
@@ -278,17 +278,31 @@ public class EditorSystem implements Service, Subscribeable {
 		ServiceManager.getService(Messenger.class).unsubscribe(this, this.listenTo);
 	}
 	
-	private void handleKeyUp(int keyCode) {
+	private void handleStateMapping(int keyCode) {
 		if (this.stateKeyMapping.containsKey(keyCode)) {
-			this.forceDeselectCollideables();
-			this.setState(this.defaultState);
+			EditorState keyStateType = this.stateKeyMapping.get(keyCode);
+			
+			if (keyStateType == this.activeState) {
+				this.setState(this.defaultState);
+				
+				return;
+			}
+			
+			this.setState(keyStateType);
 		}
 	}
 	
-	private void handleKeyDown(int keyCode) {
-		if (this.stateKeyMapping.containsKey(keyCode)) {
-			this.setState(this.stateKeyMapping.get(keyCode));
-		}
-	}
+//	private void goToStateMapping(int keyCode) {
+//		if (this.stateKeyMapping.containsKey(keyCode)) {
+//			this.forceDeselectCollideables();
+//			this.setState(this.defaultState);
+//		}
+//	}
+//	
+//	private void leaveStateMapping(int keyCode) {
+//		if (this.stateKeyMapping.containsKey(keyCode)) {
+//			this.setState(this.stateKeyMapping.get(keyCode));
+//		}
+//	}
 
 }
