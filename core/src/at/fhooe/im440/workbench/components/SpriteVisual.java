@@ -221,7 +221,6 @@ public class SpriteVisual extends Visual {
 		return this;
 	}
 
-	// TODO: change those to activate() and remove the boolean activated flag?
 	@Override
 	public void activate() {
 		ServiceManager.getService(RenderSystem.class).addVisual(this);

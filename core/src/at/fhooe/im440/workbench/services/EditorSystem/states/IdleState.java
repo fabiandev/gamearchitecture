@@ -1,5 +1,7 @@
 package at.fhooe.im440.workbench.services.EditorSystem.states;
 
+import com.badlogic.gdx.Gdx;
+
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
 import at.fhooe.im440.workbench.services.Messenger.Message;
@@ -19,6 +21,7 @@ public class IdleState implements State, Subscribeable {
 	@Override
 	public void on() {
 		this.subscribe();
+		Gdx.app.log("EditorState", "IDLE");
 	}
 
 	@Override

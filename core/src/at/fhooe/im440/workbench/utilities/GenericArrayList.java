@@ -11,6 +11,10 @@ public class GenericArrayList<I> implements Iterable<I> {
 		return this.list;
 	}
 	
+	public void setList(ArrayList<I> list) {
+		this.list = list;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T extends I> T get(T instance) {
 		for (I element : this.list) {
@@ -99,6 +103,13 @@ public class GenericArrayList<I> implements Iterable<I> {
 	
 	public void clear() {
 		this.list.clear();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public GenericArrayList<I> clone() {
+		GenericArrayList<I> list = new GenericArrayList<I>();
+		list.setList((ArrayList<I>) this.list.clone());
+		return list;
 	}
 
 	@Override

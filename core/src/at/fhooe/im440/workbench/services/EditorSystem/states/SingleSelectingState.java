@@ -1,5 +1,6 @@
 package at.fhooe.im440.workbench.services.EditorSystem.states;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 import at.fhooe.im440.workbench.services.ServiceManager;
@@ -26,6 +27,7 @@ public class SingleSelectingState implements State, Subscribeable {
 	@Override
 	public void on() {
 		this.subscribe();
+		Gdx.app.log("EditorState", "SINGLE_SELECTING");
 	}
 
 	@Override
@@ -40,8 +42,11 @@ public class SingleSelectingState implements State, Subscribeable {
 		switch (type) {
 		case TOUCH_DOWN:
 			PositionMessage mousePosition = message.get(PositionMessage.class);
-			this.editorSystem.selectCollidingEditable(mousePosition.getVector());
-			this.editorSystem.setState(EditorState.SINGLE_SELECTED);
+			
+			if (this.editorSystem.selectCollidingEditable(mousePosition.getVector())) {
+				this.editorSystem.setState(EditorState.SINGLE_SELECTED);
+			}
+			
 			break;
 		case KEY_UP:
 			int keyCode = message.get(IntegerMessage.class).getValue();

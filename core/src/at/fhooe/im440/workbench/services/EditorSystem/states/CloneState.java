@@ -1,10 +1,9 @@
 package at.fhooe.im440.workbench.services.EditorSystem.states;
 
-import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Gdx;
 
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
-import at.fhooe.im440.workbench.services.Messenger.IntegerMessage;
 import at.fhooe.im440.workbench.services.Messenger.Message;
 import at.fhooe.im440.workbench.services.Messenger.MessageType;
 import at.fhooe.im440.workbench.services.Messenger.Messenger;
@@ -23,6 +22,7 @@ public class CloneState implements State, Subscribeable {
 	@Override
 	public void on() {
 		this.subscribe();
+		Gdx.app.log("EditorState", "CLONE");
 	}
 
 	@Override
@@ -37,17 +37,11 @@ public class CloneState implements State, Subscribeable {
 		switch (type) {
 		case TOUCH_DOWN:
 			PositionMessage mousePosition = message.get(PositionMessage.class);
-			this.editorSystem.cloneCollidingEditable(mousePosition.getVector());
-			this.editorSystem.setState(EditorState.SINGLE_SELECTED);
-
-			break;
-		case KEY_UP:
-			int keyCode = message.get(IntegerMessage.class).getValue();
-
-			if (keyCode == Keys.C) {
-				this.editorSystem.setState(EditorState.IDLE);
-			}
 			
+			if (this.editorSystem.cloneCollidingEditable(mousePosition.getVector())) {
+				this.editorSystem.setState(EditorState.SINGLE_SELECTED);
+			}
+
 			break;
 		default:
 			break;

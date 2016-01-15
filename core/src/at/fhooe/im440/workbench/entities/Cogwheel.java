@@ -14,25 +14,26 @@ import at.fhooe.im440.workbench.services.EntityManager.Entity;
 public class Cogwheel extends Entity {
 	
 	public Cogwheel(float x, float y) {
-		this(x, y, 1f);
+		this(x, y, 1f, 0f, Picasso.GAME_PALEGREEN);
 	}
 	
 	public Cogwheel(float x, float y, Color color) {
-		this(x, y, 1f, color);
+		this(x, y, 1f, 0f, color);
 	}
 	
-	public Cogwheel(float x, float y, float w) {
-		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog_n")).width(w).height(w).setOriginCenter();
-		spriteVisual.setColor(Picasso.GAME_BLUEGREEN);
-		
-		this.addComponents(new StaticPose(x, y), spriteVisual, new CircleCollider(w), new CollisionMarker());
+	public Cogwheel(float x, float y, float angleRadians) {
+		this(x, y, 1f, angleRadians, Picasso.GAME_PALEGREEN);
 	}
 	
-	public Cogwheel(float x, float y, float w, Color color) {
+	public Cogwheel(float x, float y, float angleRadians, Color color) {
+		this(x, y, 1f, angleRadians, color);
+	}
+	
+	public Cogwheel(float x, float y, float w, float angleRadians, Color color) {
 		SpriteVisual spriteVisual = new SpriteVisual(ServiceManager.getService(AssetManager.class).getRegion("cog_n")).width(w).height(w).setOriginCenter();
 		spriteVisual.setColor(color);
 		
-		this.addComponents(new StaticPose(x, y), spriteVisual, new CircleCollider(w), new CollisionMarker());
+		this.addComponents(new StaticPose(x, y, angleRadians), spriteVisual, new CircleCollider(w), new CollisionMarker());
 	}
 
 	@Override

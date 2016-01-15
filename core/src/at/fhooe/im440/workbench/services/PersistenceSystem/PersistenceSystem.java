@@ -46,10 +46,7 @@ public class PersistenceSystem implements Service {
 		
 			out.writeObject(storeables);
 
-			Gdx.app.log(
-					getClass().getSimpleName(),
-					"entities (" + persistables.size() + ") stored in "
-							+ file.getAbsolutePath());
+			Gdx.app.log("PersistenceSystem", file.getName() + " saved");
 		}		
 	}
 	
@@ -61,8 +58,7 @@ public class PersistenceSystem implements Service {
 			for (Storeable storeable : storeables) {
 				storeable.restore();
 			}
-			Gdx.app.log(getClass().getSimpleName(),
-					"entities (" + storeables.size() + ") restored from " + file.getAbsolutePath());
+			Gdx.app.log("PersistenceSystem", "editor.sav loaded");
 			
 		} catch (ClassNotFoundException e) {
 			throw new IOException("invalid world file ", e);

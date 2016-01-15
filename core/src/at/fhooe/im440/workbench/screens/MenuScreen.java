@@ -183,6 +183,10 @@ public class MenuScreen extends BaseScreen implements Subscribeable {
 		this.activeMenuElementPosition.y = active.getY();
 	}
 	
+	public Menu getMenu() {
+		return this.menu;
+	}
+	
 	@Override
 	public void message(Message message) {
 		

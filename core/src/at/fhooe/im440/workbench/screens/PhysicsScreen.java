@@ -10,9 +10,9 @@ import at.fhooe.im440.workbench.entities.Spring;
 import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
-import at.fhooe.im440.workbench.services.EditorSystem.states.EditorState;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
+import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
 
 public class PhysicsScreen extends BaseScreen {
 	
@@ -20,13 +20,8 @@ public class PhysicsScreen extends BaseScreen {
 	private ArrayList<Entity> entities;
 	
 	public PhysicsScreen() {
+		this.editorSystem = ServiceManager.getService(EditorSystem.class);
 		this.entities = new ArrayList<Entity>();
-		
-		if (ServiceManager.hasService(EditorSystem.class)) {
-			this.editorSystem = ServiceManager.getService(EditorSystem.class);
-		} else {
-			this.editorSystem = new EditorSystem();
-		}
 		
 		Physics p1 = new Physics();
 		Physics p2 = new Physics();
@@ -138,8 +133,8 @@ public class PhysicsScreen extends BaseScreen {
 	public void show() {
 		super.show();
 		
-		this.editorSystem.activate();
-		this.editorSystem.setState(EditorState.SINGLE_SELECTING);
+		//this.editorSystem.setState(EditorState.SINGLE_SELECTING);
+		this.editorSystem.subscribe();
 		
 		for (Entity entity : this.entities) {
 			entity.activateComponents();
@@ -151,19 +146,15 @@ public class PhysicsScreen extends BaseScreen {
 	public void hide() {
 		super.hide();
 		
-		for (Entity entity : this.entities) {
-			entity.deactivateComponents();
-			entity.deactivate();
-		}
-		
-		this.editorSystem.setState(EditorState.IDLE);
-		this.editorSystem.deactivate();
+		this.editorSystem.unsubscribe();
+		//this.editorSystem.setState(EditorState.IDLE);
 	}
 
 	@Override
 	public void dispose() {
-		super.dispose();
+		ServiceManager.getService(EntityManager.class).deactivateAllEntities();
 		this.hide();
+		super.dispose();
 	}
 
 }

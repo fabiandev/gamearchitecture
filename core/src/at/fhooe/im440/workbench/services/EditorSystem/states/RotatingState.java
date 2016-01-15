@@ -10,22 +10,22 @@ import at.fhooe.im440.workbench.services.Messenger.Messenger;
 import at.fhooe.im440.workbench.services.Messenger.PositionMessage;
 import at.fhooe.im440.workbench.services.Messenger.Subscribeable;
 
-public class SingleSelectedState implements State, Subscribeable {
+public class RotatingState implements State, Subscribeable {
 
 	private EditorSystem editorSystem;
 	private MessageType[] listenTo = new MessageType[] { 
-			MessageType.MOUSE_MOVED,
-			MessageType.TOUCH_DOWN
+			MessageType.TOUCH_DRAGGED,
+			MessageType.TOUCH_UP
 		};
 
-	public SingleSelectedState(EditorSystem editorSystem) {
+	public RotatingState(EditorSystem editorSystem) {
 		this.editorSystem = editorSystem;
 	}
 	
 	@Override
 	public void on() {
 		this.subscribe();
-		Gdx.app.log("EditorState", "SINGLE_SELECTED");
+		Gdx.app.log("EditorState", "ROTATING");
 	}
 
 	@Override
@@ -38,14 +38,14 @@ public class SingleSelectedState implements State, Subscribeable {
 		MessageType type = message.getType();
 
 		switch (type) {
-		case MOUSE_MOVED:
+		case TOUCH_DRAGGED:
 			PositionMessage mousePosition = message.get(PositionMessage.class);
 			if (mousePosition != null) {
-				this.editorSystem.positionSelectedEditables(mousePosition.getVector());
+				this.editorSystem.rotateSelectedEditables(mousePosition.getVector());
 			}
 			
 			break;
-		case TOUCH_DOWN:
+		case TOUCH_UP:
 			if (this.editorSystem.deselectCollideables()) {
 				this.editorSystem.setPreviousState();
 			}

@@ -5,5 +5,6 @@ public enum EditorState {
 	SINGLE_SELECTING,
 	SINGLE_SELECTED,
 	ROTATE,
+	ROTATING,
 	CLONE
 }

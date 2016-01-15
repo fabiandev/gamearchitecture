@@ -19,6 +19,18 @@ public class EntityManager implements Service {
 		return this.entities.remove(entity);
 	}
 	
+	public void deactivateAllEntities() {
+		for (Entity entity : this.entities) {
+			entity.deactivateComponents();
+		}
+		
+		GenericArrayList<Entity> entities = this.entities.clone();
+		
+		for (Entity entity : entities) {
+			entity.deactivate();
+		}
+	}
+	
 	public <T> int removeAll(Class<T> type) {
 		return this.entities.removeAll(type);
 	}

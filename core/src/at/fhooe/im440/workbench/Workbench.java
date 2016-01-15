@@ -17,6 +17,7 @@ import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.AssetManager.AssetManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 import at.fhooe.im440.workbench.services.ColliderSystem.ColliderSystem;
+import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
 import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
 import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
 import at.fhooe.im440.workbench.services.Messenger.IntegerMessage;
@@ -24,6 +25,7 @@ import at.fhooe.im440.workbench.services.Messenger.Message;
 import at.fhooe.im440.workbench.services.Messenger.MessageType;
 import at.fhooe.im440.workbench.services.Messenger.Messenger;
 import at.fhooe.im440.workbench.services.Messenger.PositionMessage;
+import at.fhooe.im440.workbench.services.PersistenceSystem.PersistenceSystem;
 import at.fhooe.im440.workbench.services.PhysicsEngine.PhysicsEngine;
 import at.fhooe.im440.workbench.services.RenderSystem.RenderSystem;
 import at.fhooe.im440.workbench.services.UpdateService.UpdateService;
@@ -38,6 +40,8 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 	
 	public static final String VERSION = "1.0.0";
 	public static final String APP_TITLE = "Workbench";
+	
+	public static final String EDITOR_SAV = "../core/assets/saved/editor.sav";
 	
 	private Stage stage;
 	private BitmapFont font;
@@ -55,7 +59,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		this.stage = new Stage();
 		//this.font = new BitmapFont(Gdx.files.internal("arial_black_32.fnt"), Gdx.files.internal("arial_black_32.png"), false);
 
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Capture_it.ttf"));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Capture_it.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 50;
 		this.font = generator.generateFont(parameter);
@@ -67,10 +71,12 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		new AssetManager().activate();
 		new EntityManager().activate();
 		new EntityFactory().activate();
+		new EditorSystem().activate();
 		new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT).activate();
 		new RenderSystem(this.getBatch()).activate();
 		new ColliderSystem().activate();
 		new UpdateService().activate();
+		new PersistenceSystem().activate();
 		new PhysicsEngine().activate();
 		
 		ServiceManager.activate();
@@ -82,6 +88,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		
 		this.menuScreen = new MenuScreen();
 		this.setScreen(new SplashScreen());
+		//this.setScreen(this.menuScreen);
 		
 		Gdx.input.setInputProcessor(this);
 	}

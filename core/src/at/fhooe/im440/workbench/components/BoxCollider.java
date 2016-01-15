@@ -36,6 +36,21 @@ public class BoxCollider extends Collider {
 		}
 		return false;
 	}
+	
+//	@Override
+//	public boolean isHit(float x, float y) {
+//		/*
+//		 * Abstand Cursor von Rechteckposition (radius): Math.sqrt(Math.pow(pose.getX() - cursor.getX(), 2) + Math.pow(pose.getY() - cursor.getY(), 2))
+//		 * Winkel Cursor zu Rechteck: Math.atan(Math.abs(pose.getY() - cursor.getY()) / Math.abs(pose.getX() - cursor.getX()))
+//		 * Korrigierter winkel: Math.abs(pose.getAngle() - cursorAngle)
+//		 * 
+//		 * Umrechnung Polarkoordinaten zu kartesische Koordinaten: X -> radius * Math.cos(corrAngle), Y -> radius * Math.sin(corrAngle)
+//		 * 
+//		 * Vergleich ob projizierte Position kürzer als halbeLänge, oder niedriger als halbeHöhe
+//		 */
+//		
+//		return false;
+//	}
 
 	@Override
 	public boolean isHit(BoxCollider c) {
@@ -59,8 +74,7 @@ public class BoxCollider extends Collider {
 		
 		return false;
 	}
-
-	@Override
+	
 	public boolean isHit(CircleCollider c) {
 		/*
 		 * Roadmap: 

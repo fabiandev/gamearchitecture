@@ -1,6 +1,8 @@
 package at.fhooe.im440.workbench.services.EditorSystem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Input.Keys;
@@ -17,6 +19,8 @@ import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EditorSystem.states.CloneState;
 import at.fhooe.im440.workbench.services.EditorSystem.states.EditorState;
 import at.fhooe.im440.workbench.services.EditorSystem.states.IdleState;
+import at.fhooe.im440.workbench.services.EditorSystem.states.RotateState;
+import at.fhooe.im440.workbench.services.EditorSystem.states.RotatingState;
 import at.fhooe.im440.workbench.services.EditorSystem.states.SingleSelectedState;
 import at.fhooe.im440.workbench.services.EditorSystem.states.SingleSelectingState;
 import at.fhooe.im440.workbench.services.EditorSystem.states.State;
@@ -44,9 +48,12 @@ public class EditorSystem implements Service, Subscribeable {
 		this.states.put(EditorState.SINGLE_SELECTING, new SingleSelectingState(this));
 		this.states.put(EditorState.SINGLE_SELECTED, new SingleSelectedState(this));
 		this.states.put(EditorState.CLONE, new CloneState(this));
+		this.states.put(EditorState.ROTATE, new RotateState(this));
+		this.states.put(EditorState.ROTATING, new RotatingState(this));
 	
 		this.stateKeyMapping.put(Keys.S, EditorState.SINGLE_SELECTING);
 		this.stateKeyMapping.put(Keys.C, EditorState.CLONE);
+		this.stateKeyMapping.put(Keys.R, EditorState.ROTATE);
 		
 		this.activeState = this.defaultState;
 		this.previousState = this.defaultState;
@@ -150,6 +157,27 @@ public class EditorSystem implements Service, Subscribeable {
 			}
 		}
 	}
+	
+	public void rotateSelectedEditables(Vector2 cursorPosition) {
+		List<Entity> entities = new ArrayList<Entity>();
+		
+		for (Editable editable : this.editables) {
+			if (editable.isSelected()) {
+				entities.add(editable.getEntity());
+			}
+		}
+		
+		for (Entity entity : entities) {
+			Pose pose = entity.getComponent(Pose.class);
+			
+			float distanceX = pose.getPosX() - cursorPosition.x;
+			float distanceY = pose.getPosY() - cursorPosition.y;
+			
+			float angleRadians = (float)Math.atan(distanceY / distanceX);
+
+			pose.setAngle(angleRadians);
+		}
+	}
 
 	public boolean selectCollidingEditable(Vector2 position) {
 		for (Editable editable : this.editables) {
@@ -219,10 +247,9 @@ public class EditorSystem implements Service, Subscribeable {
 		for (Editable editable : this.editables) {
 			Entity entity = editable.getEntity();
 			if (entity.getComponent(Visual.class).contains(position.x, position.y)) {
-				Entity cloned = ServiceManager.getService(EntityFactory.class).cloneEntity(entity).addComponent(new Editable());
+				Entity cloned = ServiceManager.getService(EntityFactory.class).clonePersistableEntity(entity).addComponent(new Editable());
 				cloned.activateComponents();
 				cloned.activate();
-				this.addEditable(cloned.getComponent(Editable.class));
 				cloned.getComponent(Editable.class).select();
 				return true;
 			}

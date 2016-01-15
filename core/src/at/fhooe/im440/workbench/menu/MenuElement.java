@@ -44,12 +44,16 @@ public class MenuElement<T extends BaseScreen> {
 		if (screenClass == null) {
 			return null;
 		}
-		
-		if (screen == null) {
 				
 			try {
-				this.screen = this.screenClass.getConstructor().newInstance();
-				this.screen.subscribe();
+				T screen = this.screenClass.getConstructor().newInstance();
+				
+				if (this.screen != null) {
+					this.screen.dispose();
+				}
+				
+				this.screen = screen;
+				this.screen.subscribe();	
 			} catch (InstantiationException e) {
 				return null;
 			} catch (IllegalAccessException e) {
@@ -63,8 +67,6 @@ public class MenuElement<T extends BaseScreen> {
 			} catch (SecurityException e) {
 				return null;
 			}
-				
-		}
 		
 		return this.screen;
 	}

@@ -9,7 +9,7 @@ import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
 import at.fhooe.im440.workbench.services.PersistenceSystem.Storeable;
 
-public class CogwheelPersistable extends Persistable {
+public class WallPersistable extends Persistable {
 
 	@Override
 	public Storeable getStoreable() {
@@ -40,7 +40,7 @@ public class CogwheelPersistable extends Persistable {
 		@Override
 		public void restore() {
 			ServiceManager.getService(EntityFactory.class)
-				.createCogwheel(this.posX, this.posY, this.angleRadians, new Color(this.color[0], this.color[1], this.color[2], this.color[3]))
+				.createWall(this.posX, this.posY, this.angleRadians, new Color(this.color[0], this.color[1], this.color[2], this.color[3]))
 				.activateComponents()
 				.activate();
 		}

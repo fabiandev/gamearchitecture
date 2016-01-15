@@ -7,9 +7,9 @@ import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraSystem;
 import at.fhooe.im440.workbench.services.CameraSystem.CameraTarget;
 import at.fhooe.im440.workbench.services.EditorSystem.EditorSystem;
-import at.fhooe.im440.workbench.services.EditorSystem.states.EditorState;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.EntityManager.EntityFactory;
+import at.fhooe.im440.workbench.services.EntityManager.EntityManager;
 
 public class CameraTargetScreen extends BaseScreen {
 	
@@ -17,11 +17,7 @@ public class CameraTargetScreen extends BaseScreen {
 	private Entity entity;
 	
 	public CameraTargetScreen() {
-		if (ServiceManager.hasService(EditorSystem.class)) {
-			this.editorSystem = ServiceManager.getService(EditorSystem.class);
-		} else {
-			this.editorSystem = new EditorSystem();
-		}
+		this.editorSystem = ServiceManager.getService(EditorSystem.class);
 		
 		this.entity = ServiceManager
 				.getService(EntityFactory.class)
@@ -43,8 +39,8 @@ public class CameraTargetScreen extends BaseScreen {
 	public void show() {
 		super.show();
 		
-		this.editorSystem.activate();
-		this.editorSystem.setState(EditorState.SINGLE_SELECTING);
+		//this.editorSystem.setState(EditorState.SINGLE_SELECTING);
+		this.editorSystem.subscribe();
 		
 		this.entity.activateComponents();
 		this.entity.activate();
@@ -57,19 +53,17 @@ public class CameraTargetScreen extends BaseScreen {
 	public void hide() {
 		super.hide();
 		
-		this.entity.deactivateComponents();
-		this.entity.deactivate();
-		
-		this.editorSystem.setState(EditorState.IDLE);
-		this.editorSystem.deactivate();
+		this.editorSystem.unsubscribe();
+		//this.editorSystem.setState(EditorState.IDLE);
 		
 		ServiceManager.getService(CameraSystem.class).useDefaultTarget().forceTargetPosition();
 	}
 
 	@Override
 	public void dispose() {
-		super.dispose();
+		ServiceManager.getService(EntityManager.class).deactivateAllEntities();
 		this.hide();
+		super.dispose();
 	}
 
 }

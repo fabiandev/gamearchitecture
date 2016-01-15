@@ -14,7 +14,7 @@ import at.fhooe.im440.workbench.services.Messenger.Subscribeable;
 
 public abstract class BaseScreen extends ScreenAdapter implements Screen, Subscribeable {
 
-	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_DOWN };
+	private MessageType[] listenTo = new MessageType[] { MessageType.KEY_UP };
 	
 	@Override
 	public void subscribe() {
@@ -33,11 +33,20 @@ public abstract class BaseScreen extends ScreenAdapter implements Screen, Subscr
 		MessageType type = message.getType();
 
 		switch (type) {
-		case KEY_DOWN:
+		case KEY_UP:
 			int keyCode = message.get(IntegerMessage.class).getValue();
 
 			if (keyCode == Keys.ESCAPE) {
-				Workbench.get().setScreen(Workbench.get().getMenuScreen());
+				Workbench workbench = Workbench.get();
+				MenuScreen menuScreen = (MenuScreen) workbench.getMenuScreen();
+				Screen activeScreen = menuScreen.getMenu().getActive().getScreen();
+				
+				if (activeScreen instanceof MenuScreen) {
+					return;
+				}
+				
+				activeScreen.dispose();
+				workbench.setScreen(workbench.getMenuScreen());
 			}
 			break;
 		default:
