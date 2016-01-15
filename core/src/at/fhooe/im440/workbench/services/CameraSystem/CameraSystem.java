@@ -89,6 +89,8 @@ public class CameraSystem implements Service {
 
 	@Override
 	public void update() {
+		this.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
 		Entity targetEntity = this.target.getPose().getEntity();
 		
 		if (targetEntity != null && targetEntity.hasComponent(Editable.class)) {
