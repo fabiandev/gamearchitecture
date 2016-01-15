@@ -41,8 +41,7 @@ public class CameraSystem implements Service {
 
 	public void update(int width, int height) {
 		this.viewport.update(width, height);
-		this.camera.position.set(this.target.getPosX(), this.target.getPosY(), 0f);
-		this.camera.update();
+		this.update();
 	}
 	
 	public CameraSystem setTarget(CameraTarget target) {
@@ -89,8 +88,7 @@ public class CameraSystem implements Service {
 
 	@Override
 	public void update() {
-		this.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		
+		this.viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Entity targetEntity = this.target.getPose().getEntity();
 		
 		if (targetEntity != null && targetEntity.hasComponent(Editable.class)) {

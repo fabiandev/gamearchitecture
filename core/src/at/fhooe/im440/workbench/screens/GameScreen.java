@@ -32,7 +32,7 @@ public class GameScreen extends BaseScreen {
 	public void show() {
 		super.show();
 		try {
-			this.persistenceSystem.restore(Gdx.files.absolute(Workbench.EDITOR_SAV).file().getAbsoluteFile());
+			this.persistenceSystem.restore(Gdx.files.local(Workbench.EDITOR_SAV).file().getAbsoluteFile());
 		} catch (IOException e) {
 			Gdx.app.log("EditorScreen", e.getMessage());
 		}
