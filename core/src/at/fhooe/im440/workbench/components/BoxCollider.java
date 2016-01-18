@@ -17,17 +17,21 @@ public class BoxCollider extends Collider {
 		float vRad = this.getHalfHeight();
 		float halfDiagonal = (float) Math.sqrt(Math.pow(hRad, 2) + Math.pow(vRad, 2));
 		float angle = pose.getAngle();
+		angle += angle < 0f ? (float) Math.PI : 0f;	// Assure to map negative degree values to 90 - 180 degrees.
 		float centerX = pose.getPosX();
 		float centerY = pose.getPosY();
 		
 		/*
 		 * Set cursor position & angle in relation to center of box
 		 */
-		float cursorX = Math.abs(x - centerX);
-		float cursorY = Math.abs(y - centerY);
+		float cursorX = x - centerX;
+		float cursorY = y - centerY;
 		
 		float cursorDelta = (float) Math.sqrt(Math.pow(cursorX, 2) + Math.pow(cursorY, 2));
 		float cursorAngle = (float) Math.atan(cursorY / cursorX);	// in radians!
+		
+		// Also map the angle to 90 - 180 degrees, if initial value would be negative
+		cursorAngle += cursorAngle < 0f ? (float) Math.PI : 0f;
 		
 		/*
 		 * Check if distance of cursor to center is greater than half diagonal
@@ -41,14 +45,9 @@ public class BoxCollider extends Collider {
 		 * Otherwise, calculate angle along which cursor position will be projected
 		 * New X & Y coordinates are result of transforming polar coordinates in cartesian coordinates
 		 */
-		angle = Math.abs(angle);
 		float corrAngle = Math.abs(cursorAngle - angle);
-		
 		cursorX = cursorDelta * (float) Math.cos(corrAngle);
 		cursorY = cursorDelta * (float) Math.sin(corrAngle);
-//		System.out.println("Angle: " + Math.toDegrees(angle));
-//		System.out.println("X: " + cursorX);
-//		System.out.println("Y: " + cursorY);
 		
 		if (cursorX < hRad && cursorY < vRad) {
 			return true;
