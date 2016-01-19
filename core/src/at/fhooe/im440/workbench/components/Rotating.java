@@ -47,6 +47,12 @@ public class Rotating extends Component implements Updateable {
 			float dt = Gdx.graphics.getDeltaTime();
 			Pose pose = entity.getComponent(Pose.class);
 			
+			float angleDeg = (float) Math.toDegrees(pose.getAngle());
+			if (angleDeg > 180) angleDeg -= 360;
+			//angleDeg %= 360;
+			//angleDeg = (angleDeg + 360) % 360;  
+			pose.setAngle((float) Math.toRadians(angleDeg));
+			
 			pose.setAngle(pose.getAngle() + this.speed * dt);
 		}
 	}

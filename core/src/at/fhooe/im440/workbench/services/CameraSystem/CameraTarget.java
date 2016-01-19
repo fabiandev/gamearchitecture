@@ -1,7 +1,9 @@
 package at.fhooe.im440.workbench.services.CameraSystem;
 
+import at.fhooe.im440.workbench.Workbench;
 import at.fhooe.im440.workbench.components.Component;
 import at.fhooe.im440.workbench.components.Pose;
+import at.fhooe.im440.workbench.components.StaticPose;
 
 public class CameraTarget extends Component {
 
@@ -20,6 +22,10 @@ public class CameraTarget extends Component {
 		this.pose = pose;
 	}
 	
+	public CameraTarget() {
+		this(new StaticPose(Workbench.VIEWPORT_WIDTH / 2f, Workbench.VIEWPORT_HEIGHT / 2f));
+	}
+
 	public void setPose(Pose pose) {
 		this.pose = pose;
 	}

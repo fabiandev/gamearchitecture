@@ -3,7 +3,6 @@ package at.fhooe.im440.workbench.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 
@@ -66,27 +65,21 @@ public class Player extends Entity implements Subscribeable {
 		
 		float y = this.getComponent(Pose.class).getPosY();
 		this.getComponent(Pose.class).setPos(pose.getPosX(), this.wasColliding ? y + 0.3f : y);
-		
-		Gdx.app.log("Player", "jump");
 	}
 	
 	private void handleMoveUp() {
-		Gdx.app.log("Player", "up");
 	}
 	
 	private void handleMoveRight() {
 		this.physicsComponent.applyForce(100f, 0f);
-		Gdx.app.log("Player", "right");
 	}
 	
 	private void handleMoveLeft() {
 		this.physicsComponent.applyForce(-100f, 0f);
-		Gdx.app.log("Player", "left");
 	}
 	
 	private void handleMoveDown() {
 		this.physicsComponent.applyForce(0f, -100f);
-		Gdx.app.log("Player", "down");
 	}
 	
 	private boolean isColliding() {

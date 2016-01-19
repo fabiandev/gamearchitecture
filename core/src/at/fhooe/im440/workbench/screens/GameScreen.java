@@ -27,9 +27,9 @@ public class GameScreen extends BaseScreen {
 	
 	public GameScreen() {
 		this.persistenceSystem = ServiceManager.getService(PersistenceSystem.class);
-		this.player = new Player(2f, 10f);
+		this.player = new Player(Workbench.VIEWPORT_WIDTH / 2f, Workbench.VIEWPORT_HEIGHT / 2f);
 		this.player.addComponent(new FollowRotation());
-		//this.cameraTarget.setPose(this.player.getComponent(Pose.class));
+		this.cameraTarget = new CameraTarget();
 	}
 	
 	@Override
@@ -45,7 +45,7 @@ public class GameScreen extends BaseScreen {
 	@Override
 	public void show() {
 		super.show();
-		//ServiceManager.getService(CameraSystem.class).setTarget(cameraTarget);
+		
 		try {
 			this.persistenceSystem.restore(Workbench.EDITOR_SAV);
 			this.player.activateComponents();
@@ -63,11 +63,13 @@ public class GameScreen extends BaseScreen {
 			c.activate();
 		}
 		
+		this.cameraTarget.setPose(this.player.getComponent(Pose.class));
+		ServiceManager.getService(CameraSystem.class).setTarget(this.cameraTarget);
 	}
 
 	@Override
 	public void hide() {
-		//ServiceManager.getService(CameraSystem.class).useDefaultTarget();
+		ServiceManager.getService(CameraSystem.class).useDefaultTarget().forceTargetPosition();
 		this.player.deactivateComponents();
 		this.player.deactivate();
 		super.hide();
