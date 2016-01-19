@@ -8,14 +8,10 @@ public class BoxCollider extends Collider {
 		this.hRad = width / 2f;
 		this.vRad = height / 2f;
 	}
-
-	@Override
-	public boolean isHit(float x, float y) {
+	
+	private Vector2 getProjectedCoordinates(float x, float y) {
 		Pose pose = this.getEntity().getComponent(Pose.class);
 		
-		float hRad = this.getHalfWidth();
-		float vRad = this.getHalfHeight();
-		float halfDiagonal = (float) Math.sqrt(Math.pow(hRad, 2) + Math.pow(vRad, 2));
 		float angle = pose.getAngle();
 		angle += angle < 0f ? (float) Math.PI : 0f;	// Assure to map negative degree values to 90 - 180 degrees.
 		float centerX = pose.getPosX();
@@ -34,14 +30,6 @@ public class BoxCollider extends Collider {
 		cursorAngle += cursorAngle < 0f ? (float) Math.PI : 0f;
 		
 		/*
-		 * Check if distance of cursor to center is greater than half diagonal
-		 * If true, it doesn't hit (halfDiagonal is longest distance inside box)
-		 */
-		if (cursorDelta > halfDiagonal) {
-			return false;
-		}
-		
-		/*
 		 * Otherwise, calculate angle along which cursor position will be projected
 		 * New X & Y coordinates are result of transforming polar coordinates in cartesian coordinates
 		 */
@@ -49,7 +37,29 @@ public class BoxCollider extends Collider {
 		cursorX = cursorDelta * (float) Math.cos(corrAngle);
 		cursorY = cursorDelta * (float) Math.sin(corrAngle);
 		
-		if (cursorX < hRad && cursorY < vRad) {
+		/*
+		 * Return cartesian coordinates in relation to the rectangle, where center is
+		 * the origin of the coordinate system
+		 */
+		return new Vector2(cursorX, cursorY);
+	}
+
+	@Override
+	public boolean isHit(float x, float y) {
+		Vector2 projected = this.getProjectedCoordinates(x, y);
+		
+		/*
+		 * If projected is null, then distance is great enough to not collide with the rectangle
+		 */
+		if (projected == null) {
+			return false;
+		}
+		
+		/*
+		 * If projected x & y are both within a projected quarter of the rectangle,
+		 * then a hit is performed
+		 */
+		if (projected.x < hRad && projected.y < vRad) {
 			return true;
 		}
 		return false;
@@ -81,104 +91,28 @@ public class BoxCollider extends Collider {
 	
 	public boolean isHit(CircleCollider c) {
 		
-		float circleX = c.getCenter().x;
-		float circleY = c.getCenter().y;
-		float circleWidth = c.getHalfWidth();
-		
-		float centerX = this.getCenter().x;
-		float centerY = this.getCenter().y;
+		/*
+		 * Get already projected coordinates of the circle
+		 */
+		Vector2 circle = this.getProjectedCoordinates(c.getCenter().x, c.getCenter().y);
+		float radius = c.getHalfWidth();
 		
 		/*
-		 * Get deltaX & deltaY to calculate the angle of the hypotenuse
-		 * between circle & rectangle
+		 * Because of the rectangle center being the origin of the coordinate system,
+		 * the deltas are the projected circle center coordinates
 		 */
-		float deltaX = Math.abs(circleX - centerX);
-		float deltaY = Math.abs(circleY - centerY);
-		float circleAngle = (float) Math.atan(deltaX/deltaY);	// in radians
+		float deltaX = Math.abs(circle.x);
+		float deltaY = Math.abs(circle.y);
 		
 		/*
-		 * Get projected coordinates of circle border by transforming 
-		 * polar coordinates to cartesian coordinates
+		 * If both deltas subtracted by radius are smalle than halfHeight & halfWidth,
+		 * the circle collides with the rectangle
 		 */
-		float borderX = circleWidth * (float) Math.cos(circleAngle);
-		float borderY = circleWidth * (float) Math.sin(circleAngle);
+		if ((deltaX - radius) < hRad && (deltaY - radius) < vRad) {
+			return true;
+		}
 		
-		/*
-		 * Set coordinates to correct value, when comparing position of circle to rectangle
-		 */
-		borderX *= (centerX - circleX) < 0f ? -1f : 1f;		// Shift x to left, when circle right of rectangle
-		borderY *= (centerY - circleY) < 0f ? -1f : 1f;		// Shift y to bottom, when circle above rectangle
-		
-		float circularX = circleX + borderX;
-		float circularY = circleY + borderY;
-		
-		return this.isHit(circularX, circularY);
+		return false;
 	}
-	
-//	public boolean isHit(CircleCollider c) {
-//		/*
-//		 * Roadmap: 
-//		 * ---------
-//		 * 
-//		 * 1. Calculate angle between this.hRad and delta of center points 
-//		 * 2. Get maximum delta inside the box. 
-//		 * ----- 
-//		 * 4. Do the same shit when angle of box collider is other than 0.
-//		 */
-//		float hRad = this.getHalfWidth();
-//		float vRad = this.getHalfHeight();
-//		float angle = this.getEntity().getComponent(Pose.class).getAngle();
-//		float radius = c.getHalfWidth();
-//
-//		Vector2 centerBox = this.getCenter();
-//		Vector2 centerCircle = c.getCenter();
-//		Vector2 circleCorrected;
-//
-//		// Get diagonal angle of box (when hypotenuse is pointing directly into
-//		// the corner)
-//		float diagonalAngle = (float) Math.toDegrees(Math.atan(vRad / hRad));
-//
-//		// 1. Calculate angle in center of box
-//		float deltaX = (float) Math.pow(centerBox.x - centerCircle.x, 2);
-//		float deltaY = (float) Math.pow(centerBox.y - centerCircle.y, 2);
-//		float delta = (float) Math.sqrt(deltaX + deltaY);
-//
-//		float centerAngle = (float) Math.toDegrees(Math.asin(Math.sqrt(deltaY) / delta));
-//
-//		// 4. Rotate the colliding circle around angle of box
-//		centerAngle += angle;
-//		
-//		// Calculate new coordinates after circle transformation
-//		// Calculation: delta * cos(centerAngle + angle) + current centerBox.x,
-//		// y dimension with sin
-//		circleCorrected = new Vector2(centerBox.x + (float) (delta * Math.cos(Math.toRadians(centerAngle))),
-//				centerBox.y + (float) (delta * Math.sin(Math.toRadians(centerAngle))));
-//		deltaX = (float) Math.sqrt(Math.pow(centerBox.x - circleCorrected.x, 2));
-//		deltaY = (float) Math.sqrt(Math.pow(centerBox.y - circleCorrected.y, 2));
-//		centerAngle = (float) Math.toDegrees(Math.asin(deltaY / delta));
-//
-//		// 2. Get maximum delta inside box
-//		float maxDelta;
-//		float halfParam = hRad;
-//
-//		if (centerAngle > diagonalAngle) {
-//			// If centerAngle is greater than the diagonal angle of the box,
-//			// invert the angle and use vRad as reference length.
-//			centerAngle = 90f - centerAngle;
-//			halfParam = vRad;
-//		}
-//		
-//		maxDelta = halfParam / (float) Math.cos(Math.toRadians(centerAngle));
-//
-//		// As a second condition, perform check if sum of vRad or hRad + Radius
-//		// < delta of its axis
-//		// Needed due to a lack of exact values towards the edges.
-//		boolean x = deltaX < (hRad + radius);
-//		boolean y = deltaY < (vRad + radius);
-//
-//		// When rectangle is turned, there seems to be an issue with x && y... No clue.
-//		return delta < (maxDelta + radius) || (x && y);
-//
-//	}
 
 }
