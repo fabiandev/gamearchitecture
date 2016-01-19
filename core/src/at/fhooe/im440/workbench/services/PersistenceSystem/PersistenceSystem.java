@@ -21,6 +21,10 @@ public class PersistenceSystem implements Service {
 	private static List<Storeable> storeables = new ArrayList<Storeable>();
 	private List<Persistable> persistables = new ArrayList<Persistable>();
 	
+	private File getFileFromString(String file) {
+		return Gdx.files.local(file).file().getAbsoluteFile();
+	}
+	
 	private void prepare() {
 		storeables.clear();
 		for (int i = 0; i < persistables.size(); ++i) {
@@ -38,7 +42,11 @@ public class PersistenceSystem implements Service {
 		// silently ignore if persistable is unknown (best practice)
 		persistables.remove(persistable);
 	}
-
+	
+	public void store (String file) throws IOException {
+		this.store(this.getFileFromString(file));
+	}
+	
 	public void store(File file) throws IOException {
 		prepare();
 		
@@ -46,8 +54,12 @@ public class PersistenceSystem implements Service {
 		
 			out.writeObject(storeables);
 
-			Gdx.app.log("PersistenceSystem", file.getName() + " saved");
+			Gdx.app.log("PersistenceSystem", file.getAbsolutePath() + " saved");
 		}		
+	}
+	
+	public void restore(String file) throws FileNotFoundException, IOException {
+		this.restore(this.getFileFromString(file));
 	}
 	
 	public void restore(File file) throws FileNotFoundException, IOException {
@@ -58,7 +70,7 @@ public class PersistenceSystem implements Service {
 			for (Storeable storeable : storeables) {
 				storeable.restore();
 			}
-			Gdx.app.log("PersistenceSystem", "editor.sav loaded");
+			Gdx.app.log("PersistenceSystem", file.getAbsolutePath() + " loaded");
 			
 		} catch (ClassNotFoundException e) {
 			throw new IOException("invalid world file ", e);

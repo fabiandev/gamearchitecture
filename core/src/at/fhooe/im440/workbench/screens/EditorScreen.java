@@ -77,7 +77,7 @@ public class EditorScreen extends BaseScreen implements Subscribeable {
 			
 			if (keyCode == Keys.P) {
 				try {
-					this.persistenceSystem.store(Gdx.files.local(Workbench.EDITOR_SAV).file().getAbsoluteFile());
+					this.persistenceSystem.store(Workbench.EDITOR_SAV);
 				} catch (IOException e) {
 					Gdx.app.log("EditorScreen", e.getMessage());
 				}

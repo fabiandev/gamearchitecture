@@ -2,7 +2,6 @@ package at.fhooe.im440.workbench.components;
 
 import com.badlogic.gdx.graphics.Color;
 
-import at.fhooe.im440.workbench.helpers.Picasso;
 import at.fhooe.im440.workbench.services.ServiceManager;
 import at.fhooe.im440.workbench.services.EntityManager.Entity;
 import at.fhooe.im440.workbench.services.UpdateService.UpdateService;
@@ -11,6 +10,20 @@ import at.fhooe.im440.workbench.services.UpdateService.Updateable;
 public class CollisionMarker extends Component implements Updateable {
 
 	private Color initialColor;
+	private Color markerColor;
+	
+	public CollisionMarker() {
+		this(Color.GRAY);
+	}
+	
+	public CollisionMarker(Color markerColor) {
+		this.markerColor = markerColor;
+	}
+	
+	public CollisionMarker setColor(Color markerColor) {
+		this.markerColor = markerColor;
+		return this;
+	}
 	
 	@Override
 	public void activate() {
@@ -32,7 +45,7 @@ public class CollisionMarker extends Component implements Updateable {
 		Visual visual = entity.getComponent(Visual.class);
 		
 		if (entity.getComponent(Collider.class).isColliding()) {
-			visual.setColor(Picasso.GRAY);
+			visual.setColor(this.markerColor);
 		} else {
 			visual.setColor(initialColor);
 		}
