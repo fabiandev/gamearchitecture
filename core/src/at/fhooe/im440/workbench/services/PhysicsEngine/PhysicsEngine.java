@@ -10,7 +10,7 @@ public class PhysicsEngine implements Service {
 
 	private GenericArrayList<PhysicsObject> physicsObjects = new GenericArrayList<PhysicsObject>();
 	private float accumulator = 0;
-	private final float timeStep = 1f / 120f;
+	private final float timeStep = 1f / 60f;
 
 	private float gravity = -9.81f;
 

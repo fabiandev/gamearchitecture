@@ -67,4 +67,9 @@ public class NoPhysics extends Component implements PhysicsObject {
 		
 	}
 
+	@Override
+	public PhysicsObject setMaxVelocity(float maxVelocityX, float maxVelocityY) {
+		return this;
+	}
+
 }

@@ -20,6 +20,9 @@ public class Physics extends Component implements PhysicsObject {
 	private float velocityX = 0f;
 	private float velocityY = 0f;
 	
+	private float maxVelocityX = 1000f;
+	private float maxVelocityY = 1000f;
+	
 	private float forceX = 0f;
 	private float forceY = 0f;
 	private float gravity;
@@ -55,6 +58,12 @@ public class Physics extends Component implements PhysicsObject {
 	
 	@Override
 	public void update(float timeStep) {
+//		if (this.getEntity().hasComponent(Collider.class)) {
+//			if (this.getEntity().getComponent(Collider.class).isColliding()) {
+//				return;
+//			}
+//		}
+		
 		this.gravity = this.physicsEngine.getGravity();
 		
 		float lastAccelerationX = this.accelerationX;
@@ -70,8 +79,22 @@ public class Physics extends Component implements PhysicsObject {
 		float avgAccelerationX = (lastAccelerationX + this.accelerationX) / 2f;
 		float avgAccelerationY = (lastAccelerationY + this.accelerationY) / 2f;
 		
+		float oldVelocityX = this.velocityX;
+		float oldVelocityY = this.velocityY;
+		
 		this.velocityX += avgAccelerationX * timeStep;
 		this.velocityY += avgAccelerationY * timeStep;
+		
+		System.out.println(this.velocityX);
+		
+		if (Math.abs(this.velocityX) > this.maxVelocityX) {
+			this.velocityX = oldVelocityX;
+		}
+		
+		if (Math.abs(this.velocityY) > this.maxVelocityY) {
+			this.velocityY = oldVelocityY;
+		}
+
 		
 		float positionX = this.velocityX * timeStep + (0.5f * avgAccelerationX * timeStep * timeStep);
 		float positionY = this.velocityY * timeStep + (0.5f * avgAccelerationY * timeStep * timeStep);
@@ -84,6 +107,14 @@ public class Physics extends Component implements PhysicsObject {
 	private void resetForce() {
 		this.forceX = 0f;
 		this.forceY = 0f;
+	}
+	
+	public void reset() {
+		this.resetForce();
+		this.velocityX = 0f;
+		this.velocityY = 0f;
+		this.accelerationX = 0f;
+		this.accelerationY = 0f;
 	}
 	
 	public Physics setMass(float mass) {
@@ -114,6 +145,13 @@ public class Physics extends Component implements PhysicsObject {
 	@Override
 	public Pose getPose() {
 		return this.pose;
+	}
+
+	@Override
+	public PhysicsObject setMaxVelocity(float maxVelocityX, float maxVelocityY) {
+		this.maxVelocityX = maxVelocityX;
+		this.maxVelocityY = maxVelocityY;
+		return this;
 	}
 	
 

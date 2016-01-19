@@ -1,5 +1,7 @@
 package at.fhooe.im440.workbench;
 
+import java.awt.event.KeyEvent;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -74,10 +76,10 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 		new EditorSystem().activate();
 		new CameraSystem(VIEWPORT_WIDTH, VIEWPORT_HEIGHT).activate();
 		new RenderSystem(this.getBatch()).activate();
+		new PhysicsEngine().activate();
 		new ColliderSystem().activate();
 		new UpdateService().activate();
 		new PersistenceSystem().activate();
-		new PhysicsEngine().activate();
 		
 		ServiceManager.activate();
 	}
@@ -141,18 +143,17 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 	@Override
 	public boolean keyDown(int keycode) {
 		messenger.fire(new Message(MessageType.KEY_DOWN).with(new IntegerMessage(keycode)));
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
 		messenger.fire(new Message(MessageType.KEY_UP).with(new IntegerMessage(keycode)));
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
