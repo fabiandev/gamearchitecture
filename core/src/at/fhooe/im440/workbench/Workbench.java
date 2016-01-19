@@ -1,7 +1,5 @@
 package at.fhooe.im440.workbench;
 
-import java.awt.event.KeyEvent;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -183,8 +181,7 @@ public class Workbench extends Game implements ApplicationListener, InputProcess
 
 	@Override
 	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
-		return true;
+		return false;
 	}
 	
 }

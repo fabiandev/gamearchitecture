@@ -85,8 +85,6 @@ public class Physics extends Component implements PhysicsObject {
 		this.velocityX += avgAccelerationX * timeStep;
 		this.velocityY += avgAccelerationY * timeStep;
 		
-		System.out.println(this.velocityX);
-		
 		if (Math.abs(this.velocityX) > this.maxVelocityX) {
 			this.velocityX = oldVelocityX;
 		}
