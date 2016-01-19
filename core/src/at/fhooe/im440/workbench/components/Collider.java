@@ -37,6 +37,10 @@ public abstract class Collider extends Component implements Collideable {
 		return new Vector2(this.getEntity().getComponent(Pose.class).getPosX(),
 				this.getEntity().getComponent(Pose.class).getPosY());
 	}
+	
+	public ArrayList<Collideable> getCollisions() {
+		return this.collisions;
+	}
 
 	@Override
 	public void activate() {

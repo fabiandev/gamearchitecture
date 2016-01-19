@@ -2,6 +2,7 @@ package at.fhooe.im440.workbench.services.EntityManager;
 
 import java.util.ArrayList;
 
+import at.fhooe.im440.workbench.entities.Cogwheel;
 import at.fhooe.im440.workbench.entities.Spring;
 import at.fhooe.im440.workbench.services.Service;
 import at.fhooe.im440.workbench.services.ServiceManager;
@@ -37,6 +38,10 @@ public class EntityManager implements Service {
 	
 	public ArrayList<Spring> getSprings() {
 		return this.entities.getAll(Spring.class);
+	}
+	
+	public ArrayList<Cogwheel> getCogwheels() {
+		return this.entities.getAll(Cogwheel.class);
 	}
 	
 	@Override

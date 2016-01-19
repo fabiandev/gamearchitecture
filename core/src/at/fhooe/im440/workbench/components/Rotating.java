@@ -9,11 +9,15 @@ import at.fhooe.im440.workbench.services.UpdateService.Updateable;
 
 public class Rotating extends Component implements Updateable {
 
-	private Entity entity;
-	private float speed = 0.1f;
+	private float speed;
 	
 	public Rotating() {
-		
+		float rand = (float)Math.random();
+		if (rand < 0.5f) {
+			this.speed = -0.5f;
+		} else {
+			this.speed = 0.5f;
+		}
 	}
 	
 	public Rotating(float speed) {
@@ -38,6 +42,7 @@ public class Rotating extends Component implements Updateable {
 
 	@Override
 	public void update() {
+		Entity entity = this.getEntity();
 		if (entity != null && entity.hasComponent(Pose.class)) {
 			float dt = Gdx.graphics.getDeltaTime();
 			Pose pose = entity.getComponent(Pose.class);
