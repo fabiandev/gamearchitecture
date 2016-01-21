@@ -52,19 +52,19 @@ public abstract class Collider extends Component implements Collideable {
 		ServiceManager.getService(ColliderSystem.class).removeCollider(this);
 	}
 
-	@Override
-	public boolean isHit(Collideable c) {
-
-		if (c instanceof CircleCollider) {
-			return this.isHit((CircleCollider) c);
-		}
-
-		if (c instanceof BoxCollider) {
-			return this.isHit((BoxCollider) c);
-		}
-
-		return false;
-	}
+//	@Override
+//	public boolean isHit(Collideable c) {
+//
+//		if (c instanceof CircleCollider) {
+//			return this.isHit((CircleCollider) c);
+//		}
+//
+//		if (c instanceof BoxCollider) {
+//			return this.isHit((BoxCollider) c);
+//		}
+//
+//		return false;
+//	}
 
 	// Self included method
 	@Override

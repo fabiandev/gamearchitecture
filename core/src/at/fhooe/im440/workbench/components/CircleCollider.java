@@ -2,6 +2,8 @@ package at.fhooe.im440.workbench.components;
 
 import com.badlogic.gdx.math.Vector2;
 
+import at.fhooe.im440.workbench.services.ColliderSystem.Collideable;
+
 public class CircleCollider extends Collider {
 
 	public CircleCollider(float width) {
@@ -41,6 +43,11 @@ public class CircleCollider extends Collider {
 		float deltaRad = (float) Math.sqrt(deltaX + deltaY);
 
 		return deltaRad <= (w + otherW);
+	}
+	
+	@Override
+	public boolean isHit(Collideable other) {
+		return other.isHit(this);
 	}
 
 }

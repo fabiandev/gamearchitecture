@@ -2,6 +2,8 @@ package at.fhooe.im440.workbench.components;
 
 import com.badlogic.gdx.math.Vector2;
 
+import at.fhooe.im440.workbench.services.ColliderSystem.Collideable;
+
 public class BoxCollider extends Collider {
 
 	public BoxCollider(float width, float height) {
@@ -113,6 +115,11 @@ public class BoxCollider extends Collider {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public boolean isHit(Collideable other) {
+		return other.isHit(this);
 	}
 
 }

@@ -69,7 +69,7 @@ public class Physics extends Component implements PhysicsObject {
 		float lastAccelerationX = this.accelerationX;
 		float lastAccelerationY = this.accelerationY;
 		
-		this.accelerationY = this.gravity/* * this.pose.getPosY()*/ - this.velocityY * this.decayY;
+		this.accelerationY = this.gravity - this.velocityY * this.decayY;
 		
 		if (this.mass != 0) {
 			this.accelerationX = this.forceX / this.mass;
@@ -94,10 +94,10 @@ public class Physics extends Component implements PhysicsObject {
 		}
 
 		
-		float positionX = this.velocityX * timeStep + (0.5f * avgAccelerationX * timeStep * timeStep);
-		float positionY = this.velocityY * timeStep + (0.5f * avgAccelerationY * timeStep * timeStep);
+		float distanceX = this.velocityX * timeStep + (0.5f * avgAccelerationX * timeStep * timeStep);
+		float distanceY = this.velocityY * timeStep + (0.5f * avgAccelerationY * timeStep * timeStep);
 		
-		this.pose.setPos(this.pose.getPosX() + positionX, this.pose.getPosY() + positionY);
+		this.pose.setPos(this.pose.getPosX() + distanceX, this.pose.getPosY() + distanceY);
 		
 		this.resetForce();
 	}
